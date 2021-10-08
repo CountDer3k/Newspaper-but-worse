@@ -9,6 +9,6 @@ spring:
   platform: mysql
   flyway:
    baseline-on-migrate: true
-   schemas: bugle 
+   schemas: bugle
    user: ${spring.datasource.username}
    password: ${spring.datasource.url}
