@@ -1,0 +1,25 @@
+version: '3.8'
+x-db-variables: &db-variables
+ MYSQL_DATABASE: 'bugle'
+ MYSQL_USER: 'jjjjr'
+ MYSQL_PASSWORD: 'spiderman'
+ MYSQL_PORT:
+services: 
+  mysql:
+    image: mysql:8.0.26
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+     - 3306:3306
+    environment:
+     <<: *db-variables
+     MYSQL_ROOT_PASSWORD: '12345678'
+  Newspaper-but-worse:
+    build: .
+    ports:
+     - 8080:8080
+    environment:
+      MYSQL_URL: mysql
+      <<: *db-variables
+    depends_on:
+      - mysql
