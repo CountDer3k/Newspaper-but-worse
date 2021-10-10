@@ -1,0 +1,27 @@
+version: '3.8'
+x-db-variables: &db-variables
+ MYSQL_DATABASE: 'bugle'
+ MYSQL_USER: 'jjjjr'
+ MYSQL_PASSWORD: 'spiderman'
+ MYSQL_PORT:
+services: 
+  Newspaper-but-worse:
+    build: .
+    image: newspaper-but-worse
+    ports:
+     - 8080:8080
+    environment:
+      MYSQL_URL: mysql
+      <<: *db-variables
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0.26
+    volumes:
+      - bugle-db:/var/lib/mysql
+    ports:
+     - 3306:3306
+    environment:
+     <<: *db-variables
+volumes:
+  bugle-db:
