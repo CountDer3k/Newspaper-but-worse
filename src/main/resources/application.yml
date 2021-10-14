@@ -1,6 +1,9 @@
 spring:
  application:
   name: NEWSPAPER
+ thymeleaf:
+  cache: false
+  enabled: true
  datasource:
   url: jdbc:mysql://localhost:3306/bugle
   username: jjjjr
@@ -12,3 +15,5 @@ spring:
    schemas: bugle
    user: ${spring.datasource.username}
    password: ${spring.datasource.url}
+ server:
+  port: 8080

@@ -5,7 +5,7 @@ x-db-variables: &db-variables
  MYSQL_PASSWORD: 'spiderman'
  MYSQL_PORT:
 services: 
-  Newspaper-but-worse:
+  NEWSPAPER:
     build: .
     image: newspaper-but-worse
     ports:

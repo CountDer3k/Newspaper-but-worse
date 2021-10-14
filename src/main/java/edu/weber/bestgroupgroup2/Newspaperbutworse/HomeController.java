@@ -1,5 +1,6 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -7,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
+	@Value("${spring.application.name}")
+    String name;
+	
 	@GetMapping("/")
-	public String home(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model){
+	public String home(Model model){
 		model.addAttribute("name", name);
-		return "/index";
+		return "index";
 	}
 
 }
