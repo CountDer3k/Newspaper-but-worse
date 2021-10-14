@@ -3,6 +3,10 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 import org.springframework.lang.NonNull;
 
 public class User {
+	
+	@NonNull 
+	private String username;
+	
 	@NonNull
 	private String firstName;
 	
@@ -15,6 +19,14 @@ public class User {
 	
 	@NonNull
 	private String email;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public String getFirstName() {
 		return firstName;
