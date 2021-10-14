@@ -47,7 +47,7 @@ CREATE TABLE Favorite_Article (
 
 CREATE TABLE `Role` (
 	role_id INT NOT NULL PRIMARY KEY,
-    role_name char(50)
+    role_name CHAR(50)
 );
 
 CREATE TABLE Permission (
