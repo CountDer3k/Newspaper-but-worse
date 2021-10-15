@@ -4,13 +4,15 @@ CREATE TABLE `User` (
     `password` TEXT,
     email TEXT,
     first_name TEXT,
-    last_name TEXT
+    last_name TEXT,
+    created_on DATETIME,
+    modified_on DATETIME
 );
 
 CREATE TABLE Post (
 	post_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	create_on DATETIME,
-    last_edited DATETIME,
+    modified_on DATETIME,
     user_id INT, 
     FOREIGN KEY (user_id) REFERENCES `User`(user_id)
 );
@@ -47,12 +49,16 @@ CREATE TABLE Favorite_Article (
 
 CREATE TABLE `Role` (
 	role_id INT NOT NULL PRIMARY KEY,
-    role_name CHAR(50)
+    role_name CHAR(50),
+    created_on DATETIME,
+    modified_on DATETIME
 );
 
 CREATE TABLE Permission (
 	perm_id INT NOT NULL PRIMARY KEY,
-    perm_name CHAR(200)
+    perm_name CHAR(200),
+    created_on DATETIME,
+    modified_on DATETIME
 );
 
 CREATE TABLE Role_Permission (
