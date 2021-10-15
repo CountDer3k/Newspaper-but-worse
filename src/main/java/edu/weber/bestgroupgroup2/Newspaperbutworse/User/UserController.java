@@ -20,7 +20,7 @@ public class UserController {
 	public String showRegistrationForm(WebRequest request, Model model) {
 	    User user = new User();
 	    model.addAttribute("user", user);
-	    return "registration";
+	    return "user/registration";
 	}
 	
 	@PostMapping("/user/registration")
