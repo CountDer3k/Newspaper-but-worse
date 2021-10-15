@@ -27,6 +27,7 @@ CREATE TABLE `Comment` (
 
 CREATE TABLE Article (
 	post_id INT NOT NULL REFERENCES Post,
+	title TINYTEXT,
     content MEDIUMTEXT,
     access CHAR(3),
     section_id INT NOT NULL,
