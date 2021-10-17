@@ -1,0 +1,63 @@
+
+
+
+
+.d3-dark-primary{
+	background-color:#261C2C;
+	color: white;
+	
+}
+.d3-dark-secondary{
+	background-color:#5C527F;
+	/* 
+	#3E2C41
+	#5C527F
+	#6E85B2 */
+}
+
+.d3-dark-third{
+	background-color:#6E85B2;
+}
+
+.d3-dark-nav{
+	background-color:#3E2C41;
+}
+
+.btn-outline-dark-d3{
+	color: #6E85B2 !important;
+}
+.btn-outline-dark-d3:hover{
+	color: white !important;
+}
+
+.d3Card {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	margin:20px;
+	padding: 30px;
+	border-radius: 10px;
+}
+
+.d3Card-fullscreen{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	width: 95%;
+	height: 100vh;
+	padding: 25px;
+	margin-left: 15px;
+	margin-right: 15px;
+	border-radius: 10px;
+}
+
+.d3CardRegister {
+	background-color: #3E2C41;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	border-radius: 20px;
+	height: 500px;
+	width: 500px;
+	margin: auto;
+	margin-top: 40px;
+}
+
+.sidePadding {
+	padding-right: 25px;
+	padding-left: 25px;
+}
