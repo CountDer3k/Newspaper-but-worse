@@ -26,7 +26,7 @@ public class UserController {
 	
 	@GetMapping("/user/registration")
 	public String showRegistrationForm(WebRequest request, Model model) {
-	    User user = new User();
+	    UserDto userDto = new UserDto();
 	    model.addAttribute("user", userDto);
 	    return "user/registration";
 	}
@@ -45,7 +45,7 @@ public class UserController {
 	    if(userService.isValidUser(user)) {
 	    	User registered = userService.registerNewUserAccount(userDto);
 	    	//model.addAttribute("msg", "Registration Confirmed!");
-        model.addAttribute("user", userDto);
+        	model.addAttribute("user", userDto);
 	    	return "/";
 	    }
     
