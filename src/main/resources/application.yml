@@ -5,9 +5,9 @@ spring:
   cache: false
   enabled: true
  datasource:
-  url: jdbc:mysql://mysql:3306/bugle
   username: jjjjr
-  passwrod: spiderman
+  password: spiderman
+  url: jdbc:mysql://mysql:3306/bugle
   driver-class-name: com.mysql.cj.jdbc.Driver 
   platform: mysql
   flyway:
@@ -16,6 +16,5 @@ spring:
    user: ${spring.datasource.username}
    password: ${spring.datasource.password}
    url: ${spring.datasource.url}
-   locations: filesystem:db/migration
  server:
   port: 8080
