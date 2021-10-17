@@ -20,6 +20,11 @@ public class HomeController {
 	@GetMapping("/login")
 	public String login(Model model) {
 		return "login";
-	}	
+	}
+	
+	@GetMapping("/error")
+	public String error(Model model) {
+		return "error";
+	}
 
 }

@@ -8,17 +8,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	private static UserService INSTANCE;
-	//Should be Autowired
+//	private static UserService INSTANCE;
+	
     private UserRepository userRepository;
     
-    public UserService() {
+    @Autowired
+    public UserService(UserRepository userRepo) {
+    	this.userRepository = userRepo;
+    }
+    
+    public boolean isValidUser(User user) {
     	
+    	//TODO:Make sure that fields are entered
+    	if(!user.getPassword().equals(user.getMatchingPassword())){
+    		return false;
+    	}
+    	
+    	return true;
     }
     
     public User registerNewUserAccount(User user) {
+    	//TODO: the rest of the registration operation
         return user;
-        // the rest of the registration operation
     }
     private boolean emailExist(String email) {
         return userRepository.findByEmail(email) != null;
