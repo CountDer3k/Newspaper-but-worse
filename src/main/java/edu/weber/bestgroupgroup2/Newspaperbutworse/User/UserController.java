@@ -43,9 +43,11 @@ public class UserController {
 		
 	    if(userService.isValidUser(user)) {
 	    	User registered = userService.registerNewUserAccount(user);
-	    	return "user/userConfirmed";
+	    	model.addAttribute("msg", "Registration Confirmed!");
+	    	return "user/registration";
 	    }
 	    
+	    model.addAttribute("msg", "Registration Failed!");
 	    return "user/userFailed";
 	}
 

@@ -96,7 +96,7 @@
 		<div class="col-6 d3Card-secondary " style="padding:30px 20px;">
 			<div class="d-grid gap-2">
 				<h1>Register</h1>
-				<label name=msg id=msg></label>
+				<label th:text=${msg}></label>
 				<form action="/user/registration" th:object="${user}" method="POST" enctype="utf8">
 				    <div class="form-group">
 				        <label>username</label>
