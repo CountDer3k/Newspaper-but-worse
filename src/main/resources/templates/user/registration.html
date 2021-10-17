@@ -1,57 +1,9 @@
 <!DOCTYPE html>
 
-<style>
-.d3-dark-primary{
-	background-color:#261C2C;
-	color: white;
-	
-}
-.d3-dark-secondary{
-	background-color:#5C527F;
-	/* 
-	#3E2C41
-	#5C527F
-	#6E85B2 */
-}
-.d3-dark-nav{
-	background-color:#3E2C41;
-}
-
-.btn-outline-dark-d3{
-	color: #6E85B2 !important;
-}
-.btn-outline-dark-d3:hover{
-	color: white !important;
-}
-
-.d3Card {
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	width: 95%;
-	height: 100vh;
-	padding: 25px;
-	margin-left: 15px;
-	margin-right: 15px;
-	border-radius: 10px;
-}
-
-.d3Card-secondary{
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	padding: 25px;
-	margin-left: 15px;
-	margin-right: 15px;
-	border-radius: 10px;
-	background-color: #3E2C41;
-}
-
-.sidePadding {
-	padding-right: 25px;
-	padding-left: 25px;
-}
-</style>
-
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<link th:href = "@{/css/main.css}" rel="stylesheet">
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 	<link rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
@@ -62,33 +14,8 @@
 </head>
 <body class="d3-dark-primary">
 	<!-- Top Bar -->
-	<nav class="navbar navbar-expand-lg navbar-dark d3-dark-nav">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Navbar</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<!-- Our Items go here -->
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">Home</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">Favorites</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">Other</a></li>
-				</ul>
-				<form class="d-flex">
-					<input class="form-control me-2" type="search" placeholder="Search"
-						aria-label="Search">
-					<button class="btn btn-outline-success" type="submit">Search</button>
-				</form>
-			</div>
-		</div>
-	</nav>
+	<div th:include="_layout/navbar :: #navigationFragment"></div>
+	<br />
 
 	<br />
 	<div class="row sidePadding">
