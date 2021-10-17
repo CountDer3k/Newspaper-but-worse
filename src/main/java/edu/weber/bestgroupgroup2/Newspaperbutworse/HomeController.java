@@ -22,9 +22,9 @@ public class HomeController {
 		return "login";
 	}
 	
-	@GetMapping("/error")
-	public String error(Model model) {
-		return "error";
-	}
+//	@GetMapping("/error")
+//	public String error(Model model) {
+//		return "error";
+//	}
 
 }

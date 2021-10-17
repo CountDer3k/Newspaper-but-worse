@@ -23,18 +23,19 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@GetMapping("/user/registration")
+	@GetMapping("user/registration")
 	public String showRegistrationForm(WebRequest request, Model model) {
 	    User user = new User();
 	    model.addAttribute("user", user);
-	    return "/user/registration";
+	    return "user/registration";
 	}
 	
-	@PostMapping("/user/registration")
+	@PostMapping("user/registration")
 	public String registerUserAccount(
 	  @ModelAttribute("user") User user,
 	  BindingResult bindResult,
 	  HttpServletRequest request,
+	  Model model,
 	  Errors errors) {
 		if(bindResult.hasErrors()) {
 			return "error";
@@ -42,10 +43,10 @@ public class UserController {
 		
 	    if(userService.isValidUser(user)) {
 	    	User registered = userService.registerNewUserAccount(user);
-	    	return "user/successRegister";
+	    	return "user/userConfirmed";
 	    }
 	    
-	    return "user/failRegister";
+	    return "user/userFailed";
 	}
 
 }
