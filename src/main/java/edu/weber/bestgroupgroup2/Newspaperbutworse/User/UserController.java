@@ -34,7 +34,7 @@ public class UserController {
 	@PostMapping("/user/registration")
 	public String registerUserAccount(
 	  @Validated @ModelAttribute("user") UserDto userDto,
-    BindingResult bindResult,
+	  BindingResult bindResult,
 	  HttpServletRequest request,
 	  Model model,
 	  Errors errors) {
@@ -42,13 +42,15 @@ public class UserController {
 			return "error";
 		}
 		
-	    if(userService.isValidUser(user)) {
+	    if(userService.isValidUser(userDto)) {
 	    	User registered = userService.registerNewUserAccount(userDto);
 	    	//model.addAttribute("msg", "Registration Confirmed!");
         	model.addAttribute("user", userDto);
 	    	return "/";
 	    }
-    
+	    
+	    model.addAttribute("msg", "Registration Failed!");
+	    return "user/userFailed";
 	}
 
 }

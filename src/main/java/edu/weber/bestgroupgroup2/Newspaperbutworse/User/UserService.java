@@ -18,11 +18,11 @@ public class UserService {
     	this.userRepository = userRepo;
     }
     
-    public boolean isValidUser(User user) {
+    public boolean isValidUser(UserDto userDto) {
     	
     	//checks empty strings since these can't be null because of annotations in User
-    	if(user.getUsername().equals("") || user.getEmail().equals("") || user.getPassword().equals("") ||
-    			!user.getPassword().equals(user.getMatchingPassword()))
+    	if(userDto.getUsername().equals("") || userDto.getEmail().equals("") || userDto.getPassword().equals("") ||
+    			!userDto.getPassword().equals(userDto.getMatchingPassword()))
     		return false;
     	
     	return true;
