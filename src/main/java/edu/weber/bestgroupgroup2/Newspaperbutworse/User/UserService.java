@@ -20,9 +20,10 @@ public class UserService {
     public boolean isValidUser(User user) {
     	
     	//TODO:Make sure that fields are entered
-    	if(!user.getPassword().equals(user.getMatchingPassword())){
+    	//checks empty strings since these can't be null because of annotations in User
+    	if(user.getUsername().equals("") || user.getEmail().equals("") || user.getPassword().equals("") ||
+    			!user.getPassword().equals(user.getMatchingPassword()))
     		return false;
-    	}
     	
     	return true;
     }
