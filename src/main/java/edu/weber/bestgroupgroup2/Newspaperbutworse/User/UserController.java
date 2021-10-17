@@ -46,7 +46,7 @@ public class UserController {
 	    	User registered = userService.registerNewUserAccount(userDto);
 	    	//model.addAttribute("msg", "Registration Confirmed!");
         	model.addAttribute("user", userDto);
-	    	return "index";
+	    	return "redirect:/";
 	    }
 	    
 	    model.addAttribute("msg", "Registration Failed!");
