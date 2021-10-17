@@ -18,20 +18,20 @@ public class UserController {
 	
 	@GetMapping("/user/registration")
 	public ModelAndView showRegistrationForm(WebRequest request, Model model) {
-	    User user = new User();
-	    model.addAttribute("user", user);
+	    UserDto userDto = new UserDto();
+	    model.addAttribute("user", userDto);
 	    return new ModelAndView("user/registration");
 	}
 	
 	@PostMapping("/user/registration")
 	public ModelAndView registerUserAccount(
-	  @ModelAttribute("user") User user,
+	  @ModelAttribute("user") UserDto userDto,
 	  HttpServletRequest request,
 	  Errors errors) {
 	    
-	    User registered = userService.registerNewUserAccount(user);
+	    User registered = userService.registerNewUserAccount(userDto);
 	
-	    return new ModelAndView("/", "user", user);
+	    return new ModelAndView("/", "user", userDto);
 	}
 
 }
