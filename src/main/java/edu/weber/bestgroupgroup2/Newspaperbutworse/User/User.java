@@ -1,8 +1,5 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
-
-import org.springframework.lang.NonNull;
-
 public class User {
 	
 	private int userId;

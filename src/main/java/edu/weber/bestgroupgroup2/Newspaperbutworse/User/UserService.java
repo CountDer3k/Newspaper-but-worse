@@ -29,12 +29,19 @@ public class UserService {
     }
     
     public User registerNewUserAccount(UserDto userDto) {
-      //TODO: the rest of the registration operation
+    	if (emailExists(userDto.getEmail())) {
+    		// throw an exception
+    	}
     	User user = new User();
-      return user;
+    	user.setFirstName(userDto.getFirstName());
+    	user.setLastName(userDto.getLastName());
+    	user.setEmail(userDto.getEmail());
+    	user.setPassword(userDto.getPassword());
+    	
+    	return userRepository.save(user);
     }
     
-    private boolean emailExist(String email) {
+    private boolean emailExists(String email) {
         return userRepository.getUserByEmail(email) != null;
     }
 

@@ -36,4 +36,9 @@ public class UserRepository {
 		});
 	}
 
+	public User save(User user) {
+		// TODO Auto-generated method stub
+		return user;
+	}
+
 }
