@@ -14,7 +14,7 @@ public class UserService {
         // the rest of the registration operation
     }
     private boolean emailExist(String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.getUserByEmail(email) != null;
     }
 
 }

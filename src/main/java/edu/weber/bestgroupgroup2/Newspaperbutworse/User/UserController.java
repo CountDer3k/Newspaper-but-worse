@@ -17,10 +17,10 @@ public class UserController {
 	UserService userService;
 	
 	@GetMapping("/user/registration")
-	public String showRegistrationForm(WebRequest request, Model model) {
+	public ModelAndView showRegistrationForm(WebRequest request, Model model) {
 	    User user = new User();
 	    model.addAttribute("user", user);
-	    return "user/registration";
+	    return new ModelAndView("user/registration");
 	}
 	
 	@PostMapping("/user/registration")
@@ -31,7 +31,7 @@ public class UserController {
 	    
 	    User registered = userService.registerNewUserAccount(user);
 	
-	    return new ModelAndView("successRegister", "user", user);
+	    return new ModelAndView("/", "user", user);
 	}
 
 }
