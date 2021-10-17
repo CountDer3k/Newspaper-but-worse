@@ -1,28 +1,33 @@
 version: '3.8'
+
 x-db-variables: &db-variables
- MYSQL_DATABASE: 'bugle'
- MYSQL_USER: 'jjjjr'
- MYSQL_PASSWORD: 'spiderman'
- MYSQL_ROOT_PASSWORD: 'spiderman'
+ MYSQL_DATABASE: bugle
+ MYSQL_ROOT_PASSWORD: root
+ MYSQL_USER: jjjjr
+ MYSQL_PASSWORD: spiderman
+ MYSQL_ROOT_PASSWORD: spiderman
  MYSQL_PORT:
-services: 
+ 
+services:
+
   NEWSPAPER:
     build: .
     image: newspaper-but-worse
+    restart: on-failure
+    depends_on:
+     - mysql
     ports:
      - 8080:8080
     environment:
-      MYSQL_URL: mysql
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bugle?useSSL=false&allowPublicKeyRetrieval=true
       <<: *db-variables
-    depends_on:
-      - mysql
+
   mysql:
-    image: mysql:8.0.26
-    volumes:
-      - bugle-db:/var/lib/mysql
+    image: mysql:8.0
     ports:
      - 3306:3306
     environment:
      <<: *db-variables
+
 volumes:
   bugle-db:

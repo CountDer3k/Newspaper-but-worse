@@ -12,6 +12,7 @@ public class UserService {
 	
     private UserRepository userRepository;
     
+
     @Autowired
     public UserService(UserRepository userRepo) {
     	this.userRepository = userRepo;
@@ -19,7 +20,6 @@ public class UserService {
     
     public boolean isValidUser(User user) {
     	
-    	//TODO:Make sure that fields are entered
     	//checks empty strings since these can't be null because of annotations in User
     	if(user.getUsername().equals("") || user.getEmail().equals("") || user.getPassword().equals("") ||
     			!user.getPassword().equals(user.getMatchingPassword()))
@@ -28,12 +28,14 @@ public class UserService {
     	return true;
     }
     
-    public User registerNewUserAccount(User user) {
-    	//TODO: the rest of the registration operation
-        return user;
+    public User registerNewUserAccount(UserDto userDto) {
+      //TODO: the rest of the registration operation
+    	User user = new User();
+      return user;
     }
+    
     private boolean emailExist(String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.getUserByEmail(email) != null;
     }
 
 }
