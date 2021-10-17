@@ -46,11 +46,11 @@ public class UserController {
 	    	User registered = userService.registerNewUserAccount(userDto);
 	    	//model.addAttribute("msg", "Registration Confirmed!");
         	model.addAttribute("user", userDto);
-	    	return "/";
+	    	return "index";
 	    }
 	    
 	    model.addAttribute("msg", "Registration Failed!");
-	    return "user/userFailed";
+	    return "user/registration";
 	}
 
 }
