@@ -30,8 +30,8 @@ public class HomeController {
 				+ "BUY FROM FANATICAL\n"
 				+ "The book was also very popular in Harry Potter's second year at Hogwarts, when every copy was checked out of the library due to the reopening of the Chamber of Secrets. However, Hermione shows slight frustration with the book when scathingly renaming the book in her fourth year because it does not mention the use of house-elves at Hogwarts, even going so far as to suggest a couple of alternative titles for it: A Revised History of Hogwarts and A Highly Biased and Selective History of Hogwarts Which Glosses Over the Nastier Aspects of the School.");
 		
-		PostModel pm1 = new PostModel(1, 10, article1);
-		PostModel pm2 = new PostModel(1, 11, article2);
+		PostModel pm1 = new PostModel(3, 10, article1);
+		PostModel pm2 = new PostModel(7, 11, article2);
 		
 		postList.add(pm1);
 		postList.add(pm2);

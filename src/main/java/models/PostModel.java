@@ -9,9 +9,10 @@ public class PostModel {
 	private Date createDate;
 	private Date modifiedDate;
 	private ArticleModel article;
+	private String url;
 	
-	public PostModel(){
-		
+	public PostModel(int Id){
+		url = "articles/"+Id;
 	}
 	
 	public PostModel(int Id, int userId, ArticleModel article) 
@@ -19,6 +20,7 @@ public class PostModel {
 		this.Id = Id;
 		this.userId = userId;
 		this.article = article;
+		url = "articles/"+Id;
 	}
 	
 	public PostModel(int Id, int userId, Date createDate, Date modifiedDate, ArticleModel article) 
@@ -28,6 +30,7 @@ public class PostModel {
 		this.article = article;
 		this.createDate = createDate;
 		this.modifiedDate = modifiedDate;
+		url = "articles/"+Id;
 	}
 
 	public int getId() {
