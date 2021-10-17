@@ -9,12 +9,13 @@ public class UserService {
 	//Should be Autowired
     private UserRepository userRepository;
     
-    public User registerNewUserAccount(User user) {
+    public User registerNewUserAccount(UserDto userDto) {
+    	User user = new User();
         return user;
         // the rest of the registration operation
     }
     private boolean emailExist(String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.getUserByEmail(email) != null;
     }
 
 }
