@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -17,7 +18,7 @@ public class PostController {
 	
 	
 
-	@GetMapping("/article/{articleId}")
+	@GetMapping("/article/articleNum/{articleId}")
 	public String article(@PathVariable String articleId, Model model) {
 		
 		
@@ -44,7 +45,7 @@ public class PostController {
 	}	
 	
 	
-	@GetMapping("/article/createArticle")
+	@PostMapping("/article/createArticle")
 	public String createArticle(@Validated @ModelAttribute("post") PostModel post, BindingResult bindResult, HttpServletRequest request, Model model, Errors errors) {
 		
 		

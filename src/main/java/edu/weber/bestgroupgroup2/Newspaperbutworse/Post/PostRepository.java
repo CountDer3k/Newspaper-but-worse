@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 
 @Repository
 public class PostRepository {

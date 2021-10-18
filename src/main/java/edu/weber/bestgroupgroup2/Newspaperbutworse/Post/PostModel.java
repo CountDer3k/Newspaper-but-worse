@@ -10,6 +10,10 @@ public class PostModel {
 	private Date modifiedDate;
 	private ArticleModel article;
 	private String url;
+
+	public PostModel(){
+		
+	}
 	
 	public PostModel(int Id){
 		url = "articles/"+Id;
