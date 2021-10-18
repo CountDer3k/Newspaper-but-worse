@@ -29,9 +29,9 @@ public class UserService {
     }
     
     public User registerNewUserAccount(UserDto userDto) {
-    	if (emailExists(userDto.getEmail())) {
+//    	if (emailExists(userDto.getEmail())) {
     		// throw an exception
-    	}
+//    	}
     	User user = new User();
     	user.setFirstName(userDto.getFirstName());
     	user.setLastName(userDto.getLastName());
