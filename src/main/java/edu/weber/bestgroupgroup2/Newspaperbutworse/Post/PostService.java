@@ -1,15 +1,13 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
-import java.sql.SQLException;
-import java.util.Collection;
+
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.ArticleModel;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostRepository;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 
 public class PostService {
 
