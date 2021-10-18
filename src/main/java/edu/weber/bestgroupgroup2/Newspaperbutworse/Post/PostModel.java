@@ -1,5 +1,4 @@
-package edu.weber.bestgroupgroup2.Newspaperbutworse.Models;
-
+package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import java.sql.Date;
 

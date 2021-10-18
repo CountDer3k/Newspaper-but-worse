@@ -1,16 +1,21 @@
-package edu.weber.bestgroupgroup2.Newspaperbutworse.Article;
+package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.ArticleModel;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
 
 
 @Controller
-public class ArticleController {
+public class PostController {
+	
+	
 
 	@GetMapping("/article/{articleId}")
 	public String article(@PathVariable String articleId, Model model) {
@@ -35,6 +40,15 @@ public class ArticleController {
 		model.addAttribute("post", post);
 		model.addAttribute("articleId", articleId);
 		
-		return "article/article";
+		return "article/viewArticle";
 	}	
+	
+	
+	@GetMapping("/article/createArticle")
+	public String createArticle(@Validated @ModelAttribute("post") PostModel post, BindingResult bindResult, HttpServletRequest request, Model model, Errors errors) {
+		
+		
+		
+		return "article/createArticle";
+	}
 }

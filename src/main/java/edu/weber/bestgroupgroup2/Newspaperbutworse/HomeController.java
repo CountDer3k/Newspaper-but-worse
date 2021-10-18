@@ -3,6 +3,8 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.ArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
 
 @Controller
 public class HomeController {
 	@Value("${spring.application.name}")
 	String name;
+	
+	PostService articleService;
+	Logger logger = LoggerFactory.getLogger(PostService.class);
 
 	@GetMapping("/")
 	public String home(Model model){
@@ -35,7 +41,16 @@ public class HomeController {
 
 		postList.add(pm1);
 		postList.add(pm2);
+		
+		List<PostModel> pml;
+		try {
+		pml = articleService.getPosts();
+		} catch(Exception e) {
+			logger.error("^^^^^^^^^^^^^^"+e.toString() + "***********" + e.getLocalizedMessage());
+		}
 
+		
+		
 		model.addAttribute("posts", postList);
 		model.addAttribute("name", name);
 		return "index";

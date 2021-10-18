@@ -1,4 +1,4 @@
-package edu.weber.bestgroupgroup2.Newspaperbutworse.Article;
+package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,13 +15,13 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 
 @Repository
-public class ArticleRepository {
+public class PostRepository {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private static final Map<String, PostModel> posts = new HashMap<>();
 
 	@Autowired
-	public ArticleRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+	public PostRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
