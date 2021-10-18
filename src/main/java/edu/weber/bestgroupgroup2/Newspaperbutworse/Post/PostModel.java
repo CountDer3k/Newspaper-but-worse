@@ -1,8 +1,10 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class PostModel {
+
+public class PostModel implements Serializable{
 
 	private int Id;
 	private int userId;
@@ -24,7 +26,7 @@ public class PostModel {
 		this.Id = Id;
 		this.userId = userId;
 		this.article = article;
-		url = "articles/"+Id;
+		url = "articles/articleNum/"+Id;
 	}
 	
 	public PostModel(int Id, int userId, Date createDate, Date modifiedDate, ArticleModel article) 
@@ -34,7 +36,7 @@ public class PostModel {
 		this.article = article;
 		this.createDate = createDate;
 		this.modifiedDate = modifiedDate;
-		url = "articles/"+Id;
+		url = "articles/articleNum/"+Id;
 	}
 
 	public int getId() {
