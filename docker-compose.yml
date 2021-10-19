@@ -5,7 +5,7 @@ x-db-variables: &db-variables
  MYSQL_ROOT_PASSWORD: root
  MYSQL_USER: jjjjr
  MYSQL_PASSWORD: spiderman
- MYSQL_ROOT_PASSWORD: spiderman
+ MYSQL_ROOT_PASSWORD: MYSQL_ALLOW_EMPTY_PASSWORD=1
  MYSQL_PORT:
  
 services:
@@ -23,7 +23,7 @@ services:
       <<: *db-variables
 
   mysql:
-    image: mysql:8.0
+    image: mysql:8.0.26
     ports:
      - 3306:3306
     environment:
