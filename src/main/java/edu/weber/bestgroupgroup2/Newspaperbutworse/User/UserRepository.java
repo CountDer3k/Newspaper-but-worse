@@ -5,14 +5,19 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	private static final Map<String, User> users = new HashMap<>();
+	
+	private final String INSERT_QUERY = "INSERT INTO User (username, password, email, first_name, last_name) VALUES (:username, :password, :email, :firstName, :lastName)";
 	
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -20,8 +25,7 @@ public class UserRepository {
 	}
 
 	public User getUserByEmail(String email) {
-		
-		String sql = "SELECT * FROM USER WHERE email = :email";
+		String sql = "SELECT * FROM User WHERE email = :email";
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("email", email);
 		return namedParameterJdbcTemplate.queryForObject(sql, parameters, (RowMapper<User>) (rs, rowNum) -> {
@@ -34,6 +38,20 @@ public class UserRepository {
 			user.setLastName(rs.getString("LAST_NAME"));
 			return user;
 		});
+	}
+
+	public User save(User user) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource parameters = new MapSqlParameterSource()
+				.addValue("username", user.getUsername())
+				.addValue("password", user.getPassword())
+				.addValue("email", user.getEmail())
+				.addValue("firstName", user.getFirstName())
+				.addValue("lastName", user.getLastName());
+		
+		namedParameterJdbcTemplate.update(INSERT_QUERY, parameters, keyHolder);
+		user.setUserId(keyHolder.getKey().intValue());
+		return user;
 	}
 
 }
