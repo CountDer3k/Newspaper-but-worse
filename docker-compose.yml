@@ -6,7 +6,7 @@ x-db-variables: &db-variables
  MYSQL_USER: jjjjr
  MYSQL_PASSWORD: spiderman
  MYSQL_ROOT_PASSWORD: spiderman
- MYSQL_PORT:
+ MYSQL_PORT: 3306
  
 services:
 
