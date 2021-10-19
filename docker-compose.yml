@@ -23,7 +23,7 @@ services:
       <<: *db-variables
 
   mysql:
-    image: mysql:8.0.26
+    image: "${DOCKER_MYSQL_IMAGE:-mysql:8.0.26}"
     ports:
      - 3306:3306
     environment:
