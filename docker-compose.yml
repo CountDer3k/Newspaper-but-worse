@@ -5,7 +5,6 @@ x-db-variables: &db-variables
  MYSQL_ROOT_PASSWORD: root
  MYSQL_USER: jjjjr
  MYSQL_PASSWORD: spiderman
- MYSQL_ROOT_PASSWORD: spiderman
  MYSQL_PORT: 3306
  
 services:
@@ -19,8 +18,12 @@ services:
     ports:
      - 8080:8080
     environment:
+      SPRING_DATASOURCE_DATABASE: bugle
+      SPRING_DATASOURCE_ROOT_PASSWORD: root
+      SPRING_DATASOURCE_USER: jjjjr
+      SPRING_DATASOURCE_PASSWORD: spiderman
+      SPRING_DATASOURCE_PORT: 3306
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bugle?useSSL=false&allowPublicKeyRetrieval=true
-      <<: *db-variables
 
   mysql:
     image: mysql:8.0

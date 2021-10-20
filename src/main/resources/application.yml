@@ -5,9 +5,7 @@ spring:
   cache: false
   enabled: true
  datasource:
-  username: jjjjr
-  password: spiderman
-  url: jdbc:mysql://mysql:3306/bugle
+  url: jdbc:mysql://localhost:3306/bugle
   driver-class-name: com.mysql.cj.jdbc.Driver 
   platform: mysql
   flyway:
