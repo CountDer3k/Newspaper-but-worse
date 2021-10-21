@@ -3,6 +3,7 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,11 +12,13 @@ public class UserService {
 //	private static UserService INSTANCE;
 	
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
     
 
     @Autowired
-    public UserService(UserRepository userRepo) {
+    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
     	this.userRepository = userRepo;
+    	this.passwordEncoder = passwordEncoder;
     }
     
     public boolean isValidUser(UserDto userDto) {
