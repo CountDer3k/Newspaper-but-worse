@@ -86,11 +86,15 @@
   		<div class="col-3"></div>
   		<div class="col-6 d-flex justify-content-center">
   			<div class="row d3CardRegister" style="margin: 0;position: absolute;top:20%;">
-  			<form>
-  				<div class="form-group d-flex justify-content-center">
-  					<label>Username:</label>
-  					<input class="control-form" type="text" id="fname" name="fname"><br><br>
-  				</div>
+  			<form action="/login" method="POST" enctype="utf8">
+  				<div class="form-group">
+					<label>username(*)</label> 
+					<input class="form-control" name="username" autofocus="autofocus" />
+				</div>
+				<div class="form-group">
+					<label>password(*)</label> 
+					<input type="password" class="form-control" name="password" />
+				</div>
   			</form>
   			</div>
   		</div>
