@@ -46,7 +46,7 @@ public class HomeController {
 		try {
 		pml = articleService.getPosts();
 		} catch(Exception e) {
-			logger.error("^^^^^^^^^^^^^^"+e.toString() + "***********" + e.getLocalizedMessage());
+			logger.error(""+e.toString() + "***********" + e.getLocalizedMessage());
 		}
 
 		

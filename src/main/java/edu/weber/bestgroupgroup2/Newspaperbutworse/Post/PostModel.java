@@ -11,6 +11,7 @@ public class PostModel implements Serializable{
 	private Date createDate;
 	private Date modifiedDate;
 	private ArticleModel article;
+	private CommentModel comment;
 	private String url;
 
 	public PostModel(){
@@ -34,6 +35,16 @@ public class PostModel implements Serializable{
 		this.Id = Id;
 		this.userId = userId;
 		this.article = article;
+		this.createDate = createDate;
+		this.modifiedDate = modifiedDate;
+		url = "articles/articleNum/"+Id;
+	}
+	
+	public PostModel(int Id, int userId, Date createDate, Date modifiedDate, CommentModel comment) 
+	{
+		this.Id = Id;
+		this.userId = userId;
+		this.comment = comment;
 		this.createDate = createDate;
 		this.modifiedDate = modifiedDate;
 		url = "articles/articleNum/"+Id;
@@ -77,6 +88,22 @@ public class PostModel implements Serializable{
 
 	public void setArticle(ArticleModel article) {
 		this.article = article;
+	}
+
+	public CommentModel getComment() {
+		return comment;
+	}
+
+	public void setComment(CommentModel comment) {
+		this.comment = comment;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	

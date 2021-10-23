@@ -27,14 +27,30 @@
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary">
 			<a href="/" class="h3" style="background-color: none; color: white"><i
 				class="fas fa-arrow-left h4"></i></a>
-				
-				<form action="/article/createArticle" th:object="${post}" method="POST" enctype="utf8">
-					<div class="form-group">
-						<label>Title(*)</label>
-						<input class="form-control" th:field="*{title}" />
-					</div>
-				</form>
-				
+
+			<form action="article/createArticle" th:object="${post}"
+				method="POST" enctype="utf8">
+				<div class="form-group">
+					<label>Title(*)</label> <input class="form-control"
+						th:field="*{title}" />
+					<p th:each="error: ${#fields.errors('title')}" th:text="${error}">Validation
+						error</p>
+				</div>
+				<div class="form-group">
+					<label>Content(*)</label> <input class="form-control"
+						th:field="*{content}" />
+					<p th:each="error: ${#fields.errors('content')}" th:text="${error}">Validation
+						error</p>
+				</div>
+				<div class="form-group">
+					<label>(*)</label> <input class="form-control" th:field="*{access}" />
+					<p th:each="error: ${#fields.errors('access')}" th:text="${error}">Validation
+						error</p>
+				</div>
+				<br />
+				<button type="submit" class="btn btn-success">submit</button>
+			</form>
+
 		</div>
 		<div class="col-3"></div>
 
