@@ -105,8 +105,11 @@ VALUES
     
 INSERT INTO `User` (username, `password`, email, first_name, last_name, created_on, modified_on) 
 VALUES
-	("PParker", "SpideyPete2001", "ArachnidGuy@gmail.com", "Peter", "Parker", now(), now());
+	("PParker", "SpideyPete2001", "ArachnidGuy@gmail.com", "Peter", "Parker", now(), now()),
+    ("JonahIsTheMan", "IHateSpiderMenace7", "JJJamesonJr@gmail.com", "John", "Jameson", now(), now());
     
 INSERT INTO User_Role (user_id, role_id)
 VALUES
-	((SELECT user_id FROM `User` WHERE username = "PParker" LIMIT 1), 3);
+	((SELECT user_id FROM `User` WHERE username = "PParker" LIMIT 1), 3),
+    ((SELECT user_id FROM `User` WHERE username = "JonahIsTheMan" LIMIT 1), 4);
+	
