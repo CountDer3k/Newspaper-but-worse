@@ -44,34 +44,54 @@ public class PostController {
 		return "article/createArticle";
 	}
 
-	@PostMapping("/article/creatArticle")
-	public String create_A_Post(
+
+	@PostMapping("/article/createArticle")
+	public String create_New_post(
 			@Validated @ModelAttribute("post") PostDto postDto,
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Model model,
 			Errors errors) {
 		try {
-			if(bindResult.hasErrors()) {
-				System.out.print("error found");
-				return "error";
-			}else {
-				System.out.println("No errors");
-				if(service.isValidPost(postDto)) {
-					//boolean didCreate = 
-					service.create_new_post_article(postDto);
-					//model.addAttribute("msg", "Registration Confirmed!");
-					model.addAttribute("post", postDto);
-					return "login";
-				}
-
-				model.addAttribute("msg", "Article Creation Failed!");
-				return "index";
-			}
+			if(service.isValidPost(postDto))
+				return "success";
 		} catch(Exception e) {
+			model.addAttribute("trace", e.toString());
 			return "error";
 		}
+		return "";
 	}
+
+//	@PostMapping("/article/creatArticle")
+//	public String create_A_Post(
+//			@Validated @ModelAttribute("post") PostDto postDto,
+//			BindingResult bindResult,
+//			HttpServletRequest request,
+//			Model model,
+//			Errors errors) {
+//		try {
+//			if(bindResult.hasErrors()) {
+//				System.out.print("error found");
+//				return "error";
+//			}else {
+//				System.out.println("No errors");
+//				if(service.isValidPost(postDto)) {
+//					//boolean didCreate = 
+//					service.create_new_post_article(postDto);
+//					//model.addAttribute("msg", "Registration Confirmed!");
+//					model.addAttribute("post", postDto);
+//					//return "login";
+//					return "redirect:/";
+//				}
+//
+//				model.addAttribute("msg", "Article Creation Failed!");
+//				//return "index";
+//				return "redirect:/";
+//			}
+//		} catch(Exception e) {
+//			return "error";
+//		}
+//	}
 
 
 
