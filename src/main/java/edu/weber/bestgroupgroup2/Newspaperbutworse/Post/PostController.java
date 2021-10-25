@@ -33,10 +33,6 @@ public class PostController {
 	}
 
 
-
-
-
-
 	@GetMapping("/article/createArticle")
 	public String showCreate_A_Post(WebRequest request, Model model) {
 		PostDto postDto = new PostDto();
@@ -53,13 +49,17 @@ public class PostController {
 			Model model,
 			Errors errors) {
 		try {
-			if(service.isValidPost(postDto))
-				return "success";
+			if(service.isValidPost(postDto)) {
+				boolean didCreate = service.create_new_post_article(postDto);
+				return "redirect:/";
+			}
+			else {
+				return "";
+			}
 		} catch(Exception e) {
 			model.addAttribute("trace", e.toString());
 			return "error";
 		}
-		return "";
 	}
 
 //	@PostMapping("/article/creatArticle")
