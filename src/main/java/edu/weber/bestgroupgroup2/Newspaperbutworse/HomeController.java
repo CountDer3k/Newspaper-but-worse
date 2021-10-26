@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.ArticleModel;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.ArticleModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 
 @Controller
 public class HomeController {
