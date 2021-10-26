@@ -2,6 +2,8 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 public class PostController {
 
 	PostService service;
-
+	Logger logger = LoggerFactory.getLogger(PostService.class);
 
 	@Autowired
 	public PostController(PostService service) {
@@ -27,8 +29,8 @@ public class PostController {
 
 	@GetMapping("/article/articleNum/{articleID}")
 	public String showViewArticle(WebRequest request, Model model) {
-		PostDto userDto = new PostDto();
-		model.addAttribute("post", userDto);
+		//PostDto userDto = new PostDto();
+		//model.addAttribute("post", userDto);
 		return "article/viewArticle";
 	}
 
@@ -38,27 +40,33 @@ public class PostController {
 		PostDto postDto = new PostDto();
 		model.addAttribute("post", postDto);
 		return "article/createArticle";
+		//return "article/createArticle";
 	}
 
 
 	@PostMapping("/article/createArticle")
 	public String create_New_post(
 			@Validated @ModelAttribute("post") PostDto postDto,
-			BindingResult bindResult,
-			HttpServletRequest request,
-			Model model,
-			Errors errors) {
+			//BindingResult bindResult,
+			//HttpServletRequest request,
+			Model model
+			//,Errors errors
+			) {
+		logger.debug("Post Mapping");
 		try {
 			if(service.isValidPost(postDto)) {
 				boolean didCreate = service.create_new_post_article(postDto);
-				return "redirect:/";
+				logger.debug("Post success: "+didCreate);
+				model.addAttribute("post", postDto);
+				return "/";
 			}
 			else {
-				return "";
+				model.addAttribute("msg", "All fields must be filled");
+				return "/";
 			}
 		} catch(Exception e) {
 			model.addAttribute("trace", e.toString());
-			return "error";
+			return "/";
 		}
 	}
 

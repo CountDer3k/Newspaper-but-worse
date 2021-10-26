@@ -28,8 +28,7 @@
 			<a href="/" class="h3" style="background-color: none; color: white"><i
 				class="fas fa-arrow-left h4"></i></a>
 
-			<form action="article/createArticle" th:object="${post}"
-				method="POST" enctype="utf8">
+			<form action="article/createArticle" th:object="${post}" method="POST" enctype="utf8">
 				<div class="form-group">
 					<label>Title(*)</label> <input class="form-control"
 						th:field="*{title}" />

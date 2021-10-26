@@ -25,10 +25,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/user/registration")
-	public String showRegistrationForm(WebRequest request, Model model) {
+	public ModelAndView showRegistrationForm(WebRequest request, Model model) {
 	    UserDto userDto = new UserDto();
 	    model.addAttribute("user", userDto);
-	    return "user/registration";
+	    
+	    ModelAndView mav = new ModelAndView("user/registration");
+	    return mav;
+	    //return "user/registration";
 	}
 	
 	@PostMapping("/user/registration")
@@ -50,7 +53,7 @@ public class UserController {
 	    }
 	    
 	    model.addAttribute("msg", "Registration Failed!");
-	    return "user/registration";
+	    return "~/user/registration";
 	}
 
 }
