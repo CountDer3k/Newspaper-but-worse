@@ -17,11 +17,22 @@ public class UserRepository {
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
-	private final String INSERT_QUERY = "INSERT INTO User (username, password, email, first_name, last_name) VALUES (:username, :password, :email, :firstName, :lastName)";
+	private final String INSERT_USER = "INSERT INTO User (username, password, email, first_name, last_name) VALUES (:username, :password, :email, :firstName, :lastName)";
+	private final String SELECT_USER_WITH_ROLES = "SELECT * FROM User";
+	
 	
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
+	
+	public User getUserByUsername(String username) {
+		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username";
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("username", username);
+		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
+		namedParameterJdbcTemplate.query(sql, parameters, callbackHandler);
+		return callbackHandler.getUser();
 	}
 
 	public User getUserByEmail(String email) {
@@ -42,14 +53,14 @@ public class UserRepository {
 
 	public User save(User user) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		SqlParameterSource parameters = new MapSqlParameterSource()
+		MapSqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("username", user.getUsername())
 				.addValue("password", user.getPassword())
 				.addValue("email", user.getEmail())
 				.addValue("firstName", user.getFirstName())
 				.addValue("lastName", user.getLastName());
 		
-		namedParameterJdbcTemplate.update(INSERT_QUERY, parameters, keyHolder);
+		namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
 		user.setUserId(keyHolder.getKey().intValue());
 		return user;
 	}
