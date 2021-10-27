@@ -31,6 +31,7 @@ public class PostController {
 	@GetMapping("articles/articleNum/{articleId}")
 	public String showArticleView(@PathVariable String articleId, Model model) {
 		
+		try {
 		// Get article from db		
 		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
 		
@@ -39,6 +40,10 @@ public class PostController {
 		model.addAttribute("articleId", articleId);
 		
 		return "article/article";
+		} catch(Exception e) {
+			logger.error(e.toString());
+			return null;
+		}
 	}
 	
 	

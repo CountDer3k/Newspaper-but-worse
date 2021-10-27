@@ -3,6 +3,8 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.ArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
@@ -21,6 +24,7 @@ public class HomeController {
 	@Value("${spring.application.name}")
 	String name;
 	PostService postService;
+	private Logger logger = LoggerFactory.getLogger(PostRepository.class);
 	
 	@Autowired
 	public HomeController(PostService postService) {
@@ -31,6 +35,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String home(Model model){
 		
+		try {
 		// Get all posts from the db
 		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 		posts = postService.getAllPosts();
@@ -45,6 +50,11 @@ public class HomeController {
 			model.addAttribute("name", name);
 		}
 		return "index";
+		} catch(Exception e) {
+			logger.error("" + e.toString());
+			return null;
+		}
+		
 	}
 
 	@GetMapping("/login")

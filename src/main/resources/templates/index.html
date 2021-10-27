@@ -41,7 +41,7 @@
 						<p
 							th:text="${#strings.abbreviate(post.post.article.content,150)} "></p>
 						<a href="article.html"
-							th:href=@{/articles/articleNum/{articleId}(articleId=${post.post.Id})}
+							th:href=@{/articles/articleNum/{articleId}(articleId=${post.post.article.postId})}
 							class="btn btn-sm btn-block btn-info">Read More...</a>
 					</div>
 				</div>

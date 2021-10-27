@@ -28,7 +28,7 @@ public class UserController {
 	public String showRegistrationForm(WebRequest request, Model model) {
 	    UserDto userDto = new UserDto();
 	    model.addAttribute("user", userDto);
-	    return "user/registration";
+	    return "redirect:/user/registration";
 	}
 	
 	@PostMapping("/user/registration")
@@ -50,7 +50,7 @@ public class UserController {
 	    }
 	    
 	    model.addAttribute("msg", "Registration Failed!");
-	    return "user/registration";
+	    return "redirect:/user/registration";
 	}
 
 }
