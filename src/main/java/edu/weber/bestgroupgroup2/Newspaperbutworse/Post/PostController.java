@@ -41,6 +41,7 @@ public class PostController {
 		return "article/article";
 	}
 	
+	
 	@GetMapping("/articles/articleForm")
 	public String showRegistrationForm(WebRequest request, Model model) {
 	    PostDto postDto = new PostDto();
@@ -58,10 +59,11 @@ public class PostController {
 		if(bindResult.hasErrors()) {
 			return "error";
 		}
-		
+		//?? Get this from logged in user
+		int userID = 1;
 		
 	    if(postService.isValidPost(postDto)) {
-	    	PostModel addedPost = postService.addNewPost(postDto);
+	    	PostModel addedPost = postService.addNewPost(postDto, userID);
         	model.addAttribute("post", postDto);
 	    	return "redirect:/";
 	    }

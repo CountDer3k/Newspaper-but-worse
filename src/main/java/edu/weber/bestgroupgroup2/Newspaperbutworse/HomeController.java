@@ -31,9 +31,11 @@ public class HomeController {
 	@GetMapping("/")
 	public String home(Model model){
 		
+		// Get all posts from the db
 		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 		posts = postService.getAllPosts();
 		
+		// If no posts are available show the empty content div
 		if(posts.size() == 0) {
 			model.addAttribute("isEmpty", true);
 			model.addAttribute("empty", "No content available to display...");
@@ -42,8 +44,6 @@ public class HomeController {
 			model.addAttribute("posts", posts);
 			model.addAttribute("name", name);
 		}
-		
-		
 		return "index";
 	}
 
@@ -51,10 +51,4 @@ public class HomeController {
 	public String login(Model model) {
 		return "login";
 	}
-
-	//	@GetMapping("/error")
-	//	public String error(Model model) {
-	//		return "error";
-	//	}
-
 }

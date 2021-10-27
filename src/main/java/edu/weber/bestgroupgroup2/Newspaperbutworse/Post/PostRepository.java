@@ -3,12 +3,8 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,10 +61,9 @@ public class PostRepository {
 						article.setAccess(rs.getString("access"));
 						
 						post.setArticle(article);
-						// ?? This should be pulled from logged in user
-						int userID = 1;
-						post.setUserId(userID);
-						// ?? store create_on & modified_on
+						
+						post.setCreateDate(rs.getDate("create_on"));
+						post.setModifiedDate(rs.getDate("modified_on"));
 						return post;
 					});
 		} catch(Exception e) {
@@ -98,9 +93,8 @@ public class PostRepository {
 						
 						post.setArticle(article);
 						
-						Date date = new Date(0);
-						post.setCreateDate(date);
-						post.setModifiedDate(date);
+						post.setCreateDate(rs.getDate("create_on"));
+						post.setModifiedDate(rs.getDate("modified_on"));
 						post.setUserId(rs.getInt("user_id"));
 						
 						pam.setName(rs.getString("NAME"));

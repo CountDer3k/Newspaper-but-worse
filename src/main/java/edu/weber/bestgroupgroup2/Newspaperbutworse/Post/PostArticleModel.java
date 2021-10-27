@@ -1,9 +1,16 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+
+/*
+ This class holds a post (PostModel)
+ and has a name of the author from the post 
+ */
+
 public class PostArticleModel {
 
 	private PostModel post;
 	private String name;
+	
 	
 	public PostArticleModel() {
 		
