@@ -12,7 +12,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 @Controller
 public class ArticleController {
 
-	@GetMapping("/article/{articleId}")
+	@GetMapping("/OLDarticle/{articleId}")
 	public String article(@PathVariable String articleId, Model model) {
 		
 		

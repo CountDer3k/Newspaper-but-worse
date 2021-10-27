@@ -32,7 +32,7 @@
 						</p>
 						<hr />
 						<p th:text="${#strings.abbreviate(post.article.content,150)} "></p>
-							<a href="article.html" th:href=@{/article/{articleId}(articleId=${post.Id})} class="btn btn-sm btn-block btn-info">Read More...</a>
+							<a href="article.html" th:href=@{/articles/articleNum/{articleId}(articleId=${post.Id})} class="btn btn-sm btn-block btn-info">Read More...</a>
 					</div>
 				</div>
 			</th:block>

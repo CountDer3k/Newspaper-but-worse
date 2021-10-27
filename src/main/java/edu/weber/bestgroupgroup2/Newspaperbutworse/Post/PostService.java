@@ -27,6 +27,14 @@ public class PostService{
     	return true;
     }
     
+    public PostModel getPostByID(String id) {
+    	PostModel post = new PostModel();
+
+    	post = postRepository.getArticleByID2(id);
+    	
+    	return post;
+    }
+    
     public PostModel addNewPost(PostDto postDto) {
     	PostModel post = new PostModel();
     	ArticleModel article = new ArticleModel();
