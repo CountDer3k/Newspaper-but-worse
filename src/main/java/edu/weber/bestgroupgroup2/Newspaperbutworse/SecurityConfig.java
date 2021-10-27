@@ -25,8 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final ApplicationContext applicationContext;
 	
 	@Autowired
-	public SecurityConfig(NamedParameterJdbcTemplate jdbcTemplate, ApplicationContext applicationContext) {
-		this.jdbcTemplate = jdbcTemplate;
+	public SecurityConfig(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 	
@@ -36,17 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Override
-	public UserDetailsService userDetailsServiceBean() throws Exception {
-		return applicationContext.getBean(UserService.class);
-	}
-	
-	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 	    http
 	      .csrf().disable()
 	      .authorizeRequests()
 	      .antMatchers("/**").permitAll()
 	      .anyRequest().authenticated();
+	}
+	
+	@Override
+	public UserDetailsService userDetailsServiceBean() throws Exception {
+		return applicationContext.getBean(UserService.class);
 	}
 	
 	@Bean//(name = BeanIds.AUTHENTICATION_MANAGER)

@@ -105,8 +105,8 @@ VALUES
     
 INSERT INTO `User` (username, `password`, email, first_name, last_name, created_on, modified_on) 
 VALUES
-	("PParker", "SpideyPete2001", "ArachnidGuy@gmail.com", "Peter", "Parker", now(), now()),
-    ("JonahIsTheMan", "IHateSpiderMenace7", "JJJamesonJr@gmail.com", "John", "Jameson", now(), now());
+	("PParker", "$2a$10$kUlCiuGYLHPTwxNnXR9NL.FHeXOt.rmiO6D59kOGf7MsfLKzcU06m", "ArachnidGuy@gmail.com", "Peter", "Parker", now(), now()),
+    ("JonahIsTheMan", "$2a$10$A1NQhGFyQuy4m896Y3fRnO/XGQRMyQ.t/QSx1S8GdLaiPHkIv1v4K", "JJJamesonJr@gmail.com", "John", "Jameson", now(), now());
     
 INSERT INTO User_Role (user_id, role_id)
 VALUES
