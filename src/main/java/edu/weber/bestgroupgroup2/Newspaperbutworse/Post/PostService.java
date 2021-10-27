@@ -1,7 +1,9 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +32,22 @@ public class PostService{
     public PostModel getPostByID(String id) {
     	PostModel post = new PostModel();
 
-    	post = postRepository.getArticleByID2(id);
+    	post = postRepository.getArticleByID(id);
     	
     	return post;
+    }
+    
+    public PostArticleModel getPostWithAuthorByID(String id) {
+    	PostArticleModel pam = postRepository.getArticleWithAuthorByID(id);
+    	return pam;
+    }
+    
+    public List<PostArticleModel> getAllPosts(){
+    	List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+    	
+    	posts = postRepository.getAllPosts();
+    	
+    	return posts;
     }
     
     public PostModel addNewPost(PostDto postDto) {

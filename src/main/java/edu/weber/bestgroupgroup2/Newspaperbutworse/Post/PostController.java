@@ -15,39 +15,28 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
 @Controller
 public class PostController {
 	
 	PostService postService;
-	UserService userService;
 	private Logger logger = LoggerFactory.getLogger(PostRepository.class);
 	
 	@Autowired
-	public PostController(PostService postService, UserService userService) {
+	public PostController(PostService postService) {
 		this.postService = postService;
-		this.userService = userService;
 	}
 	
 	@GetMapping("articles/articleNum/{articleId}")
 	public String showArticleView(@PathVariable String articleId, Model model) {
 		
-		// Get article from db
-		PostModel post = postService.getPostByID(articleId);
-		ArticleModel article = post.getArticle();
-		// Get User from post & db
-		User user = userService.getUserByID(post.getUserId());
-		String authorName = user.getFirstName() + " " + user.getLastName();	
+		// Get article from db		
+		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
 		
-		// add article to model attributes
-		model.addAttribute("article", article);
-		model.addAttribute("author", authorName);
+		model.addAttribute("author", pam.getName());
+		model.addAttribute("article", pam.getPost().getArticle());
 		model.addAttribute("articleId", articleId);
-		
 		
 		return "article/article";
 	}

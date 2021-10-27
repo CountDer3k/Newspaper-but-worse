@@ -1,19 +1,9 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
-import java.sql.Date;
-
 public class PostArticleModel {
 
-	private int Id;
-	private int userId;
-	private Date createDate;
-	private Date modifiedDate;
-	private int postId;
-	private int sectionId;
-	private String title;
-	private String content;
-	private String access;
 	private PostModel post;
+	private String name;
 	
 	public PostArticleModel() {
 		
@@ -26,4 +16,14 @@ public class PostArticleModel {
 	public void setPost(PostModel post) {
 		this.post = post;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 }
