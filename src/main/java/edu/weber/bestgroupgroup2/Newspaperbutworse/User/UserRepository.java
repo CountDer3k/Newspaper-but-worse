@@ -1,13 +1,8 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -37,18 +32,11 @@ public class UserRepository {
 
 	public User getUserByEmail(String email) {
 		String sql = "SELECT * FROM User WHERE email = :email";
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("email", email);
-		return namedParameterJdbcTemplate.queryForObject(sql, parameters, (RowMapper<User>) (rs, rowNum) -> {
-			User user = new User();
-			user.setUserId(rs.getInt("USER_ID"));
-			user.setUsername(rs.getString("USERNAME"));
-			user.setPassword(rs.getString("PASSWORD"));
-			user.setEmail(rs.getString("EMAIL"));
-			user.setFirstName(rs.getString("FIRST_NAME"));
-			user.setLastName(rs.getString("LAST_NAME"));
-			return user;
-		});
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("email", email);
+		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
+		namedParameterJdbcTemplate.query(sql, parameters, callbackHandler);
+		return callbackHandler.getUser();
 	}
 
 	public User save(User user) {
