@@ -1,4 +1,4 @@
-package edu.weber.bestgroupgroup2.Newspaperbutworse.Models;
+package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import java.sql.Date;
 
@@ -29,6 +29,15 @@ public class ArticleModel {
 		this.access = access;
 	}
 	
+	public ArticleModel(int postId, int sectionId, String title, String content, String access, ArticleModel article) 
+	{
+		this.postId = postId;
+		this.sectionId = sectionId;
+		this.title = title;
+		this.content = content;
+		this.access = access;
+	}
+
 	public int getPostId() {
 		return postId;
 	}

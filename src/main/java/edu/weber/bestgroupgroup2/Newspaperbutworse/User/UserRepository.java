@@ -12,12 +12,16 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.ArticleModel;
+
 @Repository
 public class UserRepository {
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	private final String INSERT_QUERY = "INSERT INTO User (username, password, email, first_name, last_name) VALUES (:username, :password, :email, :firstName, :lastName)";
+	private final String GET_USER = "SELECT * FROM User WHERE user_id = :userID ";
+	
 	
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -29,6 +33,21 @@ public class UserRepository {
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("email", email);
 		return namedParameterJdbcTemplate.queryForObject(sql, parameters, (RowMapper<User>) (rs, rowNum) -> {
+			User user = new User();
+			user.setUserId(rs.getInt("USER_ID"));
+			user.setUsername(rs.getString("USERNAME"));
+			user.setPassword(rs.getString("PASSWORD"));
+			user.setEmail(rs.getString("EMAIL"));
+			user.setFirstName(rs.getString("FIRST_NAME"));
+			user.setLastName(rs.getString("LAST_NAME"));
+			return user;
+		});
+	}
+	
+	public User getUserByID(int id) {
+		SqlParameterSource parameters = new MapSqlParameterSource()
+				.addValue("userID", id);
+		return namedParameterJdbcTemplate.queryForObject(GET_USER, parameters, (RowMapper<User>) (rs, rowNum) -> {
 			User user = new User();
 			user.setUserId(rs.getInt("USER_ID"));
 			user.setUsername(rs.getString("USERNAME"));
