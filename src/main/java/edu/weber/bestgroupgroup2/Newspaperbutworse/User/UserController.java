@@ -29,7 +29,7 @@ public class UserController {
 	public String showRegistrationForm(WebRequest request, Model model) {
 	    UserDto userDto = new UserDto();
 	    model.addAttribute("user", userDto);
-	    return "redirect:/user/registration";
+	    return "/user/registration";
 	}
 	
 	@PostMapping("/user/registration")
