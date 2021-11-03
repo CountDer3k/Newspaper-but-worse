@@ -4,6 +4,10 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -104,8 +108,23 @@ public class PostServiceTest {
 	
 	
 	@Test
-	public void testGetAllPosts() {
-		Assert.assertFalse(true);
+	public void testGetAllPosts_NoPosts() {
+		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
+		List<PostArticleModel> actual = postRepository.getAllPosts();	
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testGetAllPosts_HasPosts() {
+		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
+		
+		PostArticleModel pam = makePAM();
+		expected.add(pam);
+		
+		//postService.addNewPost(makePostDto(), 1);
+		
+		List<PostArticleModel> actual = postRepository.getAllPosts();	
+		Assert.assertEquals(expected.size(), actual.size());
 	}
 	
 	@Test
@@ -121,10 +140,50 @@ public class PostServiceTest {
 		Assert.assertEquals(expected, actual);
 	}
 	
-	 
+
 	
+	//------------------------
+	// Helper creation methods
+	//------------------------
 	
+	public PostArticleModel makePAM() {
+		PostArticleModel pam = new PostArticleModel();
+		PostModel post = makePost();
+		pam.setPost(post);
+		pam.setName("Dobby Elf");
+		
+		
+		return pam;
+	}
 	
+	public PostModel makePost() {
+		PostModel post = new PostModel();
+		ArticleModel article = makeArticle();
+
+		post.setUserId(1);
+		long millis = System.currentTimeMillis();  
+		post.setCreateDate(new Date(millis));
+		post.setArticle(article);
+		
+		return post;
+	}
+
+	public PostDto makePostDto() {
+		PostDto article = new PostDto();
+		
+		article.setTitle("another testing article");
+		article.setContent("This is yet another article with some nice content... yum ;)");
+		article.setAccess("FR");
+		
+		return article;
+	}
 	
-	
+	public ArticleModel makeArticle() {
+		ArticleModel article = new ArticleModel();
+		article.setTitle("another testing article");
+		article.setContent("This is yet another article with some nice content... yum ;)");
+		article.setAccess("FR");
+		
+		return article;
+	}
 }
