@@ -38,13 +38,18 @@ public class PostRepository {
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id ";
 	
+	
+	private static PostRepository INSTANCE;
+	 
+	public PostRepository(){}
+	
 	@Autowired
 	public PostRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
-	//testing for all
-	public PostModel getArticleByID(String id) {
+	
+	public PostModel getArticleByID(String id) { 
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
@@ -161,7 +166,7 @@ public class PostRepository {
 			saveArticle(article);
 		} catch(Exception e) 
 		{
-			logger.error("PostRepository - savePost() " + e.getLocalizedMessage() + e.getStackTrace());
+			logger.error("PostRepository - savePost() " + e.getLocalizedMessage());
 		}
 		return post;
 	}
@@ -182,5 +187,12 @@ public class PostRepository {
 		}
 		return article;
 	}
+	
+	 public static PostRepository getInstance() {
+			if(INSTANCE == null){
+				INSTANCE = new PostRepository();
+			}
+			return INSTANCE;
+		}
 
 }

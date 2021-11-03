@@ -16,11 +16,18 @@ public class PostService{
     private PostRepository postRepository;
     private Logger logger = LoggerFactory.getLogger(PostRepository.class);
 
+    private static PostService INSTANCE;
+    
+    
+    public PostService() {
+    	
+    }
+    
     @Autowired
     public PostService(PostRepository userRepo) {
     	this.postRepository = userRepo;
     }
-    
+     
     public boolean isValidPost(PostDto postDto) {
     	
     	if(postDto.getTitle().equals("") || postDto.getContent().equals("") || postDto.getAccess().equals(""))
@@ -49,7 +56,7 @@ public class PostService{
     	PostModel post = new PostModel();
     	ArticleModel article = new ArticleModel();
     	
-    	article.setTitle(postDto.getTitle());
+    	article.setTitle(postDto.getTitle()); 
     	article.setContent(postDto.getContent());
     	article.setAccess(postDto.getAccess());
     	
@@ -63,5 +70,13 @@ public class PostService{
     	
     	return postRepository.savePost(post);
     }
+    
+    
+    public static PostService getInstance() {
+		if(INSTANCE == null){
+			INSTANCE = new PostService();
+		}
+		return INSTANCE;
+	}
     
 }
