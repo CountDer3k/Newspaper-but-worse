@@ -9,6 +9,7 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 public class PostArticleModel {
 
 	private PostModel post;
+	// author name
 	private String name;
 	
 	
