@@ -4,14 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -24,33 +22,34 @@ public class UserController {
 		this.userService = userService;
 	}
 	
+	/* Registration */
 	@GetMapping("/user/registration")
-	public String showRegistrationForm(WebRequest request, Model model) {
-	    UserDto userDto = new UserDto();
-	    model.addAttribute("user", userDto);
-	    return "user/registration";
+	public ModelAndView showRegistrationForm() {
+		ModelAndView modelAndView = new ModelAndView("user/registration");
+		modelAndView.getModelMap().addAttribute("user", new UserDto());
+	    return modelAndView;
 	}
 	
 	@PostMapping("/user/registration")
-	public String registerUserAccount(
-	  @Validated @ModelAttribute("user") UserDto userDto,
+	public ModelAndView registerUserAccount(
+	  @ModelAttribute("user") @Validated UserDto userDto,
 	  BindingResult bindResult,
 	  HttpServletRequest request,
-	  Model model,
 	  Errors errors) {
+		
 		if(bindResult.hasErrors()) {
-			return "error";
+			return new ModelAndView("error");
 		}
 		
 	    if(userService.isValidUser(userDto)) {
-	    	User registered = userService.registerNewUserAccount(userDto);
-	    	//model.addAttribute("msg", "Registration Confirmed!");
-        	model.addAttribute("user", userDto);
-	    	return "redirect:/";
+	    	ModelAndView modelAndView = new ModelAndView("redirect:/");
+	    	userService.registerNewUserAccount(userDto);
+	    	modelAndView.getModelMap().addAttribute("msg", "Registration Confirmed!");
+	    	modelAndView.getModelMap().addAttribute("user", userDto);
+	    	return modelAndView;
 	    }
 	    
-	    model.addAttribute("msg", "Registration Failed!");
-	    return "user/registration";
+	    return new ModelAndView("user/registration", "msg", "Registration Failed!");
 	}
 
 }
