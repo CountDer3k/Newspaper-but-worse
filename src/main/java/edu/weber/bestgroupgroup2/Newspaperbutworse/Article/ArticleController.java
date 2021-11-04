@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.ArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
@@ -13,13 +14,13 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
 public class ArticleController {
 
 	@GetMapping("/article/{articleId}")
-	public String article(@PathVariable String articleId, Model model) {
+	public ModelAndView article(@PathVariable String articleId) {
 		
-		
-		//?? Grab post from id and pass them into post
+		ModelAndView modelAndView = new ModelAndView("article/article");
+		// Grab post from id and pass them into post
 		PostModel post = new PostModel(-1);
 		
-		//Testing
+		// Testing
 		ArticleModel article = new ArticleModel();
 		article.setTitle("Hogwarts, A History");
 		article.setContent("Hogwarts: A History, also known as Hogwarts, A History, is a book concerning Hogwarts School of Witchcraft and Wizardry and its history that was written by Bathilda Bagshot[1]. It was Hermione Granger's favourite book and she often referred to this book on many things concerning Hogwarts School of Witchcraft and Wizardry. Three of the things that are frequently brought up are the Great Hall's enchanted ceiling that shows the weather outside, the fact that you cannot apparate or disapparate on Hogwarts grounds and the fact that electronic devices do not work within the grounds.\n"
@@ -32,9 +33,9 @@ public class ArticleController {
 		post.setUserId(10);
 		post.setArticle(article);
 		
-		model.addAttribute("post", post);
-		model.addAttribute("articleId", articleId);
+		modelAndView.getModelMap().addAttribute("post", post);
+		modelAndView.getModelMap().addAttribute("articleId", articleId);
 		
-		return "article/article";
+		return modelAndView;
 	}	
 }
