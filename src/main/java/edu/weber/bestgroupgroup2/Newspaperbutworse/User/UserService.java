@@ -32,6 +32,14 @@ public class UserService implements UserDetailsService {
     	return true;
     }
     
+    public User getUserByID(int id) {
+    	User user = new User();
+    	
+    	user = userRepository.getUserByID(id);
+    	
+    	return user;
+    }
+    
     public User registerNewUserAccount(UserDto userDto) {
     	
     	User user = new User();

@@ -3,23 +3,39 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.ArticleModel;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Models.PostModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.ArticleModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostRepository;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Controller
 public class HomeController {
 	@Value("${spring.application.name}")
 	String name;
+	PostService postService;
+	private Logger logger = LoggerFactory.getLogger(PostRepository.class);
+	
+	@Autowired
+	public HomeController(PostService postService) {
+		this.postService = postService;
+	}
+
 
 	@GetMapping("/")
-	public String home(Model model){
-
+	@Log
+	public ModelAndView home(){
+		ModelAndView modelAndView = new ModelAndView("index");
 		List<PostModel> postList = new ArrayList<PostModel>();
 
 		ArticleModel article1 = new ArticleModel("Slytherin Quidditch Through The Ages","This is the first article");
@@ -36,14 +52,10 @@ public class HomeController {
 		postList.add(pm1);
 		postList.add(pm2);
 
-		model.addAttribute("posts", postList);
-		model.addAttribute("name", name);
-		return "index";
+		modelAndView.getModelMap().addAttribute("posts", postList);
+		modelAndView.getModelMap().addAttribute("name", name);
+		
+		return modelAndView;
 	}
-
-	//	@GetMapping("/error")
-	//	public String error(Model model) {
-	//		return "error";
-	//	}
-
+	
 }
