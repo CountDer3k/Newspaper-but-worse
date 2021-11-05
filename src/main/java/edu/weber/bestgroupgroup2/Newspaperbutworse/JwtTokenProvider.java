@@ -4,12 +4,14 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Date;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
@@ -19,6 +21,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@Component
 public class JwtTokenProvider {
 
 	//Time To Live (Currently set to be 1 hour; can be changed)
@@ -118,10 +121,15 @@ public class JwtTokenProvider {
 
 	private String getJwtTokenFromRequest(HttpServletRequest request) {
 		
-		return Arrays.stream(request.getCookies())
-				.filter(c -> c.getName().equals(AppConstants.JWT_COOKIE_NAME))
-				.findFirst()
-				.get()
-				.getValue();
+		Cookie[] cookies = request.getCookies();
+		
+		if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if (cookie.getName().equals(AppConstants.JWT_COOKIE_NAME)) {
+	                return cookie.getValue();
+	            }
+	        }
+	    }
+		return null;
 	}
 }
