@@ -5,7 +5,6 @@ import org.junit.Test;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
@@ -57,7 +55,7 @@ public class PostRepositoryTest {
 		repo = new PostRepository(template);
 		keyHolder = new GeneratedKeyHolder();
 	}
-
+ 
 
 	@Test
 	public void testGetArticleByID() {
@@ -67,32 +65,6 @@ public class PostRepositoryTest {
 		PostModel post = makePost();
 		repo.savePost(post);
 		
-		
-		
-		/*
-		 * Mockito.when(jdbcTemplate.query(
-            ArgumentMatchers.anyString(), ArgumentMatchers.any(RowMapper.class)))
-            .thenAnswer((invocation) -> {
-
-                RowMapper<User> rowMapper = (RowMapper<User>) invocation.getArgument(1);
-                ResultSet rs = Mockito.mock(ResultSet.class);
-
-                // Mock ResultSet to return two rows.
-                Mockito.when(rs.getInt(ArgumentMatchers.eq("ID")))
-                    .thenReturn(506, 400);
-                Mockito.when(rs.getString(ArgumentMatchers.eq("NAME")))
-                    .thenReturn("Jim Carrey", "John Travolta");
-                Mockito.when(rs.getBoolean(ArgumentMatchers.eq("STATUS")))
-                    .thenReturn(true, false);
-
-                List<User> users = new ArrayList<>();
-                users.add(rowMapper.mapRow(rs, 0));
-                users.add(rowMapper.mapRow(rs, 1));
-
-                return users;
-        });
-
-		 * */
 		
 		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (org.springframework.jdbc.core.RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class)))
 		.thenAnswer((invocation) -> {
@@ -113,7 +85,7 @@ public class PostRepositoryTest {
 		String id = "1";
 		mockKeyHolder();
 
-		PostModel post = makePost();
+		PostModel post = makePost(); 
 		repo.savePost(post);
 
 		PostArticleModel expected = new PostArticleModel();

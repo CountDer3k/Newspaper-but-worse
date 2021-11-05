@@ -76,7 +76,7 @@ public class PostServiceTest {
 		
 		Assert.assertFalse(isValid);
 	}
-	
+	 
 	@Test
 	public void testGetPostByID_Valid() {
 		PostDto dto = new PostDto();
@@ -108,7 +108,7 @@ public class PostServiceTest {
 	@Test
 	public void testGetAllPosts_NoPosts() {
 		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
-		List<PostArticleModel> actual = postRepository.getAllPosts();	
+		List<PostArticleModel> actual = postService.getAllPosts();	
 		Assert.assertEquals(expected, actual);
 	}
 	
@@ -124,7 +124,7 @@ public class PostServiceTest {
 
 		when(postRepository.getAllPosts()).thenReturn(expected);
 		
-		List<PostArticleModel> actual = postRepository.getAllPosts();	
+		List<PostArticleModel> actual = postService.getAllPosts();	
 		Assert.assertEquals(expected.size(), actual.size());
 	}
 	
