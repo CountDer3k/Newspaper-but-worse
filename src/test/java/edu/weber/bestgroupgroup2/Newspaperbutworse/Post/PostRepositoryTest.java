@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.tree.RowMapper;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,6 +21,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -56,7 +56,7 @@ public class PostRepositoryTest {
 		keyHolder = new GeneratedKeyHolder();
 	}
  
-
+	
 	@Test
 	public void testGetArticleByID() {
 		String id = "1";
@@ -65,14 +65,8 @@ public class PostRepositoryTest {
 		PostModel post = makePost();
 		repo.savePost(post);
 		
-		
-		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (org.springframework.jdbc.core.RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class)))
-		.thenAnswer((invocation) -> {
-            return post;
-		});
-		//when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (org.springframework.jdbc.core.RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class))).thenReturn(post);
-		//when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), ArgumentMatchers.RowMapper<PostModel>any()))).thenReturn(post);
-		
+		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class)))
+		.thenReturn(post);
 		
 		PostModel actual = repo.getArticleByID(id);
 		PostModel expected = post;
@@ -87,12 +81,17 @@ public class PostRepositoryTest {
 
 		PostModel post = makePost(); 
 		repo.savePost(post);
-
+		
 		PostArticleModel expected = new PostArticleModel();
 		expected.setName("Dobby Elf");
 		expected.setPost(post);
 		
 		createNewUser();
+		
+		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (RowMapper<PostArticleModel>) ArgumentMatchers.any(RowMapper.class)))
+		.thenReturn(expected);
+		
+		
 		
 		PostArticleModel actual = repo.getArticleWithAuthorByID(id);
 		Assert.assertEquals(expected, actual);
@@ -141,11 +140,11 @@ public class PostRepositoryTest {
 	}	
 	
 	
+	
+	
 	//------------------------
 	// Helper creation methods
 	//------------------------
-	
-	
 	public void mockKeyHolder() {
 		when(template.update(Mockito.anyString(), Mockito.any(MapSqlParameterSource.class), Mockito.any(GeneratedKeyHolder.class))).thenAnswer(new Answer() {
 			public Object answer(InvocationOnMock invocation) {
@@ -182,7 +181,7 @@ public class PostRepositoryTest {
 		UserService us = new UserService(userRepo, encoder);
 		us.registerNewUserAccount(user);
 		
-	}
+	} 
 
 	
 	public PostModel makePost() {
