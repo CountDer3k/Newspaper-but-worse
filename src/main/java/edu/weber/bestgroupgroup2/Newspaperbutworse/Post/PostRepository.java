@@ -50,7 +50,7 @@ public class PostRepository {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
  
-	
+	@Log
 	public PostModel getArticleByID(String id) { 
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
@@ -79,6 +79,7 @@ public class PostRepository {
 		}
 	}
 	 
+	@Log
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
@@ -154,6 +155,7 @@ public class PostRepository {
 		return posts;
 	}
 
+	@Log
 	public PostModel savePost(PostModel post) {
 		try {
 			KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -174,6 +176,7 @@ public class PostRepository {
 		return post;
 	}
 
+	@Log
 	public ArticleModel saveArticle(ArticleModel article) {
 		try {
 			KeyHolder keyHolder = new GeneratedKeyHolder();

@@ -34,7 +34,7 @@ public class LoggingAspect {
 		String classPath = s.getDeclaringTypeName();
 		String className = classPath.split("edu.weber.bestgroupgroup2.Newspaperbutworse.")[1];
 		String methodName = s.getName();
-		String callPath = className + "-" + methodName + "() ";
+		String callPath = className + "  " + methodName + "() ";
 		Object value = null;
 
 

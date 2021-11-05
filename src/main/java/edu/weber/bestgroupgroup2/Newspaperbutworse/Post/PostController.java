@@ -37,11 +37,6 @@ public class PostController {
 		try {
 		// Get article from db		
 		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-//		logger.debug("Hi there - Debug");
-//		logger.error("Hi There - error");
-//		logger.info("Hi there - info");
-//		logger.trace("Hi there - trace");
-//		logger.warn("Hi there - warn");
 		model.addAttribute("author", pam.getName());
 		model.addAttribute("article", pam.getPost().getArticle());
 		model.addAttribute("articleId", articleId);
