@@ -16,22 +16,19 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 
+
 @RunWith(MockitoJUnitRunner.class)
 public class PostServiceTest {
-
 	
 	PostService postService;
 	
 	@Mock
 	PostRepository postRepository;
-	
 	 
 	
 	@Before
 	public void setup() {
 		postService = new PostService(postRepository);
-		
-		// add a new user here
 	}
 
 	
@@ -79,7 +76,7 @@ public class PostServiceTest {
 		
 		Assert.assertFalse(isValid);
 	}
-	
+	 
 	@Test
 	public void testGetPostByID_Valid() {
 		PostDto dto = new PostDto();
@@ -111,7 +108,7 @@ public class PostServiceTest {
 	@Test
 	public void testGetAllPosts_NoPosts() {
 		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
-		List<PostArticleModel> actual = postRepository.getAllPosts();	
+		List<PostArticleModel> actual = postService.getAllPosts();	
 		Assert.assertEquals(expected, actual);
 	}
 	
@@ -119,12 +116,15 @@ public class PostServiceTest {
 	public void testGetAllPosts_HasPosts() {
 		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
 		
-		PostArticleModel pam = makePAM();
+		PostDto postDto = makePostDto();
+		PostModel post = makePost();
+		PostArticleModel pam = makePAM(post);
 		expected.add(pam);
+		postService.addNewPost(postDto, 1);
+
+		when(postRepository.getAllPosts()).thenReturn(expected);
 		
-		//postService.addNewPost(makePostDto(), 1);
-		
-		List<PostArticleModel> actual = postRepository.getAllPosts();	
+		List<PostArticleModel> actual = postService.getAllPosts();	
 		Assert.assertEquals(expected.size(), actual.size());
 	}
 	
@@ -148,12 +148,13 @@ public class PostServiceTest {
 	//------------------------
 	
 	public PostArticleModel makePAM() {
+		return makePAM(makePost());
+	}
+	
+	public PostArticleModel makePAM(PostModel post) {
 		PostArticleModel pam = new PostArticleModel();
-		PostModel post = makePost();
 		pam.setPost(post);
 		pam.setName("Dobby Elf");
-		
-		
 		return pam;
 	}
 	

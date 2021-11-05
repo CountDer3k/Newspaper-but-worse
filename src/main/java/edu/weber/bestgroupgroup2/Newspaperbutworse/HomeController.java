@@ -18,6 +18,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Controller
 public class HomeController {
@@ -33,6 +34,7 @@ public class HomeController {
 	
 
 	@GetMapping("/")
+	@Log
 	public String home(Model model){
 		
 		try {

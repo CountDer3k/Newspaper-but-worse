@@ -5,24 +5,30 @@ import org.junit.Test;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.swing.tree.RowMapper;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
@@ -41,13 +47,15 @@ public class PostRepositoryTest {
 	UserRepository userRepo;
 	@Mock
 	PasswordEncoder encoder;
+	@Mock
+	ResultSetExtractor<List<PostArticleModel>> rse;
 	
 	@Before
 	public void setup() {
 		repo = new PostRepository(template);
 		keyHolder = new GeneratedKeyHolder();
 	}
-
+ 
 
 	@Test
 	public void testGetArticleByID() {
@@ -56,9 +64,18 @@ public class PostRepositoryTest {
 
 		PostModel post = makePost();
 		repo.savePost(post);
-
+		
+		
+		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (org.springframework.jdbc.core.RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class)))
+		.thenAnswer((invocation) -> {
+            return post;
+		});
+		//when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (org.springframework.jdbc.core.RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class))).thenReturn(post);
+		//when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), ArgumentMatchers.RowMapper<PostModel>any()))).thenReturn(post);
+		
+		
 		PostModel actual = repo.getArticleByID(id);
-		PostModel expected = post;//repo.getArticleByID(id);
+		PostModel expected = post;
 
 		Assert.assertEquals(expected, actual);
 	}
@@ -68,7 +85,7 @@ public class PostRepositoryTest {
 		String id = "1";
 		mockKeyHolder();
 
-		PostModel post = makePost();
+		PostModel post = makePost(); 
 		repo.savePost(post);
 
 		PostArticleModel expected = new PostArticleModel();
@@ -81,6 +98,24 @@ public class PostRepositoryTest {
 		Assert.assertEquals(expected, actual);
 	}
 
+	
+	@Test
+	public void testGetAllPosts() {
+		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
+		
+		mockKeyHolder();
+		PostModel post = makePost();
+		PostArticleModel pam = makePAM(post);
+		expected.add(pam);
+		repo.savePost(post);
+		
+		when(template.query(ArgumentMatchers.any(String.class), ArgumentMatchers.any(ResultSetExtractor.class))).thenReturn(expected);
+				
+		List<PostArticleModel> actual = repo.getAllPosts();
+
+		
+		Assert.assertEquals(expected.size(), actual.size());
+	}
 
 	@Test
 	public void testSavePost() {
@@ -123,6 +158,17 @@ public class PostRepositoryTest {
 		}).thenReturn(1);
 	}
 
+	public PostArticleModel makePAM() {
+		return makePAM(makePost());
+	}
+	
+	public PostArticleModel makePAM(PostModel post) {
+		PostArticleModel pam = new PostArticleModel();
+		pam.setPost(post);
+		pam.setName("Dobby Elf");
+		return pam;
+	}
+	
 	public void createNewUser() {
 		UserDto user = new UserDto();
 		

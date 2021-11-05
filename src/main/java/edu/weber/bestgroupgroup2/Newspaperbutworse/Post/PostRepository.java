@@ -19,6 +19,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 @Repository
 public class PostRepository {
 
@@ -47,7 +49,7 @@ public class PostRepository {
 	public PostRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
-
+ 
 	
 	public PostModel getArticleByID(String id) { 
 		try {
@@ -76,7 +78,7 @@ public class PostRepository {
 			return null;
 		}
 	}
-	
+	 
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
@@ -114,6 +116,7 @@ public class PostRepository {
 		}
 	}
 	
+	@Log
 	public List<PostArticleModel> getAllPosts() {
 		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 		
