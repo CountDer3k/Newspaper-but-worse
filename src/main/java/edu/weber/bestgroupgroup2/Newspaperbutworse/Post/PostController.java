@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
@@ -32,16 +33,16 @@ public class PostController {
 	
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
-	public String showArticleView(@PathVariable String articleId, Model model) {
-		
+	public ModelAndView showArticleView(@PathVariable String articleId) {
+		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
 		// Get article from db		
 		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-		model.addAttribute("author", pam.getName());
-		model.addAttribute("article", pam.getPost().getArticle());
-		model.addAttribute("articleId", articleId);
+		modelAndView.getModelMap().addAttribute("author", pam.getName());
+		modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
+		modelAndView.getModelMap().addAttribute("articleId", articleId);
 		
-		return "article/article"; 
+		return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return null;
@@ -51,34 +52,35 @@ public class PostController {
 	
 	@GetMapping("/articles/articleForm")
 	@Log
-	public String showRegistrationForm(WebRequest request, Model model) {
+	public ModelAndView showRegistrationForm(WebRequest request) {
 	    PostDto postDto = new PostDto();
-	    model.addAttribute("post", postDto);
-	    return "article/articleForm";
+	    ModelAndView modelAndView = new ModelAndView("article/articleForm");
+	    modelAndView.getModelMap().addAttribute("post", postDto);
+	    return modelAndView;
 	}
 	
 	@PostMapping("/articles/articleForm")
 	@Log
-	public String registerUserAccount(
+	public ModelAndView registerUserAccount(
 	  @Validated @ModelAttribute("user") PostDto postDto,
 	  BindingResult bindResult,
 	  HttpServletRequest request,
-	  Model model,
 	  Errors errors) {
+		
 		if(bindResult.hasErrors()) {
-			return "error";
+			return new ModelAndView("error");
 		}
 		//?? Get this from logged in user
 		int userID = 1;
 		
 	    if(postService.isValidPost(postDto)) {
+	    	ModelAndView modelAndView = new ModelAndView("redirect:/");
 	    	PostModel addedPost = postService.addNewPost(postDto, userID);
-        	model.addAttribute("post", postDto);
-	    	return "redirect:/";
+        	modelAndView.getModelMap().addAttribute("post", postDto);
+	    	return modelAndView;
 	    }
-	    
-	    model.addAttribute("msg", "Adding new post Failed!");
-	    return "article/artcileForm";
+
+	    return new ModelAndView("user/registration", "msg", "Registration Failed!");
 	}
 
 }
