@@ -1,7 +1,5 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,9 +41,7 @@ public class UserService implements UserDetailsService {
     }
     
     public User registerNewUserAccount(UserDto userDto) {
-//    	if (emailExists(userDto.getEmail())) {
-    		// throw an exception
-//    	}
+    	
     	User user = new User();
     	user.setFirstName(userDto.getFirstName());
     	user.setLastName(userDto.getLastName());
@@ -55,14 +51,15 @@ public class UserService implements UserDetailsService {
     	return userRepository.save(user);
     }
     
-    private boolean emailExists(String email) {
-        return userRepository.getUserByEmail(email) != null;
-    }
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		User user = userRepository.getUserByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("No user found with username: " + username);
+		}
+		
+		return user;
 	}
 
 }
