@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
-@Controller
+
+@Controller 
 public class PostController {
 	
 	PostService postService;
@@ -29,17 +31,17 @@ public class PostController {
 	}
 	
 	@GetMapping("articles/articleNum/{articleId}")
+	@Log
 	public String showArticleView(@PathVariable String articleId, Model model) {
 		
 		try {
 		// Get article from db		
 		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-		
 		model.addAttribute("author", pam.getName());
 		model.addAttribute("article", pam.getPost().getArticle());
 		model.addAttribute("articleId", articleId);
 		
-		return "article/article";
+		return "article/article"; 
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return null;
@@ -48,6 +50,7 @@ public class PostController {
 	
 	
 	@GetMapping("/articles/articleForm")
+	@Log
 	public String showRegistrationForm(WebRequest request, Model model) {
 	    PostDto postDto = new PostDto();
 	    model.addAttribute("post", postDto);
@@ -55,6 +58,7 @@ public class PostController {
 	}
 	
 	@PostMapping("/articles/articleForm")
+	@Log
 	public String registerUserAccount(
 	  @Validated @ModelAttribute("user") PostDto postDto,
 	  BindingResult bindResult,

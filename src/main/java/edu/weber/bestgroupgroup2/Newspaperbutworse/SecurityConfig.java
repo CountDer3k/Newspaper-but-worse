@@ -27,10 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	private JwtTokenProvider jwtTokenProvider;
 	
 	@Autowired
-	public SecurityConfig(//NamedParameterJdbcTemplate jdbcTemplate,
-			ApplicationContext applicationContext) {
-		//this.jdbcTemplate = jdbcTemplate;
-		this.applicationContext = applicationContext;
+	public SecurityConfig(ApplicationContext applicationContext) {
+      this.applicationContext = applicationContext;
 //		this.jwtTokenProvider = jwtTokenProvider;
 	}
 	
@@ -76,8 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    		.defaultSuccessUrl("/")
 	    		.successHandler(successHandler());
 	}
-	
-	
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {

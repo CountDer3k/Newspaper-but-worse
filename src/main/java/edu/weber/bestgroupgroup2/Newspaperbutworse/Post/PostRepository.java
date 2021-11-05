@@ -19,6 +19,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 @Repository
 public class PostRepository {
 
@@ -38,13 +40,18 @@ public class PostRepository {
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id ";
 	
+	 
+	private static PostRepository INSTANCE;
+	 
+	public PostRepository(){}
+	
 	@Autowired
 	public PostRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
-
-	//testing for all
-	public PostModel getArticleByID(String id) {
+ 
+	@Log
+	public PostModel getArticleByID(String id) { 
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
@@ -71,7 +78,8 @@ public class PostRepository {
 			return null;
 		}
 	}
-	
+	 
+	@Log
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
@@ -109,6 +117,7 @@ public class PostRepository {
 		}
 	}
 	
+	@Log
 	public List<PostArticleModel> getAllPosts() {
 		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 		
@@ -146,6 +155,7 @@ public class PostRepository {
 		return posts;
 	}
 
+	@Log
 	public PostModel savePost(PostModel post) {
 		try {
 			KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -161,11 +171,12 @@ public class PostRepository {
 			saveArticle(article);
 		} catch(Exception e) 
 		{
-			logger.error("PostRepository - savePost() " + e.getLocalizedMessage() + e.getStackTrace());
+			logger.error("PostRepository - savePost() " + e.getLocalizedMessage());
 		}
 		return post;
 	}
 
+	@Log
 	public ArticleModel saveArticle(ArticleModel article) {
 		try {
 			KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -182,5 +193,12 @@ public class PostRepository {
 		}
 		return article;
 	}
+	
+	 public static PostRepository getInstance() {
+			if(INSTANCE == null){
+				INSTANCE = new PostRepository();
+			}
+			return INSTANCE;
+		}
 
 }
