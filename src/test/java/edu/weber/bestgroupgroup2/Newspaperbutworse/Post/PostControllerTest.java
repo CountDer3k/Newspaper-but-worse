@@ -40,19 +40,6 @@ public class PostControllerTest {
 	
 	@Test
 	public void testShowArticleView() {
-		// build your expected results here 
-		
-		
-//	     String url = "/articles/artcileForm";
-//	     MvcResult mvcResult = (MvcResult) mockMvc
-//	    .perform((RequestBuilder) ((ResultActions) MockMvcRequestBuilders.get(url))
-//	    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//	    String responseAsJson = "some expected response"; 
-//
-//	    Assert.assertEquals("response does not match", mvcResult.getResponse().getContentAsString(),
-//	    responseAsJson);
 
-	   // verify the calls
 	}
 }

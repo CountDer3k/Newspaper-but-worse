@@ -40,7 +40,7 @@ public class PostRepository {
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id ";
 	
-	
+	 
 	private static PostRepository INSTANCE;
 	 
 	public PostRepository(){}
