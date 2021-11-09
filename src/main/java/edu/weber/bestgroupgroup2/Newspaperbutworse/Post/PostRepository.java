@@ -40,9 +40,9 @@ public class PostRepository {
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id ";
 	private final String DELETE_ARTICLE = "DELETE FROM Article WHERE post_id = :postID ";
-	private final String DELETE_POST = "DELETE FROM Post WHERE :postID ";
+	private final String DELETE_POST = "DELETE FROM Post WHERE post_id = :postID ";
 	 
-	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE :pID ";
+	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE post_id :pID ";
 	
 	private static PostRepository INSTANCE;
 	 
@@ -207,7 +207,7 @@ public class PostRepository {
 	//----------------
 	// Edit methods
 	//----------------
-	
+	@Log
 	public PostModel editPostArticle(PostModel p) {
 		PostModel post = new PostModel();
 		
@@ -219,6 +219,7 @@ public class PostRepository {
 	//----------------
 	
 	// Returns true if the post was successfully deleted
+	@Log
 	public boolean deletePostArticle(String id) {
 		try {
 			deleteArticle(id);
@@ -230,14 +231,14 @@ public class PostRepository {
 		
 	}
 	
+	@Log
 	public boolean deleteArticle(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
-					.addValue("aID", id);
-			//		.addValue("pID", id);
-			
+					.addValue("postID", id);
+					//.addValue("aID", id);
+
 			//int r = namedParameterJdbcTemplate.update(DE_PA, parameters);
-			
 			int articleResult = namedParameterJdbcTemplate.update(DELETE_ARTICLE, parameters);
 			
 			//logger.info("The article return result for deletion is: " + articleResult);
@@ -248,10 +249,13 @@ public class PostRepository {
 		}
 	}
 	
+	@Log
 	public boolean deletePost(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
+			
+			
 			
 			int postResult = namedParameterJdbcTemplate.update(DELETE_POST, parameters);
 			
