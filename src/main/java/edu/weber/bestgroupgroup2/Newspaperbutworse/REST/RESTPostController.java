@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class RESTPostController {
 	} 
 	
 	
-	@GetMapping("article/{articleId}")
+	@GetMapping("API/articles/article/{articleId}")
 	public ResponseEntity<PostModel> getPost(@PathVariable String articleId){
 		PostModel p = postService.getPostByID(articleId);
 		
@@ -38,6 +39,13 @@ public class RESTPostController {
 		else
 			return ResponseEntity.ok(new PostModel());
 			//return (ResponseEntity<PostModel>) ResponseEntity.notFound();
+	} 
+	
+	
+	@DeleteMapping("API/articles/article/{articleId}")
+	public boolean deletePost(@PathVariable String articleId){
+		boolean result = postService.deletePost(articleId);
+		return result;
 	} 
 	
 	
