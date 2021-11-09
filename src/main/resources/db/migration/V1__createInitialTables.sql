@@ -30,8 +30,6 @@ CREATE TABLE Article (
 	title TINYTEXT NOT NULL,
     content MEDIUMTEXT NOT NULL,
     access CHAR(3),
-    section_id INT,
-    FOREIGN KEY(section_id) REFERENCES Post(post_id),
     PRIMARY KEY(post_id)
 );
 

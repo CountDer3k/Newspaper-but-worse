@@ -39,8 +39,11 @@ public class PostRepository {
 			+ "FROM  Post p "
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id ";
-	
+	private final String DELETE_ARTICLE = "DELETE FROM Article WHERE post_id = :postID ";
+	private final String DELETE_POST = "DELETE FROM Post WHERE :postID ";
 	 
+	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE :pID ";
+	
 	private static PostRepository INSTANCE;
 	 
 	public PostRepository(){}
@@ -50,6 +53,10 @@ public class PostRepository {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
  
+	
+	//----------------
+	// Get methods
+	//----------------
 	@Log
 	public PostModel getArticleByID(String id) { 
 		try {
@@ -155,6 +162,9 @@ public class PostRepository {
 		return posts;
 	}
 
+	//----------------
+	// Save methods
+	//----------------
 	@Log
 	public PostModel savePost(PostModel post) {
 		try {
@@ -194,7 +204,69 @@ public class PostRepository {
 		return article;
 	}
 	
-	 public static PostRepository getInstance() {
+	//----------------
+	// Edit methods
+	//----------------
+	
+	public PostModel editPostArticle(PostModel p) {
+		PostModel post = new PostModel();
+		
+		return post;
+	}
+	
+	//----------------
+	// Delete methods
+	//----------------
+	
+	// Returns true if the post was successfully deleted
+	public boolean deletePostArticle(String id) {
+		try {
+			deleteArticle(id);
+			deletePost(id);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+		
+	}
+	
+	public boolean deleteArticle(String id) {
+		try {
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("aID", id);
+			//		.addValue("pID", id);
+			
+			//int r = namedParameterJdbcTemplate.update(DE_PA, parameters);
+			
+			int articleResult = namedParameterJdbcTemplate.update(DELETE_ARTICLE, parameters);
+			
+			//logger.info("The article return result for deletion is: " + articleResult);
+			return true;
+		} catch(Exception e) {
+			logger.error("Error occured: " + e.toString());
+			return false;
+		}
+	}
+	
+	public boolean deletePost(String id) {
+		try {
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", id);
+			
+			int postResult = namedParameterJdbcTemplate.update(DELETE_POST, parameters);
+			
+			logger.info("The post return result for deletion is: " + postResult);
+			return true;
+		} catch(Exception e) {
+			logger.error("Error occured: " + e.toString());
+			return false;
+		}
+	}
+	
+	
+	
+	
+	public static PostRepository getInstance() {
 			if(INSTANCE == null){
 				INSTANCE = new PostRepository();
 			}

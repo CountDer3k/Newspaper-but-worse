@@ -79,6 +79,11 @@ public class PostService{
     }
     
     
+    public boolean deletePost(String id) {
+    	return postRepository.deletePostArticle(id);
+    }
+    
+    
     public static PostService getInstance() {
 		if(INSTANCE == null){
 			INSTANCE = new PostService();

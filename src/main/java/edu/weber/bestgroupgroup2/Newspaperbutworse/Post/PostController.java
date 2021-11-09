@@ -57,6 +57,17 @@ public class PostController {
 	    return "article/articleForm";
 	}
 	
+	
+	
+	@GetMapping("/articles/delete/{articleId}")
+	@Log
+	public String deleteArticle(@PathVariable String articleId) {
+		
+		postService.deletePost(articleId);
+		
+		return "index";
+	}
+	
 	@PostMapping("/articles/articleForm")
 	@Log
 	public String registerUserAccount(

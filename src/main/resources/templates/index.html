@@ -29,6 +29,10 @@
 		</div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary"
 			style="padding: 30px 20px; margin: auto;" th:unless="${isEmpty}">
+			<div class="row" style="padding-bottom:10px;">
+				<button class="btn btn-sm btn-primary"><i class="fas fa-plus-circle"></i>Add Article</button>
+			</div>
+			
 			<!-- For loop to show every article in a list -->
 			<th:block th:each="post : ${posts}">
 				<div class="row d3Card d3-dark-third">
