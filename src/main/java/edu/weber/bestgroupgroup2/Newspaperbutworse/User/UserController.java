@@ -59,5 +59,4 @@ public class UserController {
 		modelAndView.getModelMap().addAttribute("user", new UserDto());
 		return modelAndView;
 	}
-
 }

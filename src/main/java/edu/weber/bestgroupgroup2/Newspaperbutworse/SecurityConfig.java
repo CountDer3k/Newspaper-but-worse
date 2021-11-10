@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,17 +20,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	//private NamedParameterJdbcTemplate jdbcTemplate;
 	private final ApplicationContext applicationContext;
-//	private JwtTokenProvider jwtTokenProvider;
+	private JwtTokenProvider jwtTokenProvider;
 	
 	@Autowired
-	public SecurityConfig(ApplicationContext applicationContext) {
+	public SecurityConfig(ApplicationContext applicationContext, @Lazy JwtTokenProvider jwtTokenProvider) {
       this.applicationContext = applicationContext;
-//		this.jwtTokenProvider = jwtTokenProvider;
+      this.jwtTokenProvider = jwtTokenProvider;
 	}
 	
 	@Bean
@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public AuthenticationSuccessHandler successHandler(){
-	    return new NewsAuthenticationSuccessHandler();
+	    return new NewsAuthenticationSuccessHandler(jwtTokenProvider);
 	}
 	
 	@Override
@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.antMatchers("/user/registration").permitAll()
 	      		.antMatchers("/articles/**").permitAll()
 	      		.antMatchers("/").permitAll()
+	      		.antMatchers("/random").permitAll()
 	      		//More?
 //	      .antMatchers("/**").permitAll()
 	      		.anyRequest().authenticated()
@@ -70,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    		.usernameParameter("username")
 	    		.passwordParameter("password")
 	    		.loginPage("/user/login")
-	    		.loginProcessingUrl("/user/login")
+	    		.loginProcessingUrl("/random")
 	    		.defaultSuccessUrl("/")
 	    		.successHandler(successHandler());
 	}
