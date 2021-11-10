@@ -53,16 +53,10 @@ public class UserController {
 	}
 	
 	/* Login */
-	@GetMapping("/login")
+	@GetMapping("/user/login")
 	public ModelAndView showLoginForm() {
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.getModelMap().addAttribute("user", new UserDto());
-		return modelAndView;
-	}
-	
-	@PostMapping("/login")
-	public ModelAndView loginUserAccount() {
-		ModelAndView modelAndView = new ModelAndView("login");
 		return modelAndView;
 	}
 
