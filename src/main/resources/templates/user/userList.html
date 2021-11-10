@@ -33,16 +33,9 @@
 			<th:block th:each="user : ${users}">
 				<div class="row d3Card d3-dark-third">
 					<div class="col">
-<!-- 						<p th:text="${post.post.article.title}" class="h2">-
-						<p class="h5">
-							By: <span th:text="${post.name}" class="h5">By: 
-						</p>
-						<hr />
-						<p
-							th:text="${#strings.abbreviate(post.post.article.content,150)} "></p>
-						<a href="article.html"
-							th:href=@{/articles/articleNum/{articleId}(articleId=${post.post.article.postId})}
-							class="btn btn-sm btn-block btn-info">Read More...</a> -->
+						<p class="h2" th:text="${user.user.username}"></p>
+						<p class="h5" th:text="${user.user.firstName} ${user.user.lastName}"></p>
+						<p class="h5" th:text="${user.user.email}"></p>
 					</div>
 				</div>
 			</th:block>
