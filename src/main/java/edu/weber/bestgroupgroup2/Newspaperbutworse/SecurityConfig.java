@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.antMatchers("/user/registration").permitAll()
 	      		.antMatchers("/articles/**").permitAll()
 	      		.antMatchers("/").permitAll()
-	      		.antMatchers("/random").permitAll()
+//	      		.antMatchers("/random").permitAll()
 	      		//More?
 //	      .antMatchers("/**").permitAll()
 	      		.anyRequest().authenticated()
@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    		.usernameParameter("username")
 	    		.passwordParameter("password")
 	    		.loginPage("/user/login")
-	    		.loginProcessingUrl("/random")
+	    		.loginProcessingUrl("/user/login")
 	    		.defaultSuccessUrl("/")
 	    		.successHandler(successHandler());
 	}
