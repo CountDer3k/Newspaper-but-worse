@@ -35,5 +35,9 @@ public class UserRowCallbackHandler implements RowCallbackHandler {
 		}
 	}
 	
+	public List<User> getUserList() {
+		return userList;
+	}
+	
 	
 }

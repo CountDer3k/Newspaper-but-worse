@@ -1,5 +1,7 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,6 +22,13 @@ public class UserRepository {
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
+	
+	public List<User> getAllUsers() {
+		String sql = SELECT_USER_WITH_ROLES;
+		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
+		namedParameterJdbcTemplate.query(sql, callbackHandler);
+		return callbackHandler.getUserList();
 	}
 	
 	public User getUserByUsername(String username) {

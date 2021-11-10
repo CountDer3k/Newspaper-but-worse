@@ -1,5 +1,6 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +66,9 @@ public class UserService implements UserDetailsService {
 	}
 
 	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> userList = new ArrayList<>();
+		userList = userRepository.getAllUsers();
+		return userList;
 	}
 
 }

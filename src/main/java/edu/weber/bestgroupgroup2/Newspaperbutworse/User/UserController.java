@@ -80,7 +80,7 @@ public class UserController {
 			users = userService.getAllUsers();
 			
 			// If no posts are available show the empty content div
-			if(users.size() == 0) {
+			if(users.size() == 0 || users.equals(null)) {
 				modelAndView.getModelMap().addAttribute("isEmpty", true);
 				modelAndView.getModelMap().addAttribute("empty", "No content available to display...");
 			}
