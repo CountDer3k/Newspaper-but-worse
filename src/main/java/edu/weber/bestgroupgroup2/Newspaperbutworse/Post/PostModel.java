@@ -1,7 +1,8 @@
-package edu.weber.bestgroupgroup2.Newspaperbutworse.Models;
+package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 
 import java.sql.Date;
+
 
 public class PostModel {
 
@@ -11,6 +12,8 @@ public class PostModel {
 	private Date modifiedDate;
 	private ArticleModel article;
 	private String url;
+	
+	public PostModel() {}
 	
 	public PostModel(int Id){
 		url = "articles/"+Id;

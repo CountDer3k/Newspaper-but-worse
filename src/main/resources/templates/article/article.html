@@ -26,13 +26,13 @@
 		<div class="col-3"></div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary">
 		<a href="/" class="h3" style="background-color:none; color:white"><i class="fas fa-arrow-left h4"></i></a>
-		<p th:text="${articleId}">
-			<p th:text="${post.article.title}" class="h2">
+		<p th:text="${articleId}" style="visibility: hidden">
+			<p th:text="${article.title}" class="h2">
 			<p class="h5">
-				By: <span th:text="${post.userId}" class="h5">By: 
+				By: <span th:text="${author}" class="h5">
 			</p>
 			<hr />
-			<p th:text="${post.article.content}"></p>
+			<p th:text="${article.content}"></p>
 		</div>
 		<div class="col-3"></div>
 

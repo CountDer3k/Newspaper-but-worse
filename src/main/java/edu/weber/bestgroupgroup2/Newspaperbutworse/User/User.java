@@ -87,6 +87,12 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	//Used by JwtTokenProvider
+	public Object getPermissions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }
