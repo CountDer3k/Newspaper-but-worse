@@ -1,8 +1,15 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
@@ -13,6 +20,13 @@ public class User implements UserDetails {
 	private String email;
 	private String firstName;
 	private String lastName;
+	private boolean locked;
+	private boolean enabled;
+	private ZonedDateTime credentialsExpireOn;
+	private ZonedDateTime expiredOn;
+	private ZonedDateTime createdOn;
+	private ZonedDateTime modifiedOn;
+	private List<Role> roles;
 	
 	public int getUserId() {
 		return userId;
@@ -53,8 +67,14 @@ public class User implements UserDetails {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(this.roles)
+				.orElseGet(Collections::emptyList)
+				.stream()
+				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
+				.flatMap(role -> role.getPermissions().stream())
+				.filter(Objects::nonNull)
+				.map(permission -> new SimpleGrantedAuthority(permission.getName()))
+				.collect(Collectors.toSet());
 	}
 	@Override
 	public boolean isAccountNonExpired() {
@@ -79,8 +99,13 @@ public class User implements UserDetails {
 	
 	//Used by JwtTokenProvider
 	public Object getPermissions() {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(this.roles)
+				.orElseGet(Collections::emptyList)
+				.stream()
+				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
+				.flatMap(role -> role.getPermissions().stream())
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 	}
 
 
