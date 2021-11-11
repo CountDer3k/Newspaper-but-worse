@@ -1,8 +1,10 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -14,7 +16,6 @@ public class UserRepository {
 	
 	private final String INSERT_USER = "INSERT INTO User (username, password, email, first_name, last_name) VALUES (:username, :password, :email, :firstName, :lastName)";
 	private final String SELECT_USER_WITH_ROLES = "SELECT * FROM User";
-	
 	
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -37,6 +38,21 @@ public class UserRepository {
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
 		namedParameterJdbcTemplate.query(sql, parameters, callbackHandler);
 		return callbackHandler.getUser();
+	}
+	
+	public User getUserByID(int id) {
+		SqlParameterSource parameters = new MapSqlParameterSource()
+				.addValue("userID", id);
+		return namedParameterJdbcTemplate.queryForObject(SELECT_USER_WITH_ROLES, parameters, (RowMapper<User>) (rs, rowNum) -> {
+			User user = new User();
+			user.setUserId(rs.getInt("USER_ID"));
+			user.setUsername(rs.getString("USERNAME"));
+			user.setPassword(rs.getString("PASSWORD"));
+			user.setEmail(rs.getString("EMAIL"));
+			user.setFirstName(rs.getString("FIRST_NAME"));
+			user.setLastName(rs.getString("LAST_NAME"));
+			return user;
+		});
 	}
 
 	public User save(User user) {
