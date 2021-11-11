@@ -32,10 +32,10 @@
 			<!-- For loop to show every article in a list -->
 			<th:block th:each="user : ${users}">
 				<div class="row d3Card d3-dark-third">
-					<div class="col">
-						<p class="h2" th:text="${user.user.username}"></p>
-						<p class="h5" th:text="${user.user.firstName} ${user.user.lastName}"></p>
-						<p class="h5" th:text="${user.user.email}"></p>
+					<div class="col" th:object="${user}">
+						<p class="h2" th:text="*{username}"></p>
+						<p class="h5" th:text="*{firstName} + ' ' + *{lastName}"></p>
+						<p class="h5" th:text="*{email}"></p>
 					</div>
 				</div>
 			</th:block>
