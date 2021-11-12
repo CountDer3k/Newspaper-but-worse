@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements UserDetailsService {
 
-//	private static UserService INSTANCE;
-	
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     
