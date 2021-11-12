@@ -20,6 +20,8 @@ import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.DefaultClaims;
+import io.jsonwebtoken.impl.DefaultJwsHeader;
 
 @Component
 public class JwtTokenProvider {
@@ -33,12 +35,14 @@ public class JwtTokenProvider {
 	@Autowired
 	public JwtTokenProvider(UserService userService) { this.userService = userService; }
 	
-	public String createCookieTokenString(Authentication auth) {
+	public Cookie createCookieTokenString(Authentication auth) {
 		
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		String jwt = createToken(auth, expiration);
-		return AppConstants.JWT_COOKIE_NAME + "=" + jwt + ";Max-Age=" + ttl.toSeconds();
+		Cookie userCookie = new Cookie(AppConstants.JWT_COOKIE_NAME, jwt);
+		userCookie.setMaxAge((int)ttl.toMillis());
+		return userCookie;
 	}
 	
 	public String createToken(Authentication auth, Date expiration) {
@@ -103,8 +107,8 @@ public class JwtTokenProvider {
 
 	private String getUsername(String token) {
 		
-		Jwt<?, ?> jwt = Jwts.parser().parse(token);
-		return jwt.getHeader().get("username").toString();
+		Jwt<DefaultJwsHeader, DefaultClaims> jwt = Jwts.parser().setSigningKey(secretKey).parse(token);
+		return jwt.getBody().get("username", String.class);
 	}
 
 	private boolean validateToken(String token) {

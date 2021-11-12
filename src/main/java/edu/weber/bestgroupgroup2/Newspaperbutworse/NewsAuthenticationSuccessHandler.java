@@ -22,7 +22,7 @@ public class NewsAuthenticationSuccessHandler implements AuthenticationSuccessHa
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		
-		Cookie userCookie = new Cookie("NewsUser", provider.createCookieTokenString(authentication));
+		Cookie userCookie = provider.createCookieTokenString(authentication);
 		response.addCookie(userCookie);
 		response.sendRedirect("/");
 		
