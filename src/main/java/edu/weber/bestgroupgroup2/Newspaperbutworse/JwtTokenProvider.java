@@ -27,7 +27,7 @@ import io.jsonwebtoken.impl.DefaultJwsHeader;
 public class JwtTokenProvider {
 
 	//Time To Live (Currently set to be 1 hour; can be changed)
-	private final Duration ttl = Duration.ofHours(1);
+	private final Duration ttl = Duration.ofMinutes(30);
 	//Might want to look at/rework the secretKey?
 	private final byte[] secretKey = "alterego".getBytes();
 	private UserService userService;
@@ -41,7 +41,7 @@ public class JwtTokenProvider {
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		String jwt = createToken(auth, expiration);
 		Cookie userCookie = new Cookie(AppConstants.JWT_COOKIE_NAME, jwt);
-		userCookie.setMaxAge((int)ttl.toMillis());
+		userCookie.setMaxAge(1800);
 		return userCookie;
 	}
 	
