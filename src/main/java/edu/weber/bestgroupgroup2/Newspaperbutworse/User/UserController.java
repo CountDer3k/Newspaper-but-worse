@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 @Controller
 public class UserController {
 	
@@ -24,6 +26,7 @@ public class UserController {
 	
 	/* Registration */
 	@GetMapping("/user/registration")
+	@Log
 	public ModelAndView showRegistrationForm() {
 		ModelAndView modelAndView = new ModelAndView("user/registration");
 		modelAndView.getModelMap().addAttribute("user", new UserDto());
@@ -31,6 +34,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/user/registration")
+	@Log
 	public ModelAndView registerUserAccount(
 	  @ModelAttribute("user") @Validated UserDto userDto,
 	  BindingResult bindResult,
@@ -54,6 +58,7 @@ public class UserController {
 	
 	/* Login */
 	@GetMapping("/user/login")
+	@Log
 	public ModelAndView showLoginForm() {
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.getModelMap().addAttribute("user", new UserDto());

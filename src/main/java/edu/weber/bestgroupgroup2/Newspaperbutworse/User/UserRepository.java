@@ -9,6 +9,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 @Repository
 public class UserRepository {
 	
@@ -22,6 +24,7 @@ public class UserRepository {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 	
+	@Log
 	public User getUserByUsername(String username) {
 		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -31,6 +34,7 @@ public class UserRepository {
 		return callbackHandler.getUser();
 	}
 
+	@Log
 	public User getUserByEmail(String email) {
 		String sql = "SELECT * FROM User WHERE email = :email";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -40,6 +44,7 @@ public class UserRepository {
 		return callbackHandler.getUser();
 	}
 	
+	@Log
 	public User getUserByID(int id) {
 		SqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("userID", id);
@@ -55,6 +60,7 @@ public class UserRepository {
 		});
 	}
 
+	@Log
 	public User save(User user) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource()

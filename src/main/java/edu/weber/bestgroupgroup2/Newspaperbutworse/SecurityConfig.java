@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,11 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//private NamedParameterJdbcTemplate jdbcTemplate;
 	private final ApplicationContext applicationContext;
 	private JwtTokenProvider jwtTokenProvider;
+	//private UserService userService;
 	
 	@Autowired
 	public SecurityConfig(ApplicationContext applicationContext, @Lazy JwtTokenProvider jwtTokenProvider) {
+//			,@Lazy UserService userService) {
       this.applicationContext = applicationContext;
       this.jwtTokenProvider = jwtTokenProvider;
+//      this.userService = userService;
 	}
 	
 	@Bean
@@ -43,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
+	@Log
 	public AuthenticationSuccessHandler successHandler(){
 	    return new NewsAuthenticationSuccessHandler(jwtTokenProvider);
 	}
@@ -80,6 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/css/**");
 	}
+	
+//	@Override
+//	@Log
+//	public void configure(AuthenticationManagerBuilder auth) throws Exception{
+//		auth.userDetailsService(userDetailsServiceBean()).passwordEncoder(encoder());
+//	}
 
 	@Bean//(name = BeanIds.AUTHENTICATION_MANAGER)
 	@Override
