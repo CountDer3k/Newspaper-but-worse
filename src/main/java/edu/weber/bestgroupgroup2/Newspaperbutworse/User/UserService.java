@@ -1,5 +1,8 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements UserDetailsService {
 
-//	private static UserService INSTANCE;
-	
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     
@@ -60,6 +61,12 @@ public class UserService implements UserDetailsService {
 		}
 		
 		return user;
+	}
+
+	public List<User> getAllUsers() {
+		List<User> userList = new ArrayList<>();
+		userList = userRepository.getAllUsers();
+		return userList;
 	}
 
 }
