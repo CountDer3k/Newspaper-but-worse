@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowCallbackHandler;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 public class UserRowCallbackHandler implements RowCallbackHandler {
 	private List<User> userList;
 	
@@ -18,6 +20,7 @@ public class UserRowCallbackHandler implements RowCallbackHandler {
 	}
 
 	@Override
+	@Log
 	public void processRow(ResultSet rs) throws SQLException {
 		User user;
 		int userId = rs.getInt("u.USER_ID");
@@ -67,6 +70,7 @@ public class UserRowCallbackHandler implements RowCallbackHandler {
 		role.addPermission(permission);
 	}
 
+	@Log
 	public User getUser() {
 		if (userList.isEmpty()) {
 			return null;
@@ -76,6 +80,7 @@ public class UserRowCallbackHandler implements RowCallbackHandler {
 		}
 	}
 	
+	@Log
 	public List<User> getUserList() {
 		return userList;
 	}
