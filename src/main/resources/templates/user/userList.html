@@ -34,7 +34,11 @@
 				<div class="row d3Card d3-dark-third">
 					<div class="col" th:object="${user}">
 						<p class="h2" th:text="*{username}"></p>
-						<p class="h5">TODO: Role</p>
+						<p>
+							<th:block th:each="role : *{roles}">
+								<span class="h5" th:text="${role.name} + ' '"></span>
+							</th:block>
+						</p>
 						<p class="h5" th:text="*{firstName} + ' ' + *{lastName}"></p>
 						<p class="h5" th:text="*{email}"></p>
 					</div>
