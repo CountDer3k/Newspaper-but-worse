@@ -14,16 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
 	
+	private static final long serialVersionUID = 7468253868850092337L;
 	private int userId;
 	private String username;
 	private String password;
 	private String email;
 	private String firstName;
 	private String lastName;
-	private boolean locked;
-	private boolean enabled;
-	private ZonedDateTime credentialsExpireOn;
-	private ZonedDateTime expiredOn;
 	private ZonedDateTime createdOn;
 	private ZonedDateTime modifiedOn;
 	private List<Role> roles;
@@ -64,6 +61,27 @@ public class User implements UserDetails {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	public ZonedDateTime getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(ZonedDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+	public ZonedDateTime getModifiedOn() {
+		return modifiedOn;
+	}
+	public void setModifiedOn(ZonedDateTime modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
+	public List<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -76,25 +94,22 @@ public class User implements UserDetails {
 				.map(permission -> new SimpleGrantedAuthority(permission.getName()))
 				.collect(Collectors.toSet());
 	}
+	
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
 	//Used by JwtTokenProvider
