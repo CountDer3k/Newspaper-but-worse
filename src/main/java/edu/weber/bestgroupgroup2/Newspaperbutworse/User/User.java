@@ -1,18 +1,29 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
 	
+	private static final long serialVersionUID = 7468253868850092337L;
 	private int userId;
 	private String username;
 	private String password;
 	private String email;
 	private String firstName;
 	private String lastName;
+	private ZonedDateTime createdOn;
+	private ZonedDateTime modifiedOn;
+	private List<Role> roles;
 	
 	public int getUserId() {
 		return userId;
@@ -50,37 +61,66 @@ public class User implements UserDetails {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	public ZonedDateTime getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(ZonedDateTime createdOn) {
+		this.createdOn = createdOn;
+	}
+	public ZonedDateTime getModifiedOn() {
+		return modifiedOn;
+	}
+	public void setModifiedOn(ZonedDateTime modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
+	public List<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(this.roles)
+				.orElseGet(Collections::emptyList)
+				.stream()
+				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
+				.flatMap(role -> role.getPermissions().stream())
+				.filter(Objects::nonNull)
+				.map(permission -> new SimpleGrantedAuthority(permission.getName()))
+				.collect(Collectors.toSet());
 	}
+	
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	
 	//Used by JwtTokenProvider
 	public Object getPermissions() {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(this.roles)
+				.orElseGet(Collections::emptyList)
+				.stream()
+				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
+				.flatMap(role -> role.getPermissions().stream())
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 	}
 
 
