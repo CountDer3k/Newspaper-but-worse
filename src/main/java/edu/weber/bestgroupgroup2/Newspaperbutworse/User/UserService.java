@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -23,6 +25,7 @@ public class UserService implements UserDetailsService {
     	this.passwordEncoder = passwordEncoder;
     }
     
+    @Log
     public boolean isValidUser(UserDto userDto) {
     	
     	//checks empty strings since these can't be null because of annotations in User
@@ -33,6 +36,7 @@ public class UserService implements UserDetailsService {
     	return true;
     }
     
+    @Log
     public User getUserByID(int id) {
     	User user = new User();
     	
@@ -41,6 +45,7 @@ public class UserService implements UserDetailsService {
     	return user;
     }
     
+    @Log
     public User registerNewUserAccount(UserDto userDto) {
     	
     	User user = new User();
@@ -55,6 +60,7 @@ public class UserService implements UserDetailsService {
     
 
 	@Override
+	@Log
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.getUserByUsername(username);
 		if (user == null) {

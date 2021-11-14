@@ -32,6 +32,7 @@ public class UserController {
 	
 	/* Registration */
 	@GetMapping("/user/registration")
+	@Log
 	public ModelAndView showRegistrationForm() {
 		ModelAndView modelAndView = new ModelAndView("user/registration");
 		modelAndView.getModelMap().addAttribute("user", new UserDto());
@@ -39,6 +40,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/user/registration")
+	@Log
 	public ModelAndView registerUserAccount(
 	  @ModelAttribute("user") @Validated UserDto userDto,
 	  BindingResult bindResult,
@@ -62,6 +64,7 @@ public class UserController {
 	
 	/* Login */
 	@GetMapping("/user/login")
+	@Log
 	public ModelAndView showLoginForm() {
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.getModelMap().addAttribute("user", new UserDto());
