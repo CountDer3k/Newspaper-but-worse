@@ -39,8 +39,11 @@ public class PostRepository {
 			+ "FROM  Post p "
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id ";
-	
+	private final String DELETE_ARTICLE = "DELETE FROM Article WHERE post_id = :postID ";
+	private final String DELETE_POST = "DELETE FROM Post WHERE post_id = :postID ";
 	 
+	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE post_id :pID ";
+	
 	private static PostRepository INSTANCE;
 	 
 	public PostRepository(){}
@@ -50,6 +53,10 @@ public class PostRepository {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
  
+	
+	//----------------
+	// Get methods
+	//----------------
 	@Log
 	public PostModel getArticleByID(String id) { 
 		try {
@@ -155,6 +162,9 @@ public class PostRepository {
 		return posts;
 	}
 
+	//----------------
+	// Save methods
+	//----------------
 	@Log
 	public PostModel savePost(PostModel post) {
 		try {
@@ -194,7 +204,70 @@ public class PostRepository {
 		return article;
 	}
 	
-	 public static PostRepository getInstance() {
+	//----------------
+	// Edit methods
+	//----------------
+	@Log
+	public PostModel editPostArticle(PostModel p) {
+		PostModel post = new PostModel();
+		
+		return post;
+	}
+	
+	//----------------
+	// Delete methods
+	//----------------
+	
+	// Returns true if the post was successfully deleted
+	@Log
+	public boolean deletePostArticle(String id) {
+		try {
+			deleteArticle(id);
+			deletePost(id);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+		
+	}
+	
+	@Log
+	public boolean deleteArticle(String id) {
+		boolean success = false;
+		try {
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", id);
+
+			int result = namedParameterJdbcTemplate.update(DELETE_ARTICLE, parameters);
+			
+			success = result == 1 ? true : false;
+			
+		} catch(Exception e) {
+			logger.error("Error occured: " + e.toString());
+		}
+		return success;
+	}
+	
+	@Log
+	public boolean deletePost(String id) {
+		boolean success = false;
+		try {
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", id);
+			
+			int result = namedParameterJdbcTemplate.update(DELETE_POST, parameters);
+			
+			success = result == 1 ? true : false;
+		} catch(Exception e) {
+			logger.error("Error occured: " + e.toString());
+		}
+		return success;
+	}
+	
+	
+	
+	
+	public static PostRepository getInstance() {
 			if(INSTANCE == null){
 				INSTANCE = new PostRepository();
 			}
