@@ -44,6 +44,7 @@ public class UserService implements UserDetailsService {
     public User registerNewUserAccount(UserDto userDto) {
     	
     	User user = new User();
+    	user.setUsername(userDto.getUsername());
     	user.setFirstName(userDto.getFirstName());
     	user.setLastName(userDto.getLastName());
     	user.setEmail(userDto.getEmail());
