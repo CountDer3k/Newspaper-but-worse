@@ -44,7 +44,7 @@ public class UserRepository {
 			"        JOIN\n" + 
 			"    Role_Permission AS rp ON r.role_id = rp.role_id\n" + 
 			"        JOIN\n" + 
-			"    Permission AS p ON rp.perm_id = p.perm_id;";
+			"    Permission AS p ON rp.perm_id = p.perm_id";
 	
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
