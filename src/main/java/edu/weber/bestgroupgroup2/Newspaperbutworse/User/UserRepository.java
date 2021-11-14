@@ -53,7 +53,7 @@ public class UserRepository {
 	
 	@Log
 	public List<User> getAllUsers() {
-		String sql = SELECT_USER_WITH_ROLES;
+		String sql = SELECT_USER_WITH_ROLES + ";";
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
 		namedParameterJdbcTemplate.query(sql, callbackHandler);
 		return callbackHandler.getUserList();
@@ -61,7 +61,7 @@ public class UserRepository {
 	
 	@Log
 	public User getUserByUsername(String username) {
-		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username";
+		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("username", username);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
@@ -71,7 +71,7 @@ public class UserRepository {
 
 	@Log
 	public User getUserByEmail(String email) {
-		String sql = "SELECT * FROM User WHERE email = :email";
+		String sql = "SELECT * FROM User WHERE email = :email;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("email", email);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
@@ -81,7 +81,7 @@ public class UserRepository {
 	
 	@Log
 	public User getUserByID(int id) {
-		String sql = SELECT_USER_WITH_ROLES + " WHERE user_id = :userId";
+		String sql = SELECT_USER_WITH_ROLES + " WHERE user_id = :userId;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", id);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
