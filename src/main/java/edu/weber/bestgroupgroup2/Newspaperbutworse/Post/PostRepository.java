@@ -233,38 +233,35 @@ public class PostRepository {
 	
 	@Log
 	public boolean deleteArticle(String id) {
+		boolean success = false;
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
-					//.addValue("aID", id);
 
-			//int r = namedParameterJdbcTemplate.update(DE_PA, parameters);
-			int articleResult = namedParameterJdbcTemplate.update(DELETE_ARTICLE, parameters);
+			int result = namedParameterJdbcTemplate.update(DELETE_ARTICLE, parameters);
 			
-			//logger.info("The article return result for deletion is: " + articleResult);
-			return true;
+			success = result == 1 ? true : false;
+			
 		} catch(Exception e) {
 			logger.error("Error occured: " + e.toString());
-			return false;
 		}
+		return success;
 	}
 	
 	@Log
 	public boolean deletePost(String id) {
+		boolean success = false;
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
 			
+			int result = namedParameterJdbcTemplate.update(DELETE_POST, parameters);
 			
-			
-			int postResult = namedParameterJdbcTemplate.update(DELETE_POST, parameters);
-			
-			logger.info("The post return result for deletion is: " + postResult);
-			return true;
+			success = result == 1 ? true : false;
 		} catch(Exception e) {
 			logger.error("Error occured: " + e.toString());
-			return false;
 		}
+		return success;
 	}
 	
 	

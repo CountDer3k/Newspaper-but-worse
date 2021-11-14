@@ -14,6 +14,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.ArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @RestController
 @RequestMapping("post")
@@ -31,6 +32,7 @@ public class RESTPostController {
 	
 	
 	@GetMapping("API/articles/article/{articleId}")
+	@Log
 	public ResponseEntity<PostModel> getPost(@PathVariable String articleId){
 		PostModel p = postService.getPostByID(articleId);
 		
@@ -38,7 +40,6 @@ public class RESTPostController {
 			return ResponseEntity.ok(p);
 		else
 			return ResponseEntity.ok(new PostModel());
-			//return (ResponseEntity<PostModel>) ResponseEntity.notFound();
 	} 
 	
 	
