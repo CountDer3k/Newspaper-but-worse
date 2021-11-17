@@ -60,7 +60,7 @@ public class JwtTokenProvider {
 		
 		if(user != null) {
 			Claims claims = Jwts.claims().setSubject(String.valueOf(user.getUserId()));
-			claims.put("perms", user.getPermissions());	//TODO:Implement this method in user
+//			claims.put("perms", user.getPermissions());	//TODO:Implement this method in user
 			claims.put("username", user.getUsername());
 			claims.put("firstName", user.getFirstName());
 			claims.put("lastname", user.getLastName());
