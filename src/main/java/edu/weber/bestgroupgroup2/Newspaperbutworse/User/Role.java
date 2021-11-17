@@ -1,9 +1,10 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-public class Role {
+public class Role implements Serializable{
 	
 	private int roleId;
 	private String name;

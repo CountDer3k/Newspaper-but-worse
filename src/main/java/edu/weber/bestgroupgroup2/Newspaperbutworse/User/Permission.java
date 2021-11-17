@@ -1,8 +1,9 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class Permission {
+public class Permission implements Serializable {
 	
 	private int permissionId;
 	private String name;

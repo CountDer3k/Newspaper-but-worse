@@ -113,15 +113,15 @@ public class User implements UserDetails {
 	}
 	
 	//Used by JwtTokenProvider
-	public Object getPermissions() {
-		return Optional.ofNullable(this.roles)
-				.orElseGet(Collections::emptyList)
-				.stream()
-				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
-				.flatMap(role -> role.getPermissions().stream())
-				.filter(Objects::nonNull)
-				.collect(Collectors.toSet());
-	}
+//	public Object getPermissions() {
+//		return Optional.ofNullable(this.roles)
+//				.orElseGet(Collections::emptyList)
+//				.stream()
+//				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
+//				.flatMap(role -> role.getPermissions().stream())
+//				.filter(Objects::nonNull)
+//				.collect(Collectors.toSet());
+//	}
 
 
 }
