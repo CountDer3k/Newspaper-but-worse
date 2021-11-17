@@ -1,5 +1,8 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -22,65 +25,138 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Controller 
 public class PostController {
-	
+
 	PostService postService;
 	private Logger logger = LoggerFactory.getLogger(PostRepository.class);
-	
+
 	@Autowired
 	public PostController(PostService postService) {
 		this.postService = postService;
 	}
-	
+
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
 	public ModelAndView showArticleView(@PathVariable String articleId) {
 		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
-		// Get article from db		
-		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-		modelAndView.getModelMap().addAttribute("author", pam.getName());
-		modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
-		modelAndView.getModelMap().addAttribute("articleId", articleId);
-		
-		return modelAndView;
+			// Get article from db		
+			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
+			modelAndView.getModelMap().addAttribute("post", pam.getPost());
+			modelAndView.getModelMap().addAttribute("author", pam.getName());
+			modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
+			modelAndView.getModelMap().addAttribute("articleId", articleId);
+
+			return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return null;
 		}
 	}
-	
-	
+
+
 	@GetMapping("/articles/articleForm")
 	@Log
 	public ModelAndView showRegistrationForm(WebRequest request) {
-	    PostDto postDto = new PostDto();
-	    ModelAndView modelAndView = new ModelAndView("article/articleForm");
-	    modelAndView.getModelMap().addAttribute("post", postDto);
-	    return modelAndView;
+		PostDto postDto = new PostDto();
+		ModelAndView modelAndView = new ModelAndView("article/articleForm");
+		modelAndView.getModelMap().addAttribute("post", postDto);
+		return modelAndView;
 	}
-	
+
+	@GetMapping("articles/editArticle")
+	@Log
+	public ModelAndView showEditableArticleDirect(@PathVariable String articleId) {
+		ModelAndView modelAndView = new ModelAndView("article/article_edit");
+
+		return modelAndView;
+	}
+
+
 	@PostMapping("/articles/articleForm")
 	@Log
-	public ModelAndView registerUserAccount(
-	  @Validated @ModelAttribute("user") PostDto postDto,
-	  BindingResult bindResult,
-	  HttpServletRequest request,
-	  Errors errors) {
-		
+	public ModelAndView registerUserArticle(
+			@Validated PostDto postDto,
+			BindingResult bindResult,
+			HttpServletRequest request,
+			Errors errors) {
+
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
 		//?? Get this from logged in user
 		int userID = 1;
-		
-	    if(postService.isValidPost(postDto)) {
-	    	ModelAndView modelAndView = new ModelAndView("redirect:/");
-	    	PostModel addedPost = postService.addNewPost(postDto, userID);
-        	modelAndView.getModelMap().addAttribute("post", postDto);
-	    	return modelAndView;
-	    }
 
-	    return new ModelAndView("user/registration", "msg", "Registration Failed!");
+		if(postService.isValidPost(postDto)) {
+			ModelAndView modelAndView = new ModelAndView("redirect:/");
+			PostModel addedPost = postService.addNewPost(postDto, userID);
+			modelAndView.getModelMap().addAttribute("post", postDto);
+			return modelAndView;
+		}
+		//?? WTF is this doing here??
+		return new ModelAndView("user/registration", "msg", "Registration Failed!");
 	}
+
+	//@GetMapping("author/{authorId}/articleList")
+	@GetMapping("authors/articleList/1")
+	@Log
+	public ModelAndView showAuthorArticles() {
+		//public ModelAndView showAuthorArticles(@PathVariable String authorId) {
+		String authorId = "1";
+		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+		posts = postService.getAllPostsForUserWithId(authorId);
+		ModelAndView modelAndView = new ModelAndView("author/articleList");
+		modelAndView.getModelMap().addAttribute("posts", posts);
+		return modelAndView;
+	}
+
+	@GetMapping("articles/articleNum/edit/{articleId}")
+	@Log
+	public ModelAndView showEditArticleView(@PathVariable String articleId) {
+		ModelAndView modelAndView = new ModelAndView("article/article_edit");
+		try {
+			// Get article from db		
+			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
+			//modelAndView.getModelMap().addAttribute("post", pam.getPost());
+			modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
+			modelAndView.getModelMap().addAttribute("articleId", articleId);
+
+			return modelAndView;
+		} catch(Exception e) {
+			logger.error(e.toString());
+			return null;
+		}
+	}
+
+
+	@PostMapping("articles/articleNum/edit/{articleId}")
+	@Log
+	public ModelAndView updateArticleView(
+			@Validated PostDto postDto,
+			BindingResult bindResult,
+			HttpServletRequest request,
+			Errors errors) {
+		ModelAndView modelAndView = new ModelAndView("/");
+		return modelAndView;
+	}
+	//			@Validated PostDto postDto,
+	//			BindingResult bindResult,
+	//			HttpServletRequest request,
+	//			Errors errors) {
+	//		ModelAndView modelAndView = new ModelAndView("/");
+	//		try {
+	//			// Get article from db		
+	//			logger.debug("fake Update");
+	//			logger.info("Fake Update");
+	//			String authorId = "1";
+	//			List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+	//			posts = postService.getAllPostsForUserWithId(authorId);
+	//			
+	//			modelAndView.getModelMap().addAttribute("posts", posts);
+	//			return modelAndView;
+	//		}catch(Exception e) {
+	//			logger.error(e.toString());
+	//			return null;
+	//		}
+	//	}
 
 }

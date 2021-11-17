@@ -35,25 +35,34 @@
 	<!-- Top Bar -->
 	<div th:include="_layout/navbar :: #navigationFragment"></div>
 	<br />
-	
-	
+
+
 	<div class="row sidePadding" style="padding: 30px 20px; margin: auto;">
 		<div class="col-3"></div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary">
-		<a href="/" class="h3" style="background-color:none; color:white"><i class="fas fa-arrow-left h4"></i></a>
+			<a href="/authors/articleList/1" class="h3"
+				style="background-color: none; color: white"><i
+				class="fas fa-arrow-left h4"></i></a>
 
-		<p th:text="${articleId}" style="visibility: hidden">
-			<p th:text="${article.title}" class="h2">
-			<p class="h5">
-				By: <span th:text="${author}" class="h5">
-			</p>
-			<hr />
-			<p th:text="${article.content}"></p>
+			<form action="/articles/articleNum/edit/${articleId}" th:object="${article}"
+				method="POST">
+				<p>Title</p>
+				<input th:value="*{title}" class="inputRounded" style="width: 100%; padding: 20px"></input>
+
+				<hr />
+				<p>Content</p>
+				<textarea th:text="*{content}" class="inputRounded"
+					style="width: 100%; height: 400px; padding: 20px"></textarea>
+				<p>Access</p>
+				<input th:value="*{access}"/>
+				<div class="row">
+					<button type="submit" class="btn btn-sm btn-success">Save</button>
+				</div>
+			</form>
 		</div>
 		<div class="col-3"></div>
 
 	</div>
-
 
 </body>
 

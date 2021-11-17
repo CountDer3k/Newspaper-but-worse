@@ -59,6 +59,13 @@ public class PostService{
     }
     
     @Log
+    public List<PostArticleModel> getAllPostsForUserWithId(String authorId){
+    	List<PostArticleModel> posts = postRepository.getAllPosts();
+    	
+    	return posts;
+    }
+    
+    @Log
     public PostModel addNewPost(PostDto postDto, int userID) {
     	PostModel post = new PostModel();
     	ArticleModel article = new ArticleModel();
