@@ -32,12 +32,8 @@
 				</form>
 			</div>
 			<div class="col-3 d-flex flex-row-reverse">
-				<a th:href="@{/user/registration}" class="btn btn-outline-light" style="height:40px;">&nbsp;Register/Login
-				</a>
-			</div>
-			<div sec:authorize="isAuthenticated()" class="col-3 d-flex flex-row-reverse">
-				<a th:href="#" class="btn btn-outline-light" style="height:40px;">&nbsp;Menu
-				</a>
+				<a sec:authorize="isAuthenticated()" href="#" class="btn btn-outline-light" style="height:40px;">&nbsp;Menu</a>
+				<a sec:authorize="isAnonymous()" th:href="@{/user/registration}" class="btn btn-outline-light" style="height:40px;">&nbsp;Register/Login</a>
 			</div>
 		</div>
 	</nav>

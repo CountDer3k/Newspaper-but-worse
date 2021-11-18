@@ -24,7 +24,7 @@
 			<div class="d-grid gap-2">
 				<h1>Register</h1>
 				<label th:text=${msg}></label>
-				<form action="/user/registration" th:object="${user}" method="POST"
+				<form th:action="@{/user/registration}" th:object="${user}" method="POST"
 					enctype="utf8">
 					<div class="form-group">
 						<label>username(*)</label> <input class="form-control"
