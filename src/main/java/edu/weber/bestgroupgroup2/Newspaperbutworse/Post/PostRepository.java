@@ -44,7 +44,7 @@ public class PostRepository {
 			+ "INNER JOIN Article a ON a.post_id = p.post_id "
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id "
 			+ "WHERE p.user_id = :authorId ";
-	
+	private final String EDIT_ARTICLE = "UPDATE Article SET title = :title, content = :content, access = :access WHERE post_id = :postID";
 	 
 	private static PostRepository INSTANCE;
 	 
@@ -156,7 +156,6 @@ public class PostRepository {
 		    	return posts;
 		    }
 		});
-		
 		return posts;
 	}
 	
@@ -167,7 +166,7 @@ public class PostRepository {
 		SqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("authorId", authorId);
 		
-		posts = namedParameterJdbcTemplate.query(GET_ALL_POSTS_WITH_AUTHORS, parameters, new ResultSetExtractor<List<PostArticleModel>>(){
+		posts = namedParameterJdbcTemplate.query(GET_ALL_POSTS_WITH_AUTHORS_FOR_AUTHOR, parameters, new ResultSetExtractor<List<PostArticleModel>>(){
 		    @Override
 		    public List<PostArticleModel> extractData(ResultSet rs) throws SQLException,DataAccessException {
 		    	
@@ -236,6 +235,29 @@ public class PostRepository {
 		} catch(Exception e) 
 		{
 			logger.error("PostRepository - saveArticle() "+e.toString());
+		}
+		return article;
+	}
+	
+	@Log
+	public ArticleModel editArticle(ArticleModel article) {
+		logger.info("edit article inside postRepo waws called");
+		logger.debug("edit article inside postRepo waws called");
+		logger.error("edit article inside postRepo waws called");
+		logger.trace("edit article inside postRepo waws called");
+		logger.warn("edit article inside postRepo waws called");
+		try {
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", article.getPostId())
+					.addValue("title", article.getTitle())
+					.addValue("content", article.getContent())
+					.addValue("access", article.getAccess());
+			logger.warn("title: " + article.getTitle());
+			namedParameterJdbcTemplate.update(EDIT_ARTICLE, parameters, keyHolder);
+		} catch(Exception e) 
+		{
+			logger.error("PostRepository - editArticle() "+e.toString());
 		}
 		return article;
 	}

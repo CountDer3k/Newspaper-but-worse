@@ -44,20 +44,34 @@
 				style="background-color: none; color: white"><i
 				class="fas fa-arrow-left h4"></i></a>
 
-			<form action="/articles/articleNum/edit/${articleId}" th:object="${article}"
-				method="POST">
-				<p>Title</p>
-				<input th:value="*{title}" class="inputRounded" style="width: 100%; padding: 20px"></input>
+			<form
+				th:action="@{/articles/articleNum/edit/{articleId}(articleId=${articleId})}"
+				th:object="${postDto}" method="POST" enctype="utrf8">
+				<div class="form-group">
+					<label>Title</label> <input th:value="${post.article.title}"
+						class="inputRounded form-control"
+						style="width: 100%; padding: 20px"></input>
+					<p th:each="error: ${#fields.errors('title')}" th:text="${error}">Validation
+						error</p>
+				</div>
 
 				<hr />
-				<p>Content</p>
-				<textarea th:text="*{content}" class="inputRounded"
-					style="width: 100%; height: 400px; padding: 20px"></textarea>
-				<p>Access</p>
-				<input th:value="*{access}"/>
-				<div class="row">
-					<button type="submit" class="btn btn-sm btn-success">Save</button>
+				<div class="form-group">
+					<p>Content</p>
+					<textarea th:text="${post.article.content}"
+						class="inputRounded form-control"
+						style="width: 100%; height: 400px; padding: 20px"></textarea>
+					<p th:each="error: ${#fields.errors('content')}" th:text="${error}">Validation
+						error</p>
 				</div>
+				<div class="form-group">
+					<p>Access</p>
+					<input th:value="${post.article.access}" class="form-control" />
+					<p th:each="error : ${#fields.errors('access')}" th:text="${error}">Validation
+						error</p>
+				</div>
+				<br />
+				<button type="submit" class="btn btn-sm btn-success">Save</button>
 			</form>
 		</div>
 		<div class="col-3"></div>

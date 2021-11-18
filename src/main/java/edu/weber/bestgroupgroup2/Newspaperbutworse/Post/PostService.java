@@ -86,6 +86,18 @@ public class PostService{
     }
     
     
+    @Log
+    public ArticleModel editPost(PostDto postDto, int userID) {
+    	ArticleModel article = new ArticleModel();
+    	
+    	article.setTitle(postDto.getTitle()); 
+    	article.setContent(postDto.getContent());
+    	article.setAccess(postDto.getAccess());
+    	logger.warn("Title: " + postDto.getTitle());
+    	
+    	return postRepository.editArticle(article);
+    }
+    
     public static PostService getInstance() {
 		if(INSTANCE == null){
 			INSTANCE = new PostService();

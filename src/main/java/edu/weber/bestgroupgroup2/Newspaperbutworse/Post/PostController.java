@@ -96,7 +96,7 @@ public class PostController {
 		return new ModelAndView("user/registration", "msg", "Registration Failed!");
 	}
 
-	//@GetMapping("author/{authorId}/articleList")
+
 	@GetMapping("authors/articleList/1")
 	@Log
 	public ModelAndView showAuthorArticles() {
@@ -113,11 +113,12 @@ public class PostController {
 	@Log
 	public ModelAndView showEditArticleView(@PathVariable String articleId) {
 		ModelAndView modelAndView = new ModelAndView("article/article_edit");
+		PostDto postDto = new PostDto();
 		try {
 			// Get article from db		
 			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-			//modelAndView.getModelMap().addAttribute("post", pam.getPost());
-			modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
+			modelAndView.getModelMap().addAttribute("post", pam.getPost());
+			modelAndView.getModelMap().addAttribute("postDto", postDto);
 			modelAndView.getModelMap().addAttribute("articleId", articleId);
 
 			return modelAndView;
@@ -135,7 +136,23 @@ public class PostController {
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Errors errors) {
-		ModelAndView modelAndView = new ModelAndView("/");
+
+		if(bindResult.hasErrors()) {
+			return new ModelAndView("error");
+		}
+		//?? Get this from logged in user
+		int authorId = 1;
+
+		//if(postService.isValidPost(postDto)) {
+			// Update articles
+			postService.editPost(postDto, authorId);
+		//}
+
+		// Return list views
+		ModelAndView modelAndView = new ModelAndView("author/articleList");
+		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+		posts = postService.getAllPostsForUserWithId(authorId+"");
+		modelAndView.getModelMap().addAttribute("posts", posts);
 		return modelAndView;
 	}
 	//			@Validated PostDto postDto,
