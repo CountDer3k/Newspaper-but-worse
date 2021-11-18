@@ -48,7 +48,8 @@
 				th:action="@{/articles/articleNum/edit/{articleId}(articleId=${articleId})}"
 				th:object="${postDto}" method="POST" enctype="utrf8">
 				<div class="form-group">
-					<label>Title</label> <input th:value="${post.article.title}"
+					<label>Title</label> 
+					<input th:field="*{title}"
 						class="inputRounded form-control"
 						style="width: 100%; padding: 20px"></input>
 					<p th:each="error: ${#fields.errors('title')}" th:text="${error}">Validation
@@ -58,7 +59,7 @@
 				<hr />
 				<div class="form-group">
 					<p>Content</p>
-					<textarea th:text="${post.article.content}"
+					<textarea th:field="*{content}"
 						class="inputRounded form-control"
 						style="width: 100%; height: 400px; padding: 20px"></textarea>
 					<p th:each="error: ${#fields.errors('content')}" th:text="${error}">Validation
@@ -66,7 +67,7 @@
 				</div>
 				<div class="form-group">
 					<p>Access</p>
-					<input th:value="${post.article.access}" class="form-control" />
+					<input th:field="*{access}" class="form-control" />
 					<p th:each="error : ${#fields.errors('access')}" th:text="${error}">Validation
 						error</p>
 				</div>

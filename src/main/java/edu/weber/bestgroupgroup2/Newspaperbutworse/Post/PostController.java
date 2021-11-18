@@ -111,13 +111,17 @@ public class PostController {
 
 	@GetMapping("articles/articleNum/edit/{articleId}")
 	@Log
-	public ModelAndView showEditArticleView(@PathVariable String articleId) {
+	public ModelAndView showEditArticleView(@PathVariable String articleId, WebRequest request) {
 		ModelAndView modelAndView = new ModelAndView("article/article_edit");
 		PostDto postDto = new PostDto();
 		try {
 			// Get article from db		
 			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-			modelAndView.getModelMap().addAttribute("post", pam.getPost());
+			
+			postDto.setTitle(pam.getPost().getArticle().getTitle());
+			postDto.setContent(pam.getPost().getArticle().getContent());
+			postDto.setAccess(pam.getPost().getArticle().getAccess());
+			
 			modelAndView.getModelMap().addAttribute("postDto", postDto);
 			modelAndView.getModelMap().addAttribute("articleId", articleId);
 
@@ -135,7 +139,8 @@ public class PostController {
 			@Validated PostDto postDto,
 			BindingResult bindResult,
 			HttpServletRequest request,
-			Errors errors) {
+			Errors errors, 
+			@PathVariable String articleId) {
 
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
@@ -143,10 +148,10 @@ public class PostController {
 		//?? Get this from logged in user
 		int authorId = 1;
 
-		//if(postService.isValidPost(postDto)) {
+		if(postService.isValidPost(postDto)) {
 			// Update articles
-			postService.editPost(postDto, authorId);
-		//}
+			postService.editPost(postDto, Integer.parseInt(articleId));
+		}
 
 		// Return list views
 		ModelAndView modelAndView = new ModelAndView("author/articleList");
@@ -155,25 +160,5 @@ public class PostController {
 		modelAndView.getModelMap().addAttribute("posts", posts);
 		return modelAndView;
 	}
-	//			@Validated PostDto postDto,
-	//			BindingResult bindResult,
-	//			HttpServletRequest request,
-	//			Errors errors) {
-	//		ModelAndView modelAndView = new ModelAndView("/");
-	//		try {
-	//			// Get article from db		
-	//			logger.debug("fake Update");
-	//			logger.info("Fake Update");
-	//			String authorId = "1";
-	//			List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
-	//			posts = postService.getAllPostsForUserWithId(authorId);
-	//			
-	//			modelAndView.getModelMap().addAttribute("posts", posts);
-	//			return modelAndView;
-	//		}catch(Exception e) {
-	//			logger.error(e.toString());
-	//			return null;
-	//		}
-	//	}
 
 }

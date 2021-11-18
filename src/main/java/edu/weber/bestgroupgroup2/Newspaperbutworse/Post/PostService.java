@@ -87,14 +87,14 @@ public class PostService{
     
     
     @Log
-    public ArticleModel editPost(PostDto postDto, int userID) {
+    public ArticleModel editPost(PostDto postDto, int postID) {
     	ArticleModel article = new ArticleModel();
     	
     	article.setTitle(postDto.getTitle()); 
     	article.setContent(postDto.getContent());
     	article.setAccess(postDto.getAccess());
-    	logger.warn("Title: " + postDto.getTitle());
-    	
+    	article.setPostId(postID);
+	
     	return postRepository.editArticle(article);
     }
     
