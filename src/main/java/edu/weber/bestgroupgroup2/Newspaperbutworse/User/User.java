@@ -88,10 +88,8 @@ public class User implements UserDetails {
 		return Optional.ofNullable(this.roles)
 				.orElseGet(Collections::emptyList)
 				.stream()
-				.filter(role -> role.getPermissions() != null && role.getPermissions().size() > 0)
-				.flatMap(role -> role.getPermissions().stream())
 				.filter(Objects::nonNull)
-				.map(permission -> new SimpleGrantedAuthority(permission.getName()))
+				.map(role -> new SimpleGrantedAuthority(role.getName()))
 				.collect(Collectors.toSet());
 	}
 	

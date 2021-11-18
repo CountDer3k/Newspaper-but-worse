@@ -1,7 +1,8 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
 <link th:href="@{/css/main.css}" rel="stylesheet">
@@ -32,7 +33,7 @@
 				</form>
 			</div>
 			<div class="col-3 d-flex flex-row-reverse">
-				<a sec:authorize="isAuthenticated()" href="#" class="btn btn-outline-light" style="height:40px;">&nbsp;Menu</a>
+				<a sec:authorize="hasAuthority('READER')" href="#" class="btn btn-outline-light" style="height:40px;">&nbsp;Menu</a>
 				<a sec:authorize="isAnonymous()" th:href="@{/user/registration}" class="btn btn-outline-light" style="height:40px;">&nbsp;Register/Login</a>
 			</div>
 		</div>
