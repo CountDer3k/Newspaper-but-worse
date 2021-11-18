@@ -92,6 +92,11 @@ public class UserRepository {
 
 	@Log
 	public User save(User user) {
+		return save(user, 2);
+	}
+	
+	@Log
+	public User save(User user, int roleId) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("username", user.getUsername())
@@ -103,7 +108,7 @@ public class UserRepository {
 				.addValue("modifiedOn", new Timestamp(System.currentTimeMillis()));
 		
 		namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
-		namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", 2));
+		namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", roleId));
 		user.setUserId(keyHolder.getKey().intValue());
 		return user;
 	}
