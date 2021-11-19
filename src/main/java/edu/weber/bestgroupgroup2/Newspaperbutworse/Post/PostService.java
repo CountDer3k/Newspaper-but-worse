@@ -59,6 +59,13 @@ public class PostService{
     }
     
     @Log
+    public List<PostArticleModel> getAllPostsForUserWithId(String authorId){
+        List<PostArticleModel> posts = postRepository.getAllPosts();
+        
+        return posts;
+    }
+
+    @Log
     public PostModel addNewPost(PostDto postDto, int userID) {
     	PostModel post = new PostModel();
     	ArticleModel article = new ArticleModel();
@@ -78,6 +85,18 @@ public class PostService{
     	return postRepository.savePost(post);
     }
     
+    @Log
+    public ArticleModel editPost(PostDto postDto, int postID) {
+        ArticleModel article = new ArticleModel();
+        
+        article.setTitle(postDto.getTitle()); 
+        article.setContent(postDto.getContent());
+        article.setAccess(postDto.getAccess());
+        article.setPostId(postID);
+    
+        return postRepository.editArticle(article);
+    }
+
     @Log
     public boolean deletePost(String id) {
     	return postRepository.deletePostArticle(id);
