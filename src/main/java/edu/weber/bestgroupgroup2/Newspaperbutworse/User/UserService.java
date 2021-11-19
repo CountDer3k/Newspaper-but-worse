@@ -76,4 +76,9 @@ public class UserService implements UserDetailsService {
 		return userList;
 	}
 
+	public User editUser(User user) {
+		return user;
+		
+	}
+
 }

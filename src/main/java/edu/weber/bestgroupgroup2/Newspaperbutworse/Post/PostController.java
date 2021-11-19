@@ -63,11 +63,11 @@ public class PostController {
 	
 	@GetMapping("/articles/delete/{articleId}")
 	@Log
-	public String deleteArticle(@PathVariable String articleId) {
+	public ModelAndView deleteArticle(@PathVariable String articleId) {
 		
 		postService.deletePost(articleId);
 		
-		return "index";
+		return new ModelAndView("index");
 	}
 	
 	@PostMapping("/articles/articleForm")

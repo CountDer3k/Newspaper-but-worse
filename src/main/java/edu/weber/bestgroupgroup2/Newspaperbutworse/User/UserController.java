@@ -106,9 +106,8 @@ public class UserController {
 	@Log
 	public ModelAndView showUser(@PathVariable String username) {
 		ModelAndView modelAndView = new ModelAndView("user/user");
-		
 		try {
-			// Get article from db		
+			// Get user from db		
 			User user = (User) userService.loadUserByUsername(username);
 			modelAndView.getModelMap().addAttribute("user", user);
 		} 
@@ -125,9 +124,21 @@ public class UserController {
 	public ModelAndView showUserForm(@PathVariable String username) {
 		ModelAndView modelAndView = new ModelAndView("user/userForm");
 		try {
-			// Get article from db		
 			User user = (User) userService.loadUserByUsername(username);
 			modelAndView.getModelMap().addAttribute("user", user);
+		} 
+		catch(Exception e) {
+				logger.error(e.toString());
+		}
+	    return modelAndView;
+	}
+	
+	@PostMapping("user/edit/{username}")
+	@Log
+	public ModelAndView editUser(@PathVariable String username, User user) {
+		ModelAndView modelAndView = new ModelAndView("user/userForm");
+		try {
+			userService.editUser(user);
 		} 
 		catch(Exception e) {
 				logger.error(e.toString());
