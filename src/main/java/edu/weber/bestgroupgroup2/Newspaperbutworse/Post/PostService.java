@@ -60,7 +60,7 @@ public class PostService{
     
     @Log
     public List<PostArticleModel> getAllPostsForUserWithId(String authorId){
-        List<PostArticleModel> posts = postRepository.getAllPosts();
+        List<PostArticleModel> posts = postRepository.getAllPostsForUserWithId(authorId);
         
         return posts;
     }

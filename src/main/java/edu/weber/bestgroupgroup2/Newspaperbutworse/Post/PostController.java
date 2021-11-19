@@ -1,5 +1,6 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,48 +18,49 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 
 @Controller 
 public class PostController {
-	
+
 	PostService postService;
 	private Logger logger = LoggerFactory.getLogger(PostRepository.class);
-	
+
 	@Autowired
 	public PostController(PostService postService) {
 		this.postService = postService;
 	}
-	
+
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
 	public ModelAndView showArticleView(@PathVariable String articleId) {
 		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
-		// Get article from db		
-		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
+			// Get article from db		
+			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
 			modelAndView.getModelMap().addAttribute("post", pam.getPost());
 			modelAndView.getModelMap().addAttribute("author", pam.getName());
 			modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
 			modelAndView.getModelMap().addAttribute("articleId", articleId);
 
-		return modelAndView;
+			return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
-			return null;
+			return new ModelAndView("/error");
 		}
 	}
-	
-	
+
+
 	@GetMapping("/articles/articleForm")
 	@Log
 	public ModelAndView showRegistrationForm(WebRequest request) {
-	    PostDto postDto = new PostDto();
-	    ModelAndView modelAndView = new ModelAndView("article/articleForm");
-	    modelAndView.getModelMap().addAttribute("post", postDto);
-	    return modelAndView;
+		PostDto postDto = new PostDto();
+		ModelAndView modelAndView = new ModelAndView("article/articleForm");
+		modelAndView.getModelMap().addAttribute("post", postDto);
+		return modelAndView;
 	}
 
 	@GetMapping("articles/editArticle")
@@ -97,14 +99,26 @@ public class PostController {
 
 	@GetMapping("authors/articleList/1")
 	@Log
-	public ModelAndView showAuthorArticles() {
+	public ModelAndView showAuthorArticles(Principal prin) {
 		//public ModelAndView showAuthorArticles(@PathVariable String authorId) {
-		String authorId = "1";
-		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
-		posts = postService.getAllPostsForUserWithId(authorId);
-		ModelAndView modelAndView = new ModelAndView("author/articleList");
-		modelAndView.getModelMap().addAttribute("posts", posts);
-		return modelAndView;
+
+		try {
+			int aId = ((User)prin).getUserId();
+			String authorId =  String.valueOf(aId);
+			logger.info("Author ID: " + authorId);
+
+			//String authorId = "1";
+
+
+			List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+			posts = postService.getAllPostsForUserWithId(authorId);
+			ModelAndView modelAndView = new ModelAndView("author/articleList");
+			modelAndView.getModelMap().addAttribute("posts", posts);
+			return modelAndView;
+		} catch(Exception e) {
+			logger.error("PostController - showAuthorArticles() " + e.toString());
+		}
+		return new ModelAndView("/error");
 	}
 
 	@GetMapping("articles/articleNum/edit/{articleId}")
@@ -115,18 +129,18 @@ public class PostController {
 		try {
 			// Get article from db		
 			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-			
+
 			postDto.setTitle(pam.getPost().getArticle().getTitle());
 			postDto.setContent(pam.getPost().getArticle().getContent());
 			postDto.setAccess(pam.getPost().getArticle().getAccess());
-			
+
 			modelAndView.getModelMap().addAttribute("postDto", postDto);
 			modelAndView.getModelMap().addAttribute("articleId", articleId);
 
 			return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
-			return null;
+			return new ModelAndView("/error");
 		}
 	}
 
@@ -158,17 +172,17 @@ public class PostController {
 		modelAndView.getModelMap().addAttribute("posts", posts);
 		return modelAndView;
 	}
-	
-	
+
+
 	@GetMapping("/articles/delete/{articleId}")
 	@Log
 	public String deleteArticle(@PathVariable String articleId) {
-		
+
 		postService.deletePost(articleId);
-		
+
 		return "index";
 	}
-	
-	
+
+
 
 }
