@@ -42,6 +42,7 @@ public class JwtTokenProvider {
 		String jwt = createToken(auth, expiration);
 		Cookie userCookie = new Cookie(AppConstants.JWT_COOKIE_NAME, jwt);
 		userCookie.setMaxAge(1800);
+		userCookie.setPath("/");
 		return userCookie;
 	}
 	
@@ -60,7 +61,7 @@ public class JwtTokenProvider {
 		
 		if(user != null) {
 			Claims claims = Jwts.claims().setSubject(String.valueOf(user.getUserId()));
-//			claims.put("perms", user.getPermissions());	//TODO:Implement this method in user
+			claims.put("authorities", user.getAuthorities());
 			claims.put("username", user.getUsername());
 			claims.put("firstName", user.getFirstName());
 			claims.put("lastname", user.getLastName());

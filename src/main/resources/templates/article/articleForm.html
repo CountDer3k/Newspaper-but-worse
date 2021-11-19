@@ -24,7 +24,7 @@
 			<div class="d-grid gap-2">
 				<h1>Article</h1>
 				<label th:text=${msg}></label>
-				<form action="/articles/articleForm" th:object="${post}" method="POST"
+				<form th:action="@{/articles/articleForm}" th:object="${post}" method="POST"
 					enctype="utf8">
 					<div class="form-group">
 						<label>Title(*)</label> <input class="form-control"
