@@ -22,6 +22,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	//private NamedParameterJdbcTemplate jdbcTemplate;
@@ -55,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
+		
 	    http
-	      	.csrf().disable()
 	      	.sessionManagement()
 	      	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	      	.and()
@@ -64,11 +65,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.authorizeRequests()
 	      		.antMatchers("/user/login").permitAll()
 	      		.antMatchers("/user/registration").permitAll()
-	      		.antMatchers("/user/list").permitAll()
 	      		.antMatchers("/articles/**").permitAll()
 	      		//?? Delete this after testing
 	      		.antMatchers("/authors/**").permitAll()
 	      		.antMatchers("/").permitAll()
+	      		.antMatchers("/user/list").hasAuthority("ADMIN")
 //	      		.antMatchers("/random").permitAll()
 	      		//More?
 //	      .antMatchers("/**").permitAll()
@@ -93,7 +94,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	@Override
 //	@Log
 //	public void configure(AuthenticationManagerBuilder auth) throws Exception{
-//		auth.userDetailsService(userDetailsServiceBean()).passwordEncoder(encoder());
+//		auth
+//			.inMemoryAuthentication()
+//			.withUser("reader").password(encoder().encode("password")).roles("READER")
+//			.and()
+//			.withUser("author").password(encoder().encode("author")).roles("UTHOR")
+//			.and()
+//			.withUser("admin").password(encoder().encode("admin")).roles("ADMIN");
 //	}
 
 	@Bean//(name = BeanIds.AUTHENTICATION_MANAGER)
