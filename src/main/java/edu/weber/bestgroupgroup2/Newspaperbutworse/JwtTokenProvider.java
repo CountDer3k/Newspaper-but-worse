@@ -42,6 +42,7 @@ public class JwtTokenProvider {
 		String jwt = createToken(auth, expiration);
 		Cookie userCookie = new Cookie(AppConstants.JWT_COOKIE_NAME, jwt);
 		userCookie.setMaxAge(1800);
+		userCookie.setPath("/");
 		return userCookie;
 	}
 	
