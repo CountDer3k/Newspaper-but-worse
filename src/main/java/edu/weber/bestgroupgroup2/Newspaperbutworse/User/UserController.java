@@ -14,9 +14,11 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Controller
@@ -98,5 +100,40 @@ public class UserController {
 	
 		return modelAndView;
 	}
+	
+	/* User */
+	@GetMapping("user/{username}")
+	@Log
+	public ModelAndView showUser(@PathVariable String username) {
+		ModelAndView modelAndView = new ModelAndView("user/user");
+		
+		try {
+			// Get article from db		
+			User user = (User) userService.loadUserByUsername(username);
+			modelAndView.getModelMap().addAttribute("user", user);
+		} 
+		catch(Exception e) {
+				logger.error(e.toString());
+		}
+		
+		return modelAndView;
+	}
+	
+	/* User Form */
+	@GetMapping("user/edit/{username}")
+	@Log
+	public ModelAndView showUserForm(@PathVariable String username) {
+		ModelAndView modelAndView = new ModelAndView("user/userForm");
+		try {
+			// Get article from db		
+			User user = (User) userService.loadUserByUsername(username);
+			modelAndView.getModelMap().addAttribute("user", user);
+		} 
+		catch(Exception e) {
+				logger.error(e.toString());
+		}
+	    return modelAndView;
+	}
+	
 
 }
