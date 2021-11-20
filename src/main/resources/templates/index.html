@@ -26,7 +26,7 @@
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary"
 			style="padding: 30px 20px; margin: auto;">
 			<div class="row" style="padding-bottom: 10px;">
-				<a sec:authorize="isAuthenticated()" href="/articles/articleForm"
+				<a sec:authorize="hasAuthority('AUTHOR')" href="/articles/articleForm"
 					class="btn btn-primary"
 					style="background-color: none; color: white"><i
 					class="fas fa-plus-circle"></i> Add Article</a>
