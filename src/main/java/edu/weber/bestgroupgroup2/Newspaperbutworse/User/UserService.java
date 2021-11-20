@@ -70,6 +70,7 @@ public class UserService implements UserDetailsService {
 		return user;
 	}
 
+	@Log
 	public List<User> getAllUsers() {
 		List<User> userList = new ArrayList<>();
 		userList = userRepository.getAllUsers();
