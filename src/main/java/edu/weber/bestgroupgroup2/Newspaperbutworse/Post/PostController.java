@@ -97,14 +97,20 @@ public class PostController {
 	}
 
 
-	@GetMapping("authors/articleList/1")
+	@GetMapping("authors/articleList")
 	@Log
 	public ModelAndView showAuthorArticles(Principal prin) {
 		//public ModelAndView showAuthorArticles(@PathVariable String authorId) {
 
 		try {
-			int aId = ((User)prin).getUserId();
+			User author = (User)prin;
+			if(author == null) {
+				logger.info("Author is still null....");
+				return null;
+			}
+			int aId = author.getUserId();
 			String authorId =  String.valueOf(aId);
+			
 			logger.info("Author ID: " + authorId);
 
 			//String authorId = "1";
@@ -118,7 +124,8 @@ public class PostController {
 		} catch(Exception e) {
 			logger.error("PostController - showAuthorArticles() " + e.toString());
 		}
-		return new ModelAndView("/error");
+		return null;
+		//return new ModelAndView("/error");
 	}
 
 	@GetMapping("articles/articleNum/edit/{articleId}")
