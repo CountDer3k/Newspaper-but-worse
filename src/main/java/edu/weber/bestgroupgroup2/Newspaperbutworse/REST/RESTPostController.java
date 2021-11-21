@@ -1,7 +1,9 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.REST;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @RestController
-@RequestMapping("API/post")
+@RequestMapping("API/")
 public class RESTPostController {
 
 	//?? Testing
@@ -49,20 +51,14 @@ public class RESTPostController {
 			}
 			
 			posts = postService.getAllPosts(entries > 0 ? entries : 1, page > 0 ? page : 1);
-			return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 		} catch(Exception e) {
-			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());
+			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());\
+			posts = postService.getAllPosts();
 		}
-		
-		posts = postService.getAllPosts();
-
-		if(posts != null)
-			return ResponseEntity.ok(posts);
-		else
-			return ResponseEntity.ok(new ArrayList<PostArticleModel>());
+		return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 	}
 	
-	@GetMapping("articles/author")
+	@GetMapping("author/articles")
 	@Log
 	public ResponseEntity<List<PostArticleModel>> getAllPostForAuthor(
 			@RequestParam(name = "authorId", required = true) String authorId,
@@ -79,36 +75,33 @@ public class RESTPostController {
 			}
 			
 			posts = postService.getAllPostsForUserWithId(authorId, entries > 0 ? entries : 1, page > 0 ? page : 1);
-			return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
+			//return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 		} catch(Exception e) {
 			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());
+			posts = postService.getAllPostsForUserWithId(authorId);
 		}
-		
-
-		posts = postService.getAllPostsForUserWithId(authorId);
-		
-		if(posts != null)
-			return ResponseEntity.ok(posts);
-		else
-			return ResponseEntity.ok(new ArrayList<PostArticleModel>());
+		return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 	}
 	
 	
-	@GetMapping("{articleId}")
+	@GetMapping("articles/{articleId}")
 	@Log
-	public ResponseEntity<PostModel> getPost(@PathVariable String articleId){
+	public ResponseEntity<Object> getPost(@PathVariable String articleId){
 		PostModel p = postService.getPostByID(articleId);
 
 		if(p != null)
 			return ResponseEntity.ok(p);
-		else
-			return ResponseEntity.ok(new PostModel());
+		else {
+			Map<String,String> m = new HashMap<String, String>();
+			m.put("Error", "No Article Found");
+			return ResponseEntity.ok(m);
+		}
 	} 
 
 	
 	
 	//?? Needs to be authenticated to work
-	@DeleteMapping("{articleId}")
+	@DeleteMapping("articles/{articleId}")
 	public boolean deletePost(@PathVariable String articleId){
 		boolean result = postService.deletePost(articleId);
 		return result;
