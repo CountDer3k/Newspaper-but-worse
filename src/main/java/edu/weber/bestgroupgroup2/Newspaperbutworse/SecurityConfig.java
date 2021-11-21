@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.antMatchers("/user/registration").permitAll()
 	      		.antMatchers("/articles/**").permitAll()
 	      		//?? Delete this after testing
+	      		.antMatchers("/API/**").permitAll()
 	      		.antMatchers("/authors/**").hasAnyAuthority("AUTHOR")
 	      		.antMatchers("/").permitAll()
 	      		.antMatchers("/error").permitAll()

@@ -102,19 +102,21 @@ public class PostController {
 	public ModelAndView showAuthorArticles(Principal prin) {
 
 		try {
-			User author = (User)prin;
-			String authorId = "";
-			if(author == null) {
-				logger.info("Author is still null....");
-				authorId = "1";
-			}
-			else {
-				int aId = author.getUserId();
-				authorId =  String.valueOf(aId);
-				logger.info("Author ID: " + authorId);
-			}
+//			User author = (User)prin;
+//			String authorId = "";
+//			if(author == null) {
+//				logger.info("Author is still null....");
+//				authorId = "1";
+//			}
+//			else {
+//				int aId = author.getUserId();
+//				authorId =  String.valueOf(aId);
+//				logger.info("Author ID: " + authorId);
+//			}
 
 
+			String authorId = "1";
+			
 			List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 			posts = postService.getAllPostsForUserWithId(authorId);
 			ModelAndView modelAndView = new ModelAndView("author/articleList");
