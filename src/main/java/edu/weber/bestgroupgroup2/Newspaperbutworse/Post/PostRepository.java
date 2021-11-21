@@ -82,9 +82,11 @@ public class PostRepository {
 						article.setTitle(rs.getString("title"));
 						article.setContent(rs.getString("content"));
 						article.setAccess(rs.getString("access"));
+						post.setId(rs.getInt("post_id"));
 						
 						post.setArticle(article);
-						
+						post.setId(rs.getInt("post_id"));
+						post.setUserId(rs.getInt("user_id"));
 						post.setCreateDate(rs.getDate("create_on"));
 						post.setModifiedDate(rs.getDate("modified_on"));
 						return post;
@@ -113,13 +115,14 @@ public class PostRepository {
 						article.setTitle(rs.getString("title"));
 						article.setContent(rs.getString("content"));
 						article.setAccess(rs.getString("access"));
-						article.setPostId(rs.getInt("p.post_id"));
+						article.setPostId(rs.getInt("post_id"));
 						
 						post.setArticle(article);
-						
+						post.setId(rs.getInt("post_id"));
 						post.setCreateDate(rs.getDate("create_on"));
 						post.setModifiedDate(rs.getDate("modified_on"));
 						post.setUserId(rs.getInt("user_id"));
+						
 						
 						pam.setName(rs.getString("NAME"));
 						pam.setPost(post);
@@ -150,13 +153,14 @@ public class PostRepository {
 		    		article.setTitle(rs.getString("title"));
 					article.setContent(rs.getString("content"));
 					article.setAccess(rs.getString("access"));
-					article.setPostId(rs.getInt("p.post_id"));
+					article.setPostId(rs.getInt("post_id"));
 					
 					post.setArticle(article);
 					
 					Date date = new Date(0);
 					post.setCreateDate(date);
 					post.setModifiedDate(date);
+					post.setId(rs.getInt("post_id"));
 					post.setUserId(rs.getInt("user_id"));
 					
 					pam.setName(rs.getString("NAME"));
@@ -199,7 +203,7 @@ public class PostRepository {
 					post.setCreateDate(date);
 					post.setModifiedDate(date);
 					post.setUserId(rs.getInt("user_id"));
-					
+					post.setId(rs.getInt("post_id"));
 					pam.setName(rs.getString("NAME"));
 					pam.setPost(post);
 		    		
