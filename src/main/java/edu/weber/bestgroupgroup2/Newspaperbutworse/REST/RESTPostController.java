@@ -52,7 +52,7 @@ public class RESTPostController {
 			
 			posts = postService.getAllPosts(entries > 0 ? entries : 1, page > 0 ? page : 1);
 		} catch(Exception e) {
-			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());\
+			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());
 			posts = postService.getAllPosts();
 		}
 		return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
