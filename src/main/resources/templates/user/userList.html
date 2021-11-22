@@ -29,18 +29,19 @@
 		</div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary"
 			style="padding: 30px 20px; margin: auto;" th:unless="${isEmpty}">
-			<!-- For loop to show every article in a list -->
+			<a class="btn btn-outline-light" th:href=@{~/user/registration}>Add User +</a>
+			<br />
+			<br />
+			<!-- For loop to show every user in a list -->
 			<th:block th:each="user : ${users}">
 				<div class="row d3Card d3-dark-third">
 					<div class="col" th:object="${user}">
-						<p class="h2" th:text="*{username}"></p>
+						<a class="h2" th:href=@{/user/{username}(username=*{username})} th:text="*{username}"></a>
 						<p>
 							<th:block th:each="role : *{roles}">
 								<span class="h5" th:text="${role.name} + ' '"></span>
 							</th:block>
 						</p>
-						<p class="h5" th:text="*{firstName} + ' ' + *{lastName}"></p>
-						<p class="h5" th:text="*{email}"></p>
 					</div>
 				</div>
 			</th:block>
