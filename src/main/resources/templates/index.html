@@ -29,7 +29,7 @@
 		</div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary"
 			style="padding: 30px 20px; margin: auto;" th:unless="${isEmpty}">
-			<div class="row" style="padding-bottom: 10px;">
+			<div sec:authorize="hasAuthority('AUTHOR')" class="row" style="padding-bottom: 10px;">
 				<a href="/articles/articleForm" class="btn btn-sm btn-primary"
 					style="background-color: none; color: white"><i
 					class="fas fa-plus-circle"></i> Add Article</a>
