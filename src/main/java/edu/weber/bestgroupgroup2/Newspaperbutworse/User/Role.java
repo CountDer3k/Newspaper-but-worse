@@ -11,6 +11,14 @@ public class Role implements Serializable{
 	private ZonedDateTime createdOn;
 	private ZonedDateTime modifiedOn;
 	private List<Permission> permissions;
+	
+	public Role() {
+		
+	}
+	
+	public Role(String id) {
+		this.roleId = Integer.parseInt(id);
+	}
 
 	public int getRoleId() {
 		return roleId;

@@ -89,14 +89,9 @@ public class UserRepository {
 		namedParameterJdbcTemplate.query(sql, parameters, callbackHandler);
 		return callbackHandler.getUser();
 	}
-
-	@Log
-	public User save(User user) {
-		return save(user, 2);
-	}
 	
 	@Log
-	public User save(User user, int roleId) {
+	public User save(User user) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("username", user.getUsername())
@@ -108,7 +103,12 @@ public class UserRepository {
 				.addValue("modifiedOn", new Timestamp(System.currentTimeMillis()));
 		
 		namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
-		namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", roleId));
+		for (Role role : user.getRoles()) {
+			namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", role.getRoleId()));
+		}
+		if (user.getRoles().isEmpty() || user.getRoles().equals(null)) {
+			namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", 2));
+		}
 		user.setUserId(keyHolder.getKey().intValue());
 		return user;
 	}
