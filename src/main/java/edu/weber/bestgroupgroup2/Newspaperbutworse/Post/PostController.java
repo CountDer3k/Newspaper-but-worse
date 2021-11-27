@@ -42,11 +42,24 @@ public class PostController {
 		modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
 		modelAndView.getModelMap().addAttribute("articleId", articleId);
 		
+		CommentDto commentDto = new CommentDto();
+		modelAndView.getModelMap().addAttribute("comment", commentDto);
+		
 		return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return null;
 		}
+	}
+	
+	@PostMapping("/articles/addComment")
+	@Log
+	public ModelAndView addComment(
+			@Validated @ModelAttribute("comment") CommentDto commentDto,
+			BindingResult bindResult,
+			HttpServletRequest request,
+			Errors errors) {
+		return null;
 	}
 	
 	
