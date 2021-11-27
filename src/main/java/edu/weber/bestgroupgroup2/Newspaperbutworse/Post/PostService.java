@@ -59,6 +59,13 @@ public class PostService{
     }
     
     @Log
+    public List<Comment> getCommentsFromArticle(int articleID){
+    	List<Comment> comments = postRepository.getCommentsFromArticle(articleID);
+    	
+    	return comments;
+    }
+    
+    @Log
     public PostModel addNewPost(PostDto postDto, int userID) {
     	PostModel post = new PostModel();
     	ArticleModel article = new ArticleModel();
@@ -76,6 +83,16 @@ public class PostService{
     	post.setArticle(article);
     	
     	return postRepository.savePost(post);
+    }
+    
+    @Log
+    public Comment addNewComment(CommentDto commentDto) {
+    	Comment comment = new Comment();
+    	
+    	comment.setContent(commentDto.getContent());
+    	comment.setParentId(commentDto.getParentId());
+    	
+    	return postRepository.saveComment(comment);
     }
     
     @Log

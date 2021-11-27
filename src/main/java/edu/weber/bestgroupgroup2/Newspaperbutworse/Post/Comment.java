@@ -1,14 +1,24 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
-import org.springframework.lang.NonNull;
+public class Comment {
 
-public class CommentDto {
-	
-	@NonNull
+	private int postId;
+	private int parentId;
 	private String content;
 	
-	@NonNull
-	private int parentId;
+	public Comment() {}
+	
+	public Comment(int parentId) {
+		this.parentId = parentId;
+	}
+
+	public int getPostId() {
+		return postId;
+	}
+
+	public void setPostId(int postId) {
+		this.postId = postId;
+	}
 
 	public int getParentId() {
 		return parentId;
@@ -25,4 +35,5 @@ public class CommentDto {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
 }

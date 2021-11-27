@@ -46,9 +46,14 @@
 					error</p>
 			</div>
 			<br />
-			<button type="submit" class="btn btn-success">submit</button>
+			<button type="submit" class="btn btn-success">Comment</button>
 			<!-- Show all comments on this article -->
 		</form>
+		
+		<div class="col-3"></div>
+		<div th:each="cmnt : ${comments}" class="col-6 d3Card-fullscreen d3-dark-secondary">
+			<p th:text="${cmnt.content}"></p>
+		</div>
 
 		<div class="col-3"></div>
 

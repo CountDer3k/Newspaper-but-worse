@@ -1,5 +1,8 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -42,8 +45,15 @@ public class PostController {
 		modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
 		modelAndView.getModelMap().addAttribute("articleId", articleId);
 		
+		// Get comments from db
+		List<Comment> comments = new ArrayList<Comment>();
+		comments = postService.getCommentsFromArticle(Integer.parseInt(articleId));
+		
 		CommentDto commentDto = new CommentDto();
+		commentDto.setParentId(Integer.parseInt(articleId));
 		modelAndView.getModelMap().addAttribute("comment", commentDto);
+		modelAndView.getModelMap().addAttribute("comments", comments);
+		
 		
 		return modelAndView;
 		} catch(Exception e) {
@@ -59,7 +69,24 @@ public class PostController {
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Errors errors) {
-		return null;
+		
+		if(bindResult.hasErrors()) {
+			return new ModelAndView("error");
+		}
+		//Get this from logged in user/current page
+		int articleID = 1;
+		ModelAndView modelAndView;
+		
+		//TODO: Validity of comments
+	    if(true) {
+	    	//Currently redirects to root instead of same article page, not passing articleId and idk yet how
+	    	modelAndView = new ModelAndView("redirect:/");
+	    	Comment addedComment = postService.addNewComment(commentDto);
+        	//modelAndView.getModelMap().addAttribute("comment", commentDto);
+	    	//return modelAndView;
+	    }
+
+	    return modelAndView;
 	}
 	
 	

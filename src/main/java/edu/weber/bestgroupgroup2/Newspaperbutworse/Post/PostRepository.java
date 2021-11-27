@@ -29,6 +29,10 @@ public class PostRepository {
 
 	private final String INSERT_POST = "INSERT INTO Post(user_id, create_on) VALUES(:userID, :create) ";
 	private final String INSERT_ARTICLE	 = "INSERT INTO Article(post_id, title, content, access) VALUES(:postID, :title, :content, :access) ";
+	
+	private final String INSERT_COMMENT = "INSERT INTO Comment(post_id, content, parent_id)"
+			+ " VALUES(:postID, :content, :parentID) ";
+	
 	private final String GET_ARTICLE = "SELECT * FROM Post p INNER JOIN Article a ON p.post_id = a.post_id WHERE p.post_id = :postID";
 	private final String GET_ARTICLE_WITH_AUTHOR = "SELECT a.title, a.content, a.access, p.post_id, p.create_on, p.modified_on, u.user_id, CONCAT(u.first_name, ' ' ,u.last_name) AS NAME "
 			+ "FROM  Post p "
@@ -161,6 +165,34 @@ public class PostRepository {
 		
 		return posts;
 	}
+	
+	@Log
+	public List<Comment> getCommentsFromArticle(int articleId){
+		
+		List<Comment> comments = new ArrayList<Comment>();
+		
+		String getCommentsSQL = "SELECT * FROM Comment WHERE parent_id = " + articleId + ";";
+		
+		comments = namedParameterJdbcTemplate.query(getCommentsSQL, new ResultSetExtractor<List<Comment>>(){
+
+			@Override
+			public List<Comment> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				
+				List<Comment> comments = new ArrayList<Comment>();
+				while(rs.next()) {
+					Comment comment = new Comment();
+					
+					comment.setPostId(rs.getInt("post_id"));
+					comment.setParentId(rs.getInt("parent_id"));
+					comment.setContent(rs.getString("content"));
+					
+					comments.add(comment);
+				}	
+				return comments;
+			}
+		});
+		return comments;
+	}
 
 	//----------------
 	// Save methods
@@ -202,6 +234,24 @@ public class PostRepository {
 			logger.error("PostRepository - saveArticle() "+e.toString());
 		}
 		return article;
+	}
+	
+	@Log
+	//Return void instead?
+	public Comment saveComment(Comment comment) {
+		try {
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", comment.getPostId())
+					.addValue("content", comment.getContent())
+					.addValue("parentID", comment.getParentId());
+			namedParameterJdbcTemplate.update(INSERT_COMMENT, parameters, keyHolder);
+			int PostID = keyHolder.getKey().intValue();
+			comment.setPostId(PostID);
+		}catch(Exception e) {
+			logger.error("PostRepository - saveComment() "+e.toString());
+		}
+		return comment;
 	}
 	
 	//----------------
