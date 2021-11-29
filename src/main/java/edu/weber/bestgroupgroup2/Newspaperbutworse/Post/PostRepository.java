@@ -239,6 +239,7 @@ public class PostRepository {
 	@Log
 	//Return void instead?
 	public Comment saveComment(Comment comment, int userID) {
+		//This seems to only get the date not the time in the db
 		long millis = System.currentTimeMillis();  
 		java.sql.Date date = new java.sql.Date(millis);  
 		try {
