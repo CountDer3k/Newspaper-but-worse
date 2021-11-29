@@ -86,13 +86,15 @@ public class PostService{
     }
     
     @Log
-    public Comment addNewComment(CommentDto commentDto) {
+    public Comment addNewComment(CommentDto commentDto, int userID) {
     	Comment comment = new Comment();
     	
     	comment.setContent(commentDto.getContent());
     	comment.setParentId(commentDto.getParentId());
     	
-    	return postRepository.saveComment(comment);
+    	
+    	
+    	return postRepository.saveComment(comment, userID);
     }
     
     @Log

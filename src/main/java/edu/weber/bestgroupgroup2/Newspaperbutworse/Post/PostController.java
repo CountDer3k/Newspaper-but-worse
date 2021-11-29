@@ -52,6 +52,7 @@ public class PostController {
 		CommentDto commentDto = new CommentDto();
 		commentDto.setParentId(Integer.parseInt(articleId));
 		modelAndView.getModelMap().addAttribute("comment", commentDto);
+		modelAndView.getModelMap().addAttribute("comment.parentId", articleId);
 		modelAndView.getModelMap().addAttribute("comments", comments);
 		
 		
@@ -74,14 +75,15 @@ public class PostController {
 			return new ModelAndView("error");
 		}
 		//Get this from logged in user/current page
-		int articleID = 1;
+//		int articleID = 1;
+		int userID = 1;
 		ModelAndView modelAndView;
 		
 		//TODO: Validity of comments
 	    if(true) {
 	    	//Currently redirects to root instead of same article page, not passing articleId and idk yet how
 	    	modelAndView = new ModelAndView("redirect:/");
-	    	Comment addedComment = postService.addNewComment(commentDto);
+	    	Comment addedComment = postService.addNewComment(commentDto, userID);
         	//modelAndView.getModelMap().addAttribute("comment", commentDto);
 	    	//return modelAndView;
 	    }

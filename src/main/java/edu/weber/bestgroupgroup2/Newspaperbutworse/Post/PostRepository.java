@@ -238,16 +238,28 @@ public class PostRepository {
 	
 	@Log
 	//Return void instead?
-	public Comment saveComment(Comment comment) {
+	public Comment saveComment(Comment comment, int userID) {
+		long millis = System.currentTimeMillis();  
+		java.sql.Date date = new java.sql.Date(millis);  
 		try {
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("userID", userID)
+					.addValue("create", date);
+
+			namedParameterJdbcTemplate.update(INSERT_POST, parameters, keyHolder);
+			
+			int PostID = keyHolder.getKey().intValue();
+			comment.setPostId(PostID);
+			
+			keyHolder = new GeneratedKeyHolder();
+			parameters = new MapSqlParameterSource()
 					.addValue("postID", comment.getPostId())
 					.addValue("content", comment.getContent())
 					.addValue("parentID", comment.getParentId());
+			
 			namedParameterJdbcTemplate.update(INSERT_COMMENT, parameters, keyHolder);
-			int PostID = keyHolder.getKey().intValue();
-			comment.setPostId(PostID);
+			
 		}catch(Exception e) {
 			logger.error("PostRepository - saveComment() "+e.toString());
 		}
