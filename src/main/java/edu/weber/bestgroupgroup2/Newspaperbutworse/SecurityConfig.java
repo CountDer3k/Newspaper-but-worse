@@ -58,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		
 	    http
+	    	.csrf().disable()
 	      	.sessionManagement()
 	      	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	      	.and()
