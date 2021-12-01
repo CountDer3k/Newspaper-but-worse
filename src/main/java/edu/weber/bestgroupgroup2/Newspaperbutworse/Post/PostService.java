@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
-
-
 @Service
 public class PostService{
 	

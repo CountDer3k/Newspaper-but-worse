@@ -33,7 +33,6 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class PostRepositoryTest {
 

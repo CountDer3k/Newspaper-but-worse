@@ -59,7 +59,6 @@ public class UserService implements UserDetailsService {
     	return userRepository.save(user);
     }
     
-
 	@Override
 	@Log
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

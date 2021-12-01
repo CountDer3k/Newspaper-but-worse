@@ -1,7 +1,6 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.http.Cookie;
