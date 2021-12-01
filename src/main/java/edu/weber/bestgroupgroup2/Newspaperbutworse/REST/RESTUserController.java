@@ -23,7 +23,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("API/")
+@RequestMapping("API/users")
 public class RESTUserController {
 	
 	private Logger logger = LoggerFactory.getLogger(RESTUserController.class);
@@ -36,7 +36,7 @@ public class RESTUserController {
 	}
 	
 	@Operation(summary = "Get all users")
-	@GetMapping("users")
+	@GetMapping()
 	@Log
 	public ResponseEntity<List<User>> getAllUsers(
 			@RequestParam(name = "entries", required = false) String entriesAmount,
@@ -59,7 +59,7 @@ public class RESTUserController {
 	}
 	
 	@Operation(summary = "Get a articles by its id")
-	@GetMapping("users/{userId}")
+	@GetMapping("{userId}")
 	@Log
 	public ResponseEntity<Object> getUser(@PathVariable String userId){
 		User u = userService.getUserByID(Integer.parseInt(userId));
@@ -74,7 +74,7 @@ public class RESTUserController {
 	}
 	
 	@Operation(summary = "Add a user")
-	@PostMapping("users")
+	@PostMapping()
 	@Log
 	public ResponseEntity<Object> loginUser(
 			@RequestParam(name = "username", required = false) String username,
