@@ -1,13 +1,17 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +40,8 @@ public class PostController {
 	
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
-	public ModelAndView showArticleView(@PathVariable String articleId) {
+	public ModelAndView showArticleView(@PathVariable String articleId, Principal principal) {
+		
 		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
 		// Get article from db		
@@ -55,6 +60,8 @@ public class PostController {
 		modelAndView.getModelMap().addAttribute("comment.parentId", articleId);
 		modelAndView.getModelMap().addAttribute("comments", comments);
 		
+//		modelAndView.getModelMap().addAttribute(, principal);
+		
 		
 		return modelAndView;
 		} catch(Exception e) {
@@ -69,7 +76,13 @@ public class PostController {
 			@Validated @ModelAttribute("comment") CommentDto commentDto,
 			BindingResult bindResult,
 			HttpServletRequest request,
-			Errors errors) {
+			Errors errors,
+			Principal principal) {
+		
+		
+		UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken)principal;
+		User user = (User)userToken.getDetails();
+		
 		
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
@@ -83,7 +96,7 @@ public class PostController {
 	    if(true) {
 	    	//Currently redirects to root instead of same article page, not passing articleId and idk yet how
 	    	modelAndView = new ModelAndView("redirect:/");
-	    	Comment addedComment = postService.addNewComment(commentDto, userID);
+	    	Comment addedComment = postService.addNewComment(commentDto, user.getUserId());
         	//modelAndView.getModelMap().addAttribute("comment", commentDto);
 	    	//return modelAndView;
 	    }
