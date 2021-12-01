@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,7 +41,7 @@ public class PostController {
 	
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
-	public ModelAndView showArticleView(@PathVariable String articleId, Principal principal) {
+	public ModelAndView showArticleView(@PathVariable String articleId) {
 		
 		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
@@ -60,9 +61,6 @@ public class PostController {
 		modelAndView.getModelMap().addAttribute("comment.parentId", articleId);
 		modelAndView.getModelMap().addAttribute("comments", comments);
 		
-//		modelAndView.getModelMap().addAttribute(, principal);
-		
-		
 		return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
@@ -74,28 +72,23 @@ public class PostController {
 	@Log
 	public ModelAndView addComment(
 			@Validated @ModelAttribute("comment") CommentDto commentDto,
+			@ModelAttribute("articleId") String id,
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Errors errors,
-			Principal principal) {
+			Authentication authentication) {
 		
-		
-		UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken)principal;
-		User user = (User)userToken.getDetails();
-		
+		User user = (User)authentication.getPrincipal();
 		
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
-		//Get this from logged in user/current page
-//		int articleID = 1;
-		int userID = 1;
 		ModelAndView modelAndView;
 		
 		//TODO: Validity of comments
 	    if(true) {
 	    	//Currently redirects to root instead of same article page, not passing articleId and idk yet how
-	    	modelAndView = new ModelAndView("redirect:/");
+	    	modelAndView = new ModelAndView("redirect:/articles/articleNum/"+commentDto.getParentId());
 	    	Comment addedComment = postService.addNewComment(commentDto, user.getUserId());
         	//modelAndView.getModelMap().addAttribute("comment", commentDto);
 	    	//return modelAndView;
