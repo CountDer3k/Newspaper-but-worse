@@ -72,7 +72,6 @@ public class PostController {
 	@Log
 	public ModelAndView addComment(
 			@Validated @ModelAttribute("comment") CommentDto commentDto,
-			@ModelAttribute("articleId") String id,
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Errors errors,

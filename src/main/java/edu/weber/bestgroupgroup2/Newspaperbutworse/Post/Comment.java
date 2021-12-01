@@ -1,10 +1,13 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
+
 public class Comment {
 
 	private int postId;
 	private int parentId;
 	private String content;
+	private User user;
 	
 	public Comment() {}
 	
@@ -34,6 +37,14 @@ public class Comment {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

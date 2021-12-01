@@ -92,8 +92,6 @@ public class PostService{
     	comment.setContent(commentDto.getContent());
     	comment.setParentId(commentDto.getParentId());
     	
-    	
-    	
     	return postRepository.saveComment(comment, userID);
     }
     

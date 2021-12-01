@@ -185,6 +185,7 @@ public class PostRepository {
 					comment.setPostId(rs.getInt("post_id"));
 					comment.setParentId(rs.getInt("parent_id"));
 					comment.setContent(rs.getString("content"));
+//					comment.setUser(null);
 					
 					comments.add(comment);
 				}	
