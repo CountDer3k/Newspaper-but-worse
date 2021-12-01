@@ -1,7 +1,5 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
-
-
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
@@ -14,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
 
 
 @RunWith(MockitoJUnitRunner.class)

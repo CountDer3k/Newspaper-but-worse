@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
 <link th:href="@{/css/main.css}" rel="stylesheet">
@@ -20,13 +21,14 @@
 	<!-- Top Bar -->
 	<div th:include="_layout/navbar :: #navigationFragment"></div>
 	<br />
-	
-	
+
+
 	<div class="row sidePadding" style="padding: 30px 20px; margin: auto;">
 		<div class="col-3"></div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary">
-		<a href="/" class="h3" style="background-color:none; color:white"><i class="fas fa-arrow-left h4"></i></a>
-		<p th:text="${articleId}" style="visibility: hidden">
+			<a href="/" class="h3" style="background-color: none; color: white"><i
+				class="fas fa-arrow-left h4"></i></a>
+			<p th:text="${articleId}" style="visibility: hidden">
 			<p th:text="${article.title}" class="h2">
 			<p class="h5">
 				By: <span th:text="${author}" class="h5">
@@ -34,7 +36,30 @@
 			<hr />
 			<p th:text="${article.content}"></p>
 		</div>
+		
 		<div class="col-3"></div>
+		<form sec:authorize="isAuthenticated()" th:action="@{/articles/addComment}" th:object="${comment}"
+			method="POST" enctype="utf8" class="col-6 d3Card-fullscreen d3-dark-secondary">
+			<div class="form-group">
+				<label>Share your thoughts:</label> <input class="form-control"
+					th:field="*{content}" />
+				<p th:each="error: ${#fields.errors('content')}" th:text="${error}">Validation
+					error</p>
+				<input type="hidden"
+					th:field="*{parentId}" />
+				<p th:each="error: ${#fields.errors('parentId')}" th:text="${error}">Validation
+					error</p>
+			</div>
+			<br />
+			<button type="submit" class="btn btn-success">Comment</button>
+			<!-- Show all comments on this article -->
+		</form>
+		
+		<div th:each="cmnt : ${comments}">
+			<div class="col-6 d3Card-fullscreen d3-dark-secondary">
+				<p th:text="${cmnt.content}"></p>
+			</div>
+		</div>
 
 	</div>
 
