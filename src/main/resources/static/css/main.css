@@ -61,3 +61,12 @@
 	padding-right: 25px;
 	padding-left: 25px;
 }
+
+
+.inputRounded{
+	border-radius: 5px;
+	border:0;
+    box-shadow:4px 4px 3px 
+}
+
+
