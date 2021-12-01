@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User editUser(User user) {
-		return user;
+		return userRepository.updateUser(user);
 		
 	}
 

@@ -135,15 +135,22 @@ public class UserController {
 	
 	@PostMapping("user/edit/{username}")
 	@Log
-	public ModelAndView editUser(@PathVariable String username, User user) {
-		ModelAndView modelAndView = new ModelAndView("user/userForm");
-		try {
-			userService.editUser(user);
-		} 
-		catch(Exception e) {
-				logger.error(e.toString());
+	public ModelAndView editUser(
+			  @ModelAttribute("user") @Validated User user,
+			  BindingResult bindResult,
+			  HttpServletRequest request,
+			  Errors errors,
+			  @PathVariable String username) {
+		
+		if(bindResult.hasErrors()) {
+			return new ModelAndView("error");
 		}
-	    return modelAndView;
+		
+    	ModelAndView modelAndView = new ModelAndView("redirect:user/list");
+    	userService.editUser(user);
+    	modelAndView.getModelMap().addAttribute("msg", "Registration Confirmed!");
+    	modelAndView.getModelMap().addAttribute("user", user);
+    	return modelAndView;
 	}
 	
 

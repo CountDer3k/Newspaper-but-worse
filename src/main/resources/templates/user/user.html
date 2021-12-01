@@ -36,7 +36,7 @@
 				</p>
 			<p class="h5" th:text="*{firstName} + ' ' + *{lastName}"/>
 			<p class="h5" th:text="*{email}"></p>
-			<a class="btn btn-outline-light" th:href=@{user/edit/{username}(username=*{username})}>Edit</a>
+			<a class="btn btn-outline-light" th:href=@{~/user/edit/{username}(username=*{username})}>Edit</a>
 		</div>
 		<div class="col-3"></div>
 	</div>
