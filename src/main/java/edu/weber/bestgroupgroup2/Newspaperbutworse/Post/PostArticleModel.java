@@ -1,12 +1,13 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
+import java.io.Serializable;
 
 /*
  This class holds a post (PostModel)
  and has a name of the author from the post 
  */
 
-public class PostArticleModel {
+public class PostArticleModel implements Serializable{
 
 	private PostModel post;
 	// author name

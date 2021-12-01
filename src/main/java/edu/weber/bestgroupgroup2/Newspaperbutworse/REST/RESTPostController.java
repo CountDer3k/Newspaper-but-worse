@@ -20,6 +20,11 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("API/")
@@ -36,20 +41,28 @@ public class RESTPostController {
 	} 
 
 
+	@Operation(summary = "Returns a list of all the articles.")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Articles Found", 
+					content = { @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = PostModel.class)) }),
+			@ApiResponse(responseCode = "404", description = "Articles not found", 
+		    content = @Content)
+	})
 	@GetMapping("articles")
 	@Log
 	public ResponseEntity<List<PostArticleModel>> getAllPost(
 			@RequestParam(name = "entries", required = false) String entriesAmount,
 			@RequestParam(name = "page", required = false) String pageNum){
 		List<PostArticleModel> posts;
-		
+
 		try {
 			int entries = Integer.parseInt(entriesAmount);
 			int page = 1;
 			if (pageNum != null){
 				page = Integer.parseInt(pageNum);
 			}
-			
+
 			posts = postService.getAllPosts(entries > 0 ? entries : 1, page > 0 ? page : 1);
 		} catch(Exception e) {
 			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());
@@ -57,14 +70,22 @@ public class RESTPostController {
 		}
 		return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 	}
-	
+
+	@Operation(summary = "Returns an article for the author id passed in.")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Articles Found", 
+					content = { @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = PostModel.class)) }),
+			@ApiResponse(responseCode = "404", description = "Articles not found", 
+		    content = @Content)
+	})
 	@GetMapping("author/articles")
 	@Log
 	public ResponseEntity<List<PostArticleModel>> getAllPostForAuthor(
 			@RequestParam(name = "authorId", required = true) String authorId,
 			@RequestParam(name = "entries", required = false) String entriesAmount,
 			@RequestParam(name = "page", required = false) String pageNum){
-		
+
 		List<PostArticleModel> posts;
 
 		try {
@@ -73,7 +94,7 @@ public class RESTPostController {
 			if(pageNum != null) {
 				page = Integer.parseInt(pageNum);
 			}
-			
+
 			posts = postService.getAllPostsForUserWithId(authorId, entries > 0 ? entries : 1, page > 0 ? page : 1);
 			//return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 		} catch(Exception e) {
@@ -82,8 +103,15 @@ public class RESTPostController {
 		}
 		return posts != null ? ResponseEntity.ok(posts) : ResponseEntity.ok(new ArrayList<PostArticleModel>());
 	}
-	
-	
+
+	@Operation(summary = "Returns an article for the article id passed in.")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Article Found", 
+					content = { @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = PostModel.class)) }),
+			@ApiResponse(responseCode = "404", description = "Article not found", 
+		    content = @Content)
+	})
 	@GetMapping("articles/{articleId}")
 	@Log
 	public ResponseEntity<Object> getPost(@PathVariable String articleId){
@@ -98,9 +126,16 @@ public class RESTPostController {
 		}
 	} 
 
-	
-	
+
 	//?? Needs to be authenticated to work
+	@Operation(summary = "Returns true/false based on if the article with the article id passed in was delete successfully.")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Article Deleted", 
+					content = { @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = PostModel.class)) }),
+			@ApiResponse(responseCode = "404", description = "Article not deleted", 
+		    content = @Content)
+	})
 	@DeleteMapping("articles/{articleId}")
 	public boolean deletePost(@PathVariable String articleId){
 		boolean result = postService.deletePost(articleId);

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("API/")
@@ -33,7 +35,7 @@ public class RESTUserController {
 		this.userService = userService;
 	}
 	
-	
+	@Operation(summary = "Get all users")
 	@GetMapping("users")
 	@Log
 	public ResponseEntity<List<User>> getAllUsers(
@@ -56,9 +58,10 @@ public class RESTUserController {
 		return users != null ? ResponseEntity.ok(users) : ResponseEntity.ok(new ArrayList<User>());
 	}
 	
+	@Operation(summary = "Get a articles by its id")
 	@GetMapping("users/{userId}")
 	@Log
-	public ResponseEntity<Object> getPost(@PathVariable String userId){
+	public ResponseEntity<Object> getUser(@PathVariable String userId){
 		User u = userService.getUserByID(Integer.parseInt(userId));
 
 		if(u != null)
@@ -69,5 +72,31 @@ public class RESTUserController {
 			return ResponseEntity.ok(m);
 		}
 	}
+	
+	@Operation(summary = "Add a user")
+	@PostMapping("users")
+	@Log
+	public ResponseEntity<Object> loginUser(
+			@RequestParam(name = "username", required = false) String username,
+			@RequestParam(name = "password", required = false) String password){
+		
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
