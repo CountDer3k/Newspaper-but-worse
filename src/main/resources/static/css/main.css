@@ -69,3 +69,9 @@ a.h2:active {
 	text-decoration: none;
 	color: #5C527F;
 }
+
+.inputRounded{
+	border-radius: 5px;
+	border:0;
+    box-shadow:4px 4px 3px 
+}

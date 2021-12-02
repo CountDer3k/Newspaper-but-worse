@@ -1,7 +1,6 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.http.Cookie;
@@ -106,7 +105,7 @@ public class JwtTokenProvider {
 		return null;
 	}
 
-	private String getUsername(String token) {
+	public String getUsername(String token) {
 		
 		Jwt<DefaultJwsHeader, DefaultClaims> jwt = Jwts.parser().setSigningKey(secretKey).parse(token);
 		return jwt.getBody().get("username", String.class);
@@ -124,7 +123,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 
-	private String getJwtTokenFromRequest(HttpServletRequest request) {
+	public String getJwtTokenFromRequest(HttpServletRequest request) {
 		
 		Cookie[] cookies = request.getCookies();
 		

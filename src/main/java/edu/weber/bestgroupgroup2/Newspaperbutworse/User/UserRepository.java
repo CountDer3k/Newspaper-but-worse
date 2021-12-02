@@ -83,7 +83,7 @@ public class UserRepository {
 	
 	@Log
 	public User getUserByID(int id) {
-		String sql = SELECT_USER_WITH_ROLES + " WHERE user_id = :userId;";
+		String sql = SELECT_USER_WITH_ROLES + " WHERE u.user_id = :userId;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", id);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();

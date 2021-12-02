@@ -1,10 +1,16 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 
+import java.io.Serializable;
 import java.sql.Date;
 
+public class PostModel implements Serializable{
 
-public class PostModel {
+	@Override
+	public String toString() {
+		return "PostModel [Id=" + Id + ", userId=" + userId + ", createDate=" + createDate + ", modifiedDate="
+				+ modifiedDate + ", article=" + article + ", url=" + url + "]";
+	}
 
 	private int Id;
 	private int userId;

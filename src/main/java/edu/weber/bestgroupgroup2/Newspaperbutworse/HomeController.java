@@ -52,7 +52,7 @@ public class HomeController {
 			return modelAndView;
 			} catch(Exception e) {
 				logger.error("" + e.toString());
-				return null;
+				return new ModelAndView("/error");
 			}
 	}
 	
