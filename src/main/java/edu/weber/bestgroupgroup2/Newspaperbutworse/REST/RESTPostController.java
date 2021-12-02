@@ -42,6 +42,14 @@ public class RESTPostController {
 		this.postService = postService;
 	} 
 
+	@Operation(summary = "Returns an article if the article was successfully added.")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Articles Added", 
+					content = { @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = PostModel.class)) }),
+			@ApiResponse(responseCode = "404", description = "Articles not added", 
+			content = @Content)
+	})
 	@PostMapping("articles")
 	@Log
 	public ResponseEntity<Object> createArticle(
@@ -49,18 +57,23 @@ public class RESTPostController {
 			@RequestParam(name = "title", required = true) String title,
 			@RequestParam(name = "content", required = true) String content){
 
+		Object p = new Object();
 		try {
 			PostDto dto = new PostDto();
 			dto.setTitle(title);
 			dto.setContent(content);
 			dto.setAccess("FR");
 
-			PostModel p = postService.addNewPost(dto, Integer.valueOf(authorId));		
+			p = postService.addNewPost(dto, Integer.valueOf(authorId));		
 
-			return ResponseEntity.ok(p);
+			
 		} catch(Exception e) {
-			return ResponseEntity.ok("Internall error occured");
+			return ResponseEntity.ok("Internal error occured");
 		}
+		if(p != null)
+			return ResponseEntity.ok(p);
+		else
+			return ResponseEntity.ok("Article could not be added");
 	}
 
 	@Operation(summary = "Returns a list of all the articles.")
@@ -162,20 +175,6 @@ public class RESTPostController {
 		boolean result = postService.deletePost(articleId);
 		return ResponseEntity.ok(result);
 	} 
-
-	
-	
-	@PostMapping("articles/test/")
-	@Log
-	public ResponseEntity<Object> createArticletest(
-			@RequestParam(name = "title", required = true) String title){
-
-		try {
-			return ResponseEntity.ok("Accepted: " + title);
-		} catch(Exception e) {
-			return ResponseEntity.ok("Rejected: " + title);
-		}
-	}
 
 
 }
