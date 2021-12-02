@@ -9,17 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 
@@ -37,23 +39,61 @@ public class PostController {
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
 	public ModelAndView showArticleView(@PathVariable String articleId) {
+		
 		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
-			// Get article from db		
-			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-			modelAndView.getModelMap().addAttribute("post", pam.getPost());
-			modelAndView.getModelMap().addAttribute("author", pam.getName());
-			modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
-			modelAndView.getModelMap().addAttribute("articleId", articleId);
-
-			return modelAndView;
+		// Get article from db		
+		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
+    modelAndView.getModelMap().addAttribute("post", pam.getPost());
+		modelAndView.getModelMap().addAttribute("author", pam.getName());
+		modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
+		modelAndView.getModelMap().addAttribute("articleId", articleId);
+		
+		// Get comments from db
+		List<Comment> comments = new ArrayList<Comment>();
+		comments = postService.getCommentsFromArticle(Integer.parseInt(articleId));
+		
+		CommentDto commentDto = new CommentDto();
+		commentDto.setParentId(Integer.parseInt(articleId));
+		modelAndView.getModelMap().addAttribute("comment", commentDto);
+		modelAndView.getModelMap().addAttribute("comment.parentId", articleId);
+		modelAndView.getModelMap().addAttribute("comments", comments);
+		
+		return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return new ModelAndView("/error");
 		}
 	}
+	
+	@PostMapping("/articles/addComment")
+	@Log
+	public ModelAndView addComment(
+			@Validated @ModelAttribute("comment") CommentDto commentDto,
+			BindingResult bindResult,
+			HttpServletRequest request,
+			Errors errors,
+			Authentication authentication) {
+		
+		User user = (User)authentication.getPrincipal();
+		
+		if(bindResult.hasErrors()) {
+			return new ModelAndView("error");
+		}
+		ModelAndView modelAndView;
+		
+		//TODO: Validity of comments
+	    if(true) {
+	    	//Currently redirects to root instead of same article page, not passing articleId and idk yet how
+	    	modelAndView = new ModelAndView("redirect:/articles/articleNum/"+commentDto.getParentId());
+	    	Comment addedComment = postService.addNewComment(commentDto, user.getUserId());
+        	//modelAndView.getModelMap().addAttribute("comment", commentDto);
+	    	//return modelAndView;
+	    }
 
-
+	    return modelAndView;
+	}
+	
 	@GetMapping("/articles/articleForm")
 	@Log
 	public ModelAndView showRegistrationForm(WebRequest request) {

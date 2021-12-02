@@ -4,7 +4,6 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 import java.io.Serializable;
 import java.sql.Date;
 
-
 public class PostModel implements Serializable{
 
 	@Override
