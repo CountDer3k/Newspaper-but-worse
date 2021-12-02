@@ -79,6 +79,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User editUser(User user) {
+		User oldUser = (User) loadUserByUsername(user.getUsername());
+		user.setUserId(oldUser.getUserId());
 		return userRepository.updateUser(user);
 		
 	}

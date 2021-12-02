@@ -121,7 +121,14 @@ public class UserRepository {
 				.addValue("lastName", user.getLastName())
 				.addValue("email", user.getEmail())
 				.addValue("userId", user.getUserId());
-		namedParameterJdbcTemplate.update(UPDATE_USER, parameters);
+		int status = namedParameterJdbcTemplate.update(UPDATE_USER, parameters);
+
+	    if(status != 0){
+	      System.out.println("User data updated for ID " + user.getUserId());
+	    }
+	    else {
+	      System.out.println("No User found with ID " + user.getUserId());
+	    }
 		return user;
 	}
 
