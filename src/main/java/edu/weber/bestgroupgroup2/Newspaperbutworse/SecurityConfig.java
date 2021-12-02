@@ -58,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		
 	    http
+	    	.csrf().disable()
 	      	.sessionManagement()
 	      	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	      	.and()
@@ -73,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.antMatchers("/").permitAll()
 	      		.antMatchers("/error").permitAll()
 	      		.antMatchers("/user/list").hasAuthority("ADMIN")
+	      		.antMatchers("/**").permitAll()
 //	      		.antMatchers("/random").permitAll()
 	      		//More?
 //	      .antMatchers("/**").permitAll()
