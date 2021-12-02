@@ -42,7 +42,7 @@ public class RESTPostController {
 		this.postService = postService;
 	} 
 
-	@Operation(summary = "Returns an article if the article was successfully added.")
+	@Operation(summary = "Returns an article based on the parameters passed in, if the article was successfully added.")
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Articles Added", 
 					content = { @Content(mediaType = "application/json", 
