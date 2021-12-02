@@ -19,6 +19,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Repository
@@ -185,8 +186,13 @@ public class PostRepository {
 		List<Comment> comments = new ArrayList<Comment>();
 		
 		String getCommentsSQL = "SELECT * FROM Comment WHERE parent_id = " + articleId + ";";
+		String GET_COMMENTS_FROM_POST_WITH_USERS = "SELECT c.post_id, c.content, c.parent_id, u.user_id, u.username "
+				+ "FROM  Post p "
+				+ "INNER JOIN Comment c ON c.post_id = p.post_id "
+				+ "INNER JOIN `User` u  ON p.user_id = u.user_id "
+				+ "WHERE c.parent_id = " + articleId + ";";
 		
-		comments = namedParameterJdbcTemplate.query(getCommentsSQL, new ResultSetExtractor<List<Comment>>(){
+		comments = namedParameterJdbcTemplate.query(GET_COMMENTS_FROM_POST_WITH_USERS, new ResultSetExtractor<List<Comment>>(){
 
 			@Override
 			public List<Comment> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -198,7 +204,7 @@ public class PostRepository {
 					comment.setPostId(rs.getInt("post_id"));
 					comment.setParentId(rs.getInt("parent_id"));
 					comment.setContent(rs.getString("content"));
-//					comment.setUser(null);
+					comment.setUsername(rs.getString("username"));
 					
 					comments.add(comment);
 				}	
