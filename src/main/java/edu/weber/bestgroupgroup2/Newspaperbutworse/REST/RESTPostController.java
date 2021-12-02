@@ -42,6 +42,26 @@ public class RESTPostController {
 		this.postService = postService;
 	} 
 
+	@PostMapping("articles")
+	@Log
+	public ResponseEntity<Object> createArticle(
+			@RequestParam(name = "authorId", required = true) String authorId,
+			@RequestParam(name = "title", required = true) String title,
+			@RequestParam(name = "content", required = true) String content){
+
+		try {
+			PostDto dto = new PostDto();
+			dto.setTitle(title);
+			dto.setContent(content);
+			dto.setAccess("FR");
+
+			PostModel p = postService.addNewPost(dto, Integer.valueOf(authorId));		
+
+			return ResponseEntity.ok(p);
+		} catch(Exception e) {
+			return ResponseEntity.ok("Internall error occured");
+		}
+	}
 
 	@Operation(summary = "Returns a list of all the articles.")
 	@ApiResponses(value = { 
@@ -143,26 +163,7 @@ public class RESTPostController {
 		return ResponseEntity.ok(result);
 	} 
 
-	@PostMapping("articles/")
-	@Log
-	public ResponseEntity<Object> createArticle(
-			@RequestParam(name = "authorId", required = true) String authorId,
-			@RequestParam(name = "title", required = true) String title,
-			@RequestParam(name = "content", required = true) String content){
-
-		try {
-			PostDto dto = new PostDto();
-			dto.setTitle(title);
-			dto.setContent(content);
-			dto.setAccess("FR");
-
-			PostModel p = postService.addNewPost(dto, Integer.valueOf(authorId));		
-
-			return ResponseEntity.ok(p);
-		} catch(Exception e) {
-			return ResponseEntity.ok("Internall error occured");
-		}
-	}
+	
 	
 	@PostMapping("articles/test/")
 	@Log

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -70,11 +71,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	      		.antMatchers(HttpMethod.POST, "/articles/**").authenticated()
 	      		//?? Delete this after testing
 	      		.antMatchers("/API/**").permitAll()
+	      		.antMatchers(HttpMethod.POST, "/API/**").permitAll()
 	      		.antMatchers("/authors/**").hasAnyAuthority("AUTHOR")
 	      		.antMatchers("/").permitAll()
 	      		.antMatchers("/error").permitAll()
 	      		.antMatchers("/user/list").hasAuthority("ADMIN")
-	      		//.antMatchers("/**").permitAll()
 //	      		.antMatchers("/random").permitAll()
 	      		//More?
 //	      .antMatchers("/**").permitAll()
