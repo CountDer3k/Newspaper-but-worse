@@ -74,7 +74,7 @@ public class UserController {
 	}
 	
 	/* List */
-	@GetMapping("user/list")
+	@GetMapping("/user/list")
 	@Log
 	public ModelAndView showUserList() {
 		ModelAndView modelAndView = new ModelAndView("user/userList");
@@ -102,7 +102,7 @@ public class UserController {
 	}
 	
 	/* User */
-	@GetMapping("user/{username}")
+	@GetMapping("/user/{username}")
 	@Log
 	public ModelAndView showUser(@PathVariable String username) {
 		ModelAndView modelAndView = new ModelAndView("user/user");
@@ -119,7 +119,7 @@ public class UserController {
 	}
 	
 	/* User Form */
-	@GetMapping("user/edit/{username}")
+	@GetMapping("/user/edit/{username}")
 	@Log
 	public ModelAndView showUserForm(@PathVariable String username) {
 		ModelAndView modelAndView = new ModelAndView("user/userForm");
@@ -133,7 +133,7 @@ public class UserController {
 	    return modelAndView;
 	}
 	
-	@PostMapping("user/edit/{username}")
+	@PostMapping("/user/edit/{username}")
 	@Log
 	public ModelAndView editUser(
 			  @ModelAttribute("user") @Validated User user,
@@ -146,7 +146,7 @@ public class UserController {
 			return new ModelAndView("error");
 		}
 		
-    	ModelAndView modelAndView = new ModelAndView("redirect:user/list");
+    	ModelAndView modelAndView = new ModelAndView("redirect:/user/list");
     	userService.editUser(user);
     	modelAndView.getModelMap().addAttribute("msg", "Registration Confirmed!");
     	modelAndView.getModelMap().addAttribute("user", user);

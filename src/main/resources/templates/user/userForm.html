@@ -22,9 +22,9 @@
 		<div class="col-3"></div>
 		<div class="col-6 d3Card-secondary " style="padding: 30px 20px;">
 			<div class="d-grid gap-2">
-				<h1>Article</h1>
+				<h1>Edit User</h1>
 				<label th:text=${msg}></label>
-				<form action="/user/userForm" th:object="${user}" method="POST"
+				<form th:action="@{/user/userForm}" th:object="${user}" method="POST"
 					enctype="utf8">
 					<div class="form-group">
 						<label>first name</label> <input class="form-control"
