@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;

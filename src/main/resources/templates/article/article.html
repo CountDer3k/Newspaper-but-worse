@@ -42,14 +42,13 @@
 				th:action="@{/articles/addComment}" th:object="${comment}"
 				method="POST" enctype="utf8" class="">
 				<div class="form-group" style="width: 80%; margin: auto">
-					<label>Share your thoughts:</label> <input class="form-control"
-						th:field="*{content}" />
+					<label>Share your thoughts:</label> <input class="form-control" th:field="*{content}" />
 
-					<p th:each="error: ${#fields.errors('content')}" th:text="${error}">Validation
-						error</p>
+					<p th:each="error: ${#fields.errors('content')}" th:text="${error}">Validation error</p>
 					<input type="hidden" th:field="*{parentId}" />
 					<p th:each="error: ${#fields.errors('parentId')}"
 						th:text="${error}">Validation error</p>
+						<br/>
 					<button type="submit" class="btn btn-success">Comment</button>
 				</div>
 				<br />
