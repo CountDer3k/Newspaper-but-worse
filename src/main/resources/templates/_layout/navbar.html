@@ -36,7 +36,7 @@
 				<button sec:authorize="isAuthenticated()" class="btn btn-outline-light dropdown-toggle" id="navbarDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false" style="height:40px;">&nbsp;Menu</button>
 				<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenu">
 					<li><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/user/list}" class="dropdown-item">User List</a></li>
-					<li><a href="#!" class="dropdown-item">Logout</a></li>
+					<li><a th:href="@{~/user/logout}" class="dropdown-item">Logout</a></li>
 				</ul>
 				<a sec:authorize="isAnonymous()" th:href="@{/user/login}" class="btn btn-outline-light" style="height:40px;">&nbsp;Login</a>
 				<a sec:authorize="isAnonymous()" th:href="@{/user/registration}" class="btn btn-outline-light" style="height:40px;">&nbsp;Register</a>
