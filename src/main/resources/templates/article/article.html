@@ -57,6 +57,7 @@
 		
 		<div th:each="cmnt : ${comments}">
 			<div class="col-6 d3Card-fullscreen d3-dark-secondary">
+				<p th:text="${cmnt.username} + ':'"></p>
 				<p th:text="${cmnt.content}"></p>
 			</div>
 		</div>
