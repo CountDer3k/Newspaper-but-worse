@@ -11,12 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.ArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostService;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Controller
@@ -55,7 +52,7 @@ public class HomeController {
 			return modelAndView;
 			} catch(Exception e) {
 				logger.error("" + e.toString());
-				return null;
+				return new ModelAndView("/error");
 			}
 	}
 	

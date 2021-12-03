@@ -24,32 +24,46 @@
 	<div class="row sidePadding">
 		<div class="col-3"></div>
 		<div class="col-6 d3Card-fullscreen d3-dark-secondary"
-			style="padding: 30px 20px; margin: auto;" th:if="${isEmpty}">
-			<p class="h3" th:text="${empty}">
-		</div>
-		<div class="col-6 d3Card-fullscreen d3-dark-secondary"
-			style="padding: 30px 20px; margin: auto;" th:unless="${isEmpty}">
-			<!-- For loop to show every article in a list -->
-			<th:block th:each="post : ${posts}">
-				<div class="row d3Card d3-dark-third">
-					<div class="col">
-						<p th:text="${post.post.article.title}" class="h2">
-						<p class="h5">
-							By: <span th:text="${post.name}" class="h5">By: 
-						</p>
-						<hr />
-						<p
-							th:text="${#strings.abbreviate(post.post.article.content,150)} "></p>
-						<a href="article.html"
-							th:href=@{/articles/articleNum/{articleId}(articleId=${post.post.article.postId})}
-							class="btn btn-sm btn-block btn-info">Read More...</a>
+			style="padding: 30px 20px; margin: auto;">
+			<div class="row" style="padding-bottom: 10px;">
+				<a sec:authorize="hasAuthority('AUTHOR')" href="/articles/articleForm"
+					class="btn btn-primary"
+					style="background-color: none; color: white"><i
+					class="fas fa-plus-circle"></i> Add Article</a>
+			</div>
+			<div class="row sidePadding" th:if="${isEmpty}">
+				<p class="h3" th:text="${empty}">
+			</div>
+			<div class="row sidePadding" th:unless="${isEmpty}">
+				<!-- For loop to show every article in a list -->
+				<th:block th:each="post : ${posts}">
+					<div class="row d3Card d3-dark-third">
+						<div class="col">
+							<p th:text="${post.post.article.title}" class="h2">
+							<p class="h5">
+								By: <span th:text="${post.name}" class="h5">By: 
+							</p>
+							<hr />
+							<p
+								th:text="${#strings.abbreviate(post.post.article.content,150)} "></p>
+							<a href="article.html"
+								th:href=@{/articles/articleNum/{articleId}(articleId=${post.post.article.postId})}
+								class="btn btn-sm btn-block btn-info">Read More...</a>
+						</div>
 					</div>
-				</div>
-			</th:block>
+				</th:block>
+			</div>
+
 		</div>
 		<div class="col-3"></div>
 	</div>
 
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+		crossorigin="anonymous">
+		
+	</script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
 		integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/"

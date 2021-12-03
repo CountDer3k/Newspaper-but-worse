@@ -1,7 +1,6 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.http.Cookie;
@@ -20,12 +19,14 @@ import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.DefaultClaims;
+import io.jsonwebtoken.impl.DefaultJwsHeader;
 
 @Component
 public class JwtTokenProvider {
 
 	//Time To Live (Currently set to be 1 hour; can be changed)
-	private final Duration ttl = Duration.ofHours(1);
+	private final Duration ttl = Duration.ofMinutes(30);
 	//Might want to look at/rework the secretKey?
 	private final byte[] secretKey = "alterego".getBytes();
 	private UserService userService;
@@ -33,12 +34,15 @@ public class JwtTokenProvider {
 	@Autowired
 	public JwtTokenProvider(UserService userService) { this.userService = userService; }
 	
-	public String createCookieTokenString(Authentication auth) {
+	public Cookie createCookieTokenString(Authentication auth) {
 		
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		String jwt = createToken(auth, expiration);
-		return AppConstants.JWT_COOKIE_NAME + "=" + jwt + ";Max-Age=" + ttl.toSeconds();
+		Cookie userCookie = new Cookie(AppConstants.JWT_COOKIE_NAME, jwt);
+		userCookie.setMaxAge(1800);
+		userCookie.setPath("/");
+		return userCookie;
 	}
 	
 	public String createToken(Authentication auth, Date expiration) {
@@ -56,7 +60,7 @@ public class JwtTokenProvider {
 		
 		if(user != null) {
 			Claims claims = Jwts.claims().setSubject(String.valueOf(user.getUserId()));
-			claims.put("perms", user.getPermissions());	//TODO:Implement this method in user
+			claims.put("authorities", user.getAuthorities());
 			claims.put("username", user.getUsername());
 			claims.put("firstName", user.getFirstName());
 			claims.put("lastname", user.getLastName());
@@ -95,16 +99,16 @@ public class JwtTokenProvider {
 		if(username != null) {
 			UserDetails userDetails = userService.loadUserByUsername(username);
 			if(userDetails != null && userDetails.getUsername() != null) {
-				return new UsernamePasswordAuthenticationToken(userDetails, "");
+				return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 			}
 		}
 		return null;
 	}
 
-	private String getUsername(String token) {
+	public String getUsername(String token) {
 		
-		Jwt<?, ?> jwt = Jwts.parser().parse(token);
-		return jwt.getHeader().get("username").toString();
+		Jwt<DefaultJwsHeader, DefaultClaims> jwt = Jwts.parser().setSigningKey(secretKey).parse(token);
+		return jwt.getBody().get("username", String.class);
 	}
 
 	private boolean validateToken(String token) {
@@ -119,7 +123,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 
-	private String getJwtTokenFromRequest(HttpServletRequest request) {
+	public String getJwtTokenFromRequest(HttpServletRequest request) {
 		
 		Cookie[] cookies = request.getCookies();
 		

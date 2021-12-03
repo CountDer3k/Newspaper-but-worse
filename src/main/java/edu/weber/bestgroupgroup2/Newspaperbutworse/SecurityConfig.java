@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -17,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Configuration
 @EnableWebSecurity
@@ -24,12 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	//private NamedParameterJdbcTemplate jdbcTemplate;
 	private final ApplicationContext applicationContext;
-//	private JwtTokenProvider jwtTokenProvider;
+	private JwtTokenProvider jwtTokenProvider;
+	//private UserService userService;
 	
 	@Autowired
-	public SecurityConfig(ApplicationContext applicationContext) {
+	public SecurityConfig(ApplicationContext applicationContext, @Lazy JwtTokenProvider jwtTokenProvider) {
+//			,@Lazy UserService userService) {
       this.applicationContext = applicationContext;
-//		this.jwtTokenProvider = jwtTokenProvider;
+      this.jwtTokenProvider = jwtTokenProvider;
+//      this.userService = userService;
 	}
 	
 	@Bean
@@ -43,14 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
+	@Log
 	public AuthenticationSuccessHandler successHandler(){
-	    return new NewsAuthenticationSuccessHandler();
+	    return new NewsAuthenticationSuccessHandler(jwtTokenProvider);
 	}
 	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
+		
 	    http
-	      	.csrf().disable()
+	    	.csrf().disable()
 	      	.sessionManagement()
 	      	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	      	.and()
@@ -58,8 +66,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.authorizeRequests()
 	      		.antMatchers("/user/login").permitAll()
 	      		.antMatchers("/user/registration").permitAll()
-	      		.antMatchers("/articles/**").permitAll()
+	      		.antMatchers(HttpMethod.GET, "/articles/**").permitAll()
+//	      		.antMatchers(HttpMethod.POST, "/articles/**").authenticated()
+	      		//?? Delete this after testing
+	      		.antMatchers("/API/**").permitAll()
+	      		.antMatchers("/authors/**").hasAnyAuthority("AUTHOR")
 	      		.antMatchers("/").permitAll()
+	      		.antMatchers("/error").permitAll()
+	      		.antMatchers("/user/list").hasAuthority("ADMIN")
+//	      		.antMatchers("/random").permitAll()
 	      		//More?
 //	      .antMatchers("/**").permitAll()
 	      		.anyRequest().authenticated()
@@ -77,8 +92,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/resources/**").anyRequest();
+		web.ignoring().antMatchers("/css/**");
 	}
+	
+//	@Override
+//	@Log
+//	public void configure(AuthenticationManagerBuilder auth) throws Exception{
+//		auth
+//			.inMemoryAuthentication()
+//			.withUser("reader").password(encoder().encode("password")).roles("READER")
+//			.and()
+//			.withUser("author").password(encoder().encode("author")).roles("UTHOR")
+//			.and()
+//			.withUser("admin").password(encoder().encode("admin")).roles("ADMIN");
+//	}
 
 	@Bean//(name = BeanIds.AUTHENTICATION_MANAGER)
 	@Override

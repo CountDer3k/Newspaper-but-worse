@@ -1,6 +1,7 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
-
-
 
 @Service
 public class PostService{
@@ -53,9 +52,68 @@ public class PostService{
     
     @Log
     public List<PostArticleModel> getAllPosts(){
-    	List<PostArticleModel> posts = postRepository.getAllPosts();
-    	
+    	List<PostArticleModel> posts = getAllPosts(50, 1);     	
     	return posts;
+    }
+    
+    // Pagination method
+    @Log
+    public List<PostArticleModel> getAllPosts(int entriesAmount, int pageNum){
+    	List<PostArticleModel> posts = postRepository.getAllPosts();
+    	int postsCount = posts.size();
+    	
+    	int start = (entriesAmount * pageNum)-entriesAmount;
+    	int end = (entriesAmount + start); 
+    	
+    	
+    	//Edge case, requesting too high of a page number, or negative numbers return a blank set
+    	if(start > postsCount || pageNum <= 0 || entriesAmount <= 0) {
+    		return new ArrayList<PostArticleModel>();
+    	}
+    	//Edge case, not enough entries.
+    	else if(end > postsCount) {
+    		end = postsCount;
+    	}
+    	
+    	return posts.subList(start, end);
+    }
+    
+    @Log
+    public List<PostArticleModel> getAllPostsForUserWithId(String authorId){
+        // Pagination included
+    	List<PostArticleModel> posts = getAllPostsForUserWithId(authorId, 50, 1);
+        return posts;
+    }
+    
+    
+    // Pagination method
+    @Log
+    public List<PostArticleModel> getAllPostsForUserWithId(String authorId, int entriesAmount, int pageNum){
+    	List<PostArticleModel> posts = postRepository.getAllPostsForUserWithId(authorId);
+    	int postsCount = posts.size();
+    	
+    	int start = (entriesAmount * pageNum)-entriesAmount;
+    	int end = (entriesAmount + start); 
+    	
+    	
+    	//Edge case, requesting too high of a page number, or negative numbers return a blank set
+    	if(start > postsCount || pageNum <= 0 || entriesAmount <= 0) {
+    		return new ArrayList<PostArticleModel>();
+    	}
+    	//Edge case, not enough entries.
+    	else if(end > postsCount) {
+    		end = postsCount;
+    	}
+    	
+    	return posts.subList(start, end);
+    }
+    
+
+    @Log
+    public List<Comment> getCommentsFromArticle(int articleID){
+    	List<Comment> comments = postRepository.getCommentsFromArticle(articleID);
+    	
+    	return comments;
     }
     
     @Log
@@ -76,6 +134,33 @@ public class PostService{
     	post.setArticle(article);
     	
     	return postRepository.savePost(post);
+    }
+    
+    @Log
+    public Comment addNewComment(CommentDto commentDto, int userID) {
+    	Comment comment = new Comment();
+    	
+    	comment.setContent(commentDto.getContent());
+    	comment.setParentId(commentDto.getParentId());
+    	
+    	return postRepository.saveComment(comment, userID);
+    }
+    
+    @Log
+    public ArticleModel editPost(PostDto postDto, int postID) {
+        ArticleModel article = new ArticleModel();
+        
+        article.setTitle(postDto.getTitle()); 
+        article.setContent(postDto.getContent());
+        article.setAccess(postDto.getAccess());
+        article.setPostId(postID);
+    
+        return postRepository.editArticle(article);
+    }
+
+    @Log
+    public boolean deletePost(String id) {
+    	return postRepository.deletePostArticle(id);
     }
     
     
