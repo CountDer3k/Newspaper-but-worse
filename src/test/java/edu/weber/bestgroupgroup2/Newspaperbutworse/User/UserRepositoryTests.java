@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+
 
 @RunWith(SpringRunner.class)
 @DataJdbcTest
@@ -21,12 +23,14 @@ public class UserRepositoryTests {
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	@Before
+	@Log
 	public void setup() {
 		userRepository = new UserRepository(namedParameterJdbcTemplate);
 	}
 	
 	
 	@Test
+	@Log
 	public void testGetUserByUsername() {
 		String username = "spiderman";
 		User expected = entities()
@@ -38,6 +42,7 @@ public class UserRepositoryTests {
 		Assert.assertTrue(expected.equals(actual));
 	}
 	
+	@Log
 	private Stream<User> entities() {
 		return Stream.of(
 				new User("spiderman", "pparker@dailybugle.net", "Peter", "Parker"),
