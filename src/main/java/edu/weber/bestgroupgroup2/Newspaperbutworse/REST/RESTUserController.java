@@ -80,7 +80,7 @@ public class RESTUserController {
 			@RequestParam(name = "username", required = true) String username,
 			@RequestParam(name = "password", required = true) String password,
 			@RequestParam(name = "firstname", required = true) String fName,
-			@RequestParam(name = "lastNmae", required = true) String lName){
+			@RequestParam(name = "lastname", required = true) String lName){
 		
 		UserDto dto = new UserDto();
 		
