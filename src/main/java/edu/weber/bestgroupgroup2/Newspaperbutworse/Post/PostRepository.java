@@ -377,7 +377,7 @@ public class PostRepository {
 			
 			success = result == 1 ? true : false;
 			
-		} catch(Exception e) {
+		} catch(Exception e) { 
 			logger.error("Error occured: " + e.toString());
 		}
 		return success;

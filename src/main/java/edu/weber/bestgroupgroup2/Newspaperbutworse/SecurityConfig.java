@@ -70,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	      		.antMatchers(HttpMethod.GET, "/articles/**").permitAll()
 //	      		.antMatchers(HttpMethod.POST, "/articles/**").authenticated()
 	      		//?? Delete this after testing
-	      		.antMatchers("/API/**").permitAll()
+	      		.antMatchers(HttpMethod.GET, "/API/**").permitAll()
+	      		.antMatchers(HttpMethod.DELETE, "/API/**").authenticated()
 	      		.antMatchers(HttpMethod.POST, "/API/**").authenticated()
 	      		.antMatchers("/authors/**").hasAnyAuthority("AUTHOR")
 	      		.antMatchers("/").permitAll()
