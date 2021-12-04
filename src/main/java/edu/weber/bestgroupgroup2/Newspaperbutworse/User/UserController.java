@@ -14,9 +14,11 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Controller
@@ -72,7 +74,7 @@ public class UserController {
 	}
 	
 	/* List */
-	@GetMapping("user/list")
+	@GetMapping("/user/list")
 	@Log
 	public ModelAndView showUserList() {
 		ModelAndView modelAndView = new ModelAndView("user/userList");
@@ -98,5 +100,58 @@ public class UserController {
 	
 		return modelAndView;
 	}
+	
+	/* User */
+	@GetMapping("/user/{username}")
+	@Log
+	public ModelAndView showUser(@PathVariable String username) {
+		ModelAndView modelAndView = new ModelAndView("user/user");
+		try {
+			// Get user from db		
+			User user = (User) userService.loadUserByUsername(username);
+			modelAndView.getModelMap().addAttribute("user", user);
+		} 
+		catch(Exception e) {
+				logger.error(e.toString());
+		}
+		
+		return modelAndView;
+	}
+	
+	/* User Form */
+	@GetMapping("/user/edit/{username}")
+	@Log
+	public ModelAndView showUserForm(@PathVariable String username) {
+		ModelAndView modelAndView = new ModelAndView("user/userForm");
+		try {
+			User user = (User) userService.loadUserByUsername(username);
+			modelAndView.getModelMap().addAttribute("user", user);
+		} 
+		catch(Exception e) {
+				logger.error(e.toString());
+		}
+	    return modelAndView;
+	}
+	
+	@PostMapping("/user/edit/{username}")
+	@Log
+	public ModelAndView editUser(
+			  @ModelAttribute("user") @Validated User user,
+			  BindingResult bindResult,
+			  HttpServletRequest request,
+			  Errors errors,
+			  @PathVariable String username) {
+		
+		if(bindResult.hasErrors()) {
+			return new ModelAndView("error");
+		}
+		
+    	ModelAndView modelAndView = new ModelAndView("redirect:/user/list");
+    	userService.editUser(user);
+    	modelAndView.getModelMap().addAttribute("msg", "Registration Confirmed!");
+    	modelAndView.getModelMap().addAttribute("user", user);
+    	return modelAndView;
+	}
+	
 
 }
