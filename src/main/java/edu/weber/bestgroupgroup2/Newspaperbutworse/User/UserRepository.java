@@ -46,6 +46,7 @@ public class UserRepository {
 			"    Role_Permission AS rp ON r.role_id = rp.role_id\n" + 
 			"        JOIN\n" + 
 			"    Permission AS p ON rp.perm_id = p.perm_id";
+	private final String UPDATE_USER = "UPDATE User SET first_name = :firstName, last_name = :lastName, email = :email WHERE user_id = :userId";
 	
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -89,14 +90,9 @@ public class UserRepository {
 		namedParameterJdbcTemplate.query(sql, parameters, callbackHandler);
 		return callbackHandler.getUser();
 	}
-
-	@Log
-	public User save(User user) {
-		return save(user, 2);
-	}
 	
 	@Log
-	public User save(User user, int roleId) {
+	public User save(User user) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("username", user.getUsername())
@@ -108,8 +104,31 @@ public class UserRepository {
 				.addValue("modifiedOn", new Timestamp(System.currentTimeMillis()));
 		
 		namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
-		namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", roleId));
+		for (Role role : user.getRoles()) {
+			namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", role.getRoleId()));
+		}
+		if (user.getRoles().isEmpty() || user.getRoles().equals(null)) {
+			namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", 2));
+		}
 		user.setUserId(keyHolder.getKey().intValue());
+		return user;
+	}
+	
+	@Log
+	public User updateUser(User user) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource()
+				.addValue("firstName", user.getFirstName())
+				.addValue("lastName", user.getLastName())
+				.addValue("email", user.getEmail())
+				.addValue("userId", user.getUserId());
+		int status = namedParameterJdbcTemplate.update(UPDATE_USER, parameters);
+
+	    if(status != 0){
+	      System.out.println("User data updated for ID " + user.getUserId());
+	    }
+	    else {
+	      System.out.println("No User found with ID " + user.getUserId());
+	    }
 		return user;
 	}
 
