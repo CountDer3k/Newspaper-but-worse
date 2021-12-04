@@ -40,7 +40,7 @@
 					<li><a sec:authorize="hasAuthority('AUTHOR')" th:href="@{~/authors/articleList}" class="dropdown-item">Article List</a></li>
 					<li><a sec:authorize="hasAuthority('AUTHOR')" th:href="@{~/articles/articleForm}" class="dropdown-item">New Article</a></li>
 					<li><a sec:authorize="hasAuthority('READER')" th:href="@{~/}" class="dropdown-item">Favorite Articles</a></li>
-					<li><a href="#!" class="dropdown-item">Logout</a></li>
+					<li><a th:href="@{~/user/logout}" class="dropdown-item">Logout</a></li>
 				</ul>
 				<a sec:authorize="isAnonymous()" th:href="@{~/user/login}" class="btn btn-outline-light" style="height:40px;">&nbsp;Login</a>
 				<a sec:authorize="isAnonymous()" th:href="@{~/user/registration}" class="btn btn-outline-light" style="height:40px;">&nbsp;Register</a>
