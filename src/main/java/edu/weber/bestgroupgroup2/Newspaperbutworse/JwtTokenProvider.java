@@ -35,7 +35,6 @@ public class JwtTokenProvider {
 	public JwtTokenProvider(UserService userService) { this.userService = userService; }
 	
 	public Cookie createCookieTokenString(Authentication auth) {
-		
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		String jwt = createToken(auth, expiration);

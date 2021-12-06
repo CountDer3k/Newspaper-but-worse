@@ -1,5 +1,7 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import java.util.List;
+
 import org.springframework.lang.NonNull;
 
 public class UserDto {
@@ -19,6 +21,8 @@ public class UserDto {
 	@NonNull
 	private String password;
 	private String matchingPassword;
+	
+	private List<Role> roles;
 	
 	public String getUsername() {
 		return username;
@@ -55,6 +59,12 @@ public class UserDto {
 	}
 	public void setMatchingPassword(String matchingPassword) {
 		this.matchingPassword = matchingPassword;
+	}
+	public List<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 	
 }
