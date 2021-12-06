@@ -24,13 +24,13 @@
 			<div class="d-grid gap-2">
 				<h1>Article</h1>
 				<label th:text=${msg}></label>
-				<form th:action="@{/articles/articleForm}" th:object="${post}" method="POST"
-					enctype="utf8">
+				<form th:action="@{/articles/articleForm}" th:object="${post}"
+					method="POST" enctype="utf8">
 					<div class="form-group">
 						<label>Title(*)</label> <input class="form-control"
 							th:field="*{title}" />
-						<p th:each="error: ${#fields.errors('title')}"
-							th:text="${error}">Validation error</p>
+						<p th:each="error: ${#fields.errors('title')}" th:text="${error}">Validation
+							error</p>
 					</div>
 					<div class="form-group">
 						<label>Content</label> <input class="form-control"
@@ -52,9 +52,9 @@
 		<div class="col-3"></div>
 	</div>
 
-	<script 
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" 
-		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" 
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
 		crossorigin="anonymous">
 	</script>
 	<script
