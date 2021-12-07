@@ -39,10 +39,7 @@ public class UserService implements UserDetailsService {
     
     @Log
     public User getUserByID(int id) {
-    	User user = new User();
-    	
-    	user = userRepository.getUserByID(id);
-    	
+    	User user = userRepository.getUserByID(id);
     	return user;
     }
     

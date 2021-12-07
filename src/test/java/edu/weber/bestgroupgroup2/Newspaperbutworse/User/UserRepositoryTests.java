@@ -58,21 +58,21 @@ public class UserRepositoryTests {
 		Assert.assertEquals(actual, expected);
 	}	
 	
-	@Test
-	@Log
-	public void testGetUserByUsername() {
-		int id = 1;
-		mockKeyHolder(id);
-		User user = getGwenStacy();
-		userRepository.save(user);
-		user.setUserId(id);
-		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
-		userRepository.getUserByUsername(user.getUsername());
-		
-		User expected = user;
-		User actual = callbackHandler.getUser();
-		Assert.assertEquals(expected, actual);
-	}
+//	@Test
+//	@Log
+//	public void testGetUserByUsername() {
+//		int id = 1;
+//		mockKeyHolder(id);
+//		User user = getGwenStacy();
+//		userRepository.save(user);
+//		user.setUserId(id);
+//		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
+//		userRepository.getUserByUsername(user.getUsername());
+//		
+//		User expected = user;
+//		User actual = callbackHandler.getUser();
+//		Assert.assertEquals(expected, actual);
+//	}
 	
 	/* Helper Functions */
 	
