@@ -1,8 +1,10 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -95,6 +97,7 @@ public class UserServiceTest {
 		UserDto user = getGwenStacy();
 		
 		when(passwordEncoder.encode(Mockito.anyString())).thenReturn(user.getPassword());
+		when(userRepository.save(Mockito.any())).then(returnsFirstArg());
 		User expected = userService.registerNewUserAccount(user);
 		
 		when(userRepository.getUserByUsername(Mockito.anyString())).thenReturn(expected);
@@ -111,12 +114,24 @@ public class UserServiceTest {
 	
 	@Test
 	public void testGetAllUsers() {
+		List<User> userList = new ArrayList<User>();
+		userList.add(getFlashThompson());
+		userList.add(getBettyBrant());
 		
+		when(userRepository.getAllUsers()).thenReturn(userList);
+		List<User> actual = userService.getAllUsers();
+		Assert.assertEquals(userList, actual);
 	}
 	
 	@Test
-	public void testGetAllUsersPagination() {
+	public void testGetAllUsersEmpty() {
+		List<User> userList = new ArrayList<User>();
+		userList.add(getFlashThompson());
+		userList.add(getBettyBrant());
 		
+		when(userRepository.getAllUsers()).thenReturn(userList);
+		List<User> result = userService.getAllUsers(50, 2);
+		Assert.assertTrue(result.isEmpty());
 	}
 	
 	@Test
@@ -124,16 +139,48 @@ public class UserServiceTest {
 		UserDto user = getGwenStacy();
 		
 		when(passwordEncoder.encode(Mockito.anyString())).thenReturn(user.getPassword());
+		when(userRepository.save(Mockito.any())).then(returnsFirstArg());
 		User expected = userService.registerNewUserAccount(user);
 		expected.setUserId(1);
 		
 		when(userRepository.getUserByUsername(Mockito.anyString())).thenReturn(expected);
+		when(userRepository.updateUser(Mockito.any())).then(returnsFirstArg());
 		User actual = userService.editUser(expected);
 		Assert.assertEquals(expected, actual);
 	}
 	
 	
 	/* Helper Methods */
+	
+	public User getFlashThompson() {
+		User user = new User();
+		user.setUsername("CallMeFlash");
+		user.setPassword(passwordEncoder.encode("antivenom"));
+		user.setEmail("flashthompson15@gmail.com");
+		user.setFirstName("Eugene");
+		user.setLastName("Thompson");
+		user.setRoles(new ArrayList<Role>());
+		
+		Role role = new Role();
+		role.setRoleId(2);
+		user.addRole(role);
+		return user;
+	}
+	
+	public User getBettyBrant() {
+		User user = new User();
+		user.setUsername("GirlFriday");
+		user.setPassword(passwordEncoder.encode("123456789"));
+		user.setEmail("bettybrant4@gmail.com");
+		user.setFirstName("Elizabeth");
+		user.setLastName("Brant");
+		user.setRoles(new ArrayList<Role>());
+		
+		Role role = new Role();
+		role.setRoleId(3);
+		user.addRole(role);
+		return user;
+	}
 	
 	public UserDto getGwenStacy() {
 		UserDto user = new UserDto();
