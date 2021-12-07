@@ -114,6 +114,11 @@ public class PostRepositoryTest {
 		
 		Assert.assertEquals(expected.size(), actual.size());
 	}
+	
+	@Test
+	public void testGetCommentsFromArticle() {
+		
+	}
 
 	@Test
 	public void testSavePost() {
