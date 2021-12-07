@@ -45,7 +45,6 @@ public class RESTAuthenticationController {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
-		// ?? get User from username
 		
 		
 		final Duration ttl = Duration.ofMinutes(30);

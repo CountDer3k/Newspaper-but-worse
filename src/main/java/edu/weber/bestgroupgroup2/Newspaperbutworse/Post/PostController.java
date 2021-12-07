@@ -124,7 +124,6 @@ public class PostController {
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
-		//?? Get this from logged in user
 		User user = (User)authentication.getPrincipal();
 		int userID = user.getUserId();
 
@@ -134,8 +133,7 @@ public class PostController {
 			modelAndView.getModelMap().addAttribute("post", postDto);
 			return modelAndView;
 		}
-		//?? WTF is this doing here??
-		return new ModelAndView("user/registration", "msg", "Registration Failed!");
+		return new ModelAndView("/error");
 	}
 
 
@@ -191,13 +189,14 @@ public class PostController {
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Errors errors, 
+			Authentication authentication,
 			@PathVariable String articleId) {
 
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
-		//?? Get this from logged in user
-		int authorId = 1;
+		User user = (User)authentication.getPrincipal();
+		int authorId = user.getUserId();
 
 		if(postService.isValidPost(postDto)) {
 			// Update articles

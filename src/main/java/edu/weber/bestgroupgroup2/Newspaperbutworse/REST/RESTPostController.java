@@ -32,7 +32,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("API")
 public class RESTPostController {
 
-	//?? Testing
 	private Logger logger = LoggerFactory.getLogger(RESTPostController.class);
 
 	private PostService postService;

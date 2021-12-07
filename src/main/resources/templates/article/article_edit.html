@@ -40,7 +40,7 @@
 			<a href="/authors/articleList" class="h3"
 				style="background-color: none; color: white"><i
 				class="fas fa-arrow-left h4"></i></a>
-
+			<h3>Edit article</h3>
 			<form
 				th:action="@{/articles/articleNum/edit/{articleId}(articleId=${articleId})}"
 				th:object="${postDto}" method="POST" enctype="utrf8">
