@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.Role;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
@@ -81,33 +82,59 @@ public class RESTUserController {
 			@RequestBody String body){
 		
 		String[] bodyInfo = body.split("&");
-		if(bodyInfo.length < 3) {
+		if(bodyInfo.length < 5) {
 			return ResponseEntity.ok("Not enough parameters passed in");
 		}
-		String username = bodyInfo[0].split("=")[1];
-		String password = bodyInfo[1].split("=")[1];
-		String firstName = bodyInfo[2].split("=")[1];
-		String lastName = bodyInfo[3].split("=")[1];
+		
+		String username ="", password="", firstName="", lastName="", email="";
 
+
+		for(String item : bodyInfo) {
+			String[] itemParameters = item.split("=");
+			
+			switch(itemParameters[0]){
+				case "username":
+					username = itemParameters[1];
+					break;
+				case "password":
+					password = itemParameters[1];
+					break;
+				case "email":
+					email = itemParameters[1];
+					break;
+				case "firstname":
+					firstName = itemParameters[1];
+					break;
+				case "lastname":
+					lastName = itemParameters[1];
+					break;
+			}
+		}
 		
-		UserDto dto = new UserDto();
-		
-		dto.setFirstName(firstName);
-		dto.setLastName(lastName);
-		dto.setUsername(username);
-		dto.setPassword(password);
-		
-		// ?? Make sure that this also adds a role and permissions as well
-		// ?? Ask Jazelyn
-		
-		User newUser = userService.registerNewUserAccount(dto);
-		
-		
-		if (newUser.getUserId() != 0) {
-			return ResponseEntity.ok(newUser);
+		if((username != "") && (password != "") && (email !="") && (firstName !="") && (lastName !="")) {
+			UserDto dto = new UserDto();
+			
+			dto.setFirstName(firstName);
+			dto.setLastName(lastName);
+			dto.setUsername(username);
+			dto.setPassword(password);
+			dto.setEmail(email);
+			dto.setRoles(new ArrayList<Role>());
+			
+			// ?? Make sure that this also adds a role and permissions as well
+			
+			User newUser = userService.registerNewUserAccount(dto);
+			
+			
+			if (newUser.getUserId() != 0) {
+				return ResponseEntity.ok(newUser);
+			}
+			else {
+				return ResponseEntity.ok("Failed to add new user");
+			}
 		}
 		else {
-			return ResponseEntity.ok("Failed to add new user");
+			return ResponseEntity.ok("One or more parameters where missing in the body");
 		}
 	}
 	
