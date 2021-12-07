@@ -1,27 +1,22 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +40,6 @@ public class UserRepositoryTests {
 	@Log
 	public void setup() {
 		userRepository = new UserRepository(namedParameterJdbcTemplate);
-		keyHolder = new GeneratedKeyHolder();
 	}
 	
 
@@ -73,11 +67,10 @@ public class UserRepositoryTests {
 		userRepository.save(user);
 		user.setUserId(id);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
-		
-		
+		userRepository.getUserByUsername(user.getUsername());
 		
 		User expected = user;
-		User actual = userRepository.getUserByUsername(user.getUsername());
+		User actual = callbackHandler.getUser();
 		Assert.assertEquals(expected, actual);
 	}
 	
