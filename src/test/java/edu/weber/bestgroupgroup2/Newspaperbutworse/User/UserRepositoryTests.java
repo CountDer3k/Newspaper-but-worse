@@ -1,54 +1,147 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 
-@RunWith(SpringRunner.class)
-@DataJdbcTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@RunWith(MockitoJUnitRunner.class)
 public class UserRepositoryTests {
 	
 	UserRepository userRepository;
+	
+	@Mock
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	@Mock
+	PasswordEncoder passwordEncoder;
+	@Mock 
+	KeyHolder keyHolder;
 	
 	@Before
 	@Log
 	public void setup() {
 		userRepository = new UserRepository(namedParameterJdbcTemplate);
+		keyHolder = new GeneratedKeyHolder();
 	}
 	
+
+	@Test
+	@Log
+	public void testSave() {
+		int id = 1;
+		User user = getFlashThompson();
+
+		mockKeyHolder(id);
+		User actual = userRepository.save(user);
+		
+		User expected = user;
+		expected.setUserId(id);
+		
+		Assert.assertEquals(actual, expected);
+	}	
 	
 	@Test
 	@Log
 	public void testGetUserByUsername() {
-		String username = "spiderman";
-		User expected = entities()
-				.map(userRepository::save)
-				.filter(user -> user.getUsername().equals(username))
-				.findFirst().get();
-		User actual = (userRepository.getUserByUsername(username));
+		int id = 1;
+		mockKeyHolder(id);
+		User user = getGwenStacy();
+		userRepository.save(user);
+		user.setUserId(id);
+		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
 		
-		Assert.assertTrue(expected.equals(actual));
+		
+		
+		User expected = user;
+		User actual = userRepository.getUserByUsername(user.getUsername());
+		Assert.assertEquals(expected, actual);
 	}
 	
-	@Log
-	private Stream<User> entities() {
-		return Stream.of(
-				new User("spiderman", "pparker@dailybugle.net", "Peter", "Parker"),
-				new User("jjjjr", "jjjameson@dailybugle.net", "J Jonah", "Jameson")
-			);
+	/* Helper Functions */
+	
+	public void mockKeyHolder(int id) {
+		when(namedParameterJdbcTemplate.update(
+				Mockito.anyString(), 
+				Mockito.any(MapSqlParameterSource.class), 
+				Mockito.any(GeneratedKeyHolder.class)))
+		.thenAnswer(new Answer() {
+			public Object answer(InvocationOnMock invocation) {
+				Object[] args = invocation.getArguments();
+				Map<String, Object> keyMap = new HashMap<String, Object>();
+				keyMap.put("", id);
+				((GeneratedKeyHolder)args[2]).getKeyList().add(keyMap);
+				return id;
+			}
+		}).thenReturn(id);
 	}
 	
+	public User getFlashThompson() {
+		User user = new User();
+		user.setUsername("CallMeFlash");
+		user.setPassword(passwordEncoder.encode("antivenom"));
+		user.setEmail("flashthompson15@gmail.com");
+		user.setFirstName("Eugene");
+		user.setLastName("Thompson");
+		user.setRoles(new ArrayList<Role>());
+		
+		Role role = new Role();
+		role.setRoleId(2);
+		user.addRole(role);
+		return user;
+	}
+	
+	public User getBettyBrant() {
+		User user = new User();
+		user.setUsername("GirlFriday");
+		user.setPassword(passwordEncoder.encode("123456789"));
+		user.setEmail("bettybrant4@gmail.com");
+		user.setFirstName("Elizabeth");
+		user.setLastName("Brant");
+		user.setRoles(new ArrayList<Role>());
+		
+		Role role = new Role();
+		role.setRoleId(3);
+		user.addRole(role);
+		return user;
+	}
+	
+	public User getGwenStacy() {
+		User user = new User();
+		user.setUsername("GhostSpider");
+		user.setPassword(passwordEncoder.encode("123456789"));
+		user.setEmail("gwen.stacy@gmail.com");
+		user.setFirstName("Gwendolyne");
+		user.setLastName("Stacy");
+		user.setRoles(new ArrayList<Role>());
+		
+		Role role = new Role();
+		role.setRoleId(4);
+		user.addRole(role);
+		return user;
+	}
 }
 
