@@ -25,7 +25,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserRepositoryTests {
+public class UserRepositoryTest {
 	
 	UserRepository userRepository;
 	
