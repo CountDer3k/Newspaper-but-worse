@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,29 +69,40 @@ public class RESTUserController {
 			return ResponseEntity.ok(u);
 		else {
 			Map<String,String> m = new HashMap<String, String>();
-			m.put("Error", "No User Found");
+			m.put("Error", "No User Found"); 
 			return ResponseEntity.ok(m);
 		}
 	}
 	
-	@Operation(summary = "Add a user")
+	@Operation(summary = "Add a user \nTakes in arguments in the body in the following order: \nusername, password, firstname, lastname")
 	@PostMapping()
 	@Log
 	public ResponseEntity<Object> loginUser(
-			@RequestParam(name = "username", required = true) String username,
-			@RequestParam(name = "password", required = true) String password,
-			@RequestParam(name = "firstname", required = true) String fName,
-			@RequestParam(name = "lastname", required = true) String lName){
+			@RequestBody String body){
+		
+		String[] bodyInfo = body.split("&");
+		if(bodyInfo.length < 3) {
+			return ResponseEntity.ok("Not enough parameters passed in");
+		}
+		String username = bodyInfo[0].split("=")[1];
+		String password = bodyInfo[1].split("=")[1];
+		String firstName = bodyInfo[2].split("=")[1];
+		String lastName = bodyInfo[3].split("=")[1];
+
 		
 		UserDto dto = new UserDto();
 		
-		dto.setFirstName(fName);
-		dto.setLastName(lName);
+		dto.setFirstName(firstName);
+		dto.setLastName(lastName);
 		dto.setUsername(username);
 		dto.setPassword(password);
+		
+		// ?? Make sure that this also adds a role and permissions as well
+		// ?? Ask Jazelyn
+		
 		User newUser = userService.registerNewUserAccount(dto);
 		
-		logger.info(String.valueOf(newUser.getUserId()));
+		
 		if (newUser.getUserId() != 0) {
 			return ResponseEntity.ok(newUser);
 		}
@@ -98,14 +110,6 @@ public class RESTUserController {
 			return ResponseEntity.ok("Failed to add new user");
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

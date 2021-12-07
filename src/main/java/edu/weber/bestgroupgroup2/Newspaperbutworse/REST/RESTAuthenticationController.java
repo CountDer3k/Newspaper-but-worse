@@ -1,7 +1,5 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.REST;
 
-
-
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.util.Base64;
@@ -11,14 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.JwtTokenProvider;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("API/")
@@ -32,6 +31,7 @@ public class RESTAuthenticationController {
 		this.jot = jot;
 	}
 	
+	@Operation(summary = "Returns a Bearer Token based on authentication parameters passed in")
 	@GetMapping("tokens")
 	@Log
 	public ResponseEntity<String> createNewToken(@RequestHeader("Authorization") String authHeader ) throws UnsupportedEncodingException{
@@ -41,9 +41,9 @@ public class RESTAuthenticationController {
 		String[] userPassword = decodedString.split(":");
 		String username = userPassword[0];
 		String password = userPassword[1];
-		
+		 
 		User user = new User();
-		user.setUsername(username);
+		user.setUsername(username); 
 		user.setPassword(password);
 		
 		
@@ -52,7 +52,6 @@ public class RESTAuthenticationController {
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		
 		String token = jot.createToken(user, expiration);
-		
 		
 		return ResponseEntity.ok(token);
 	}
