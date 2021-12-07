@@ -58,7 +58,7 @@ public class UserRepository {
 	
 	@Log
 	public User getUserByUsername(String username) {
-		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username;";
+		String sql = SELECT_USER_WITH_ROLES + "WHERE username = :username;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("username", username);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
@@ -68,7 +68,7 @@ public class UserRepository {
 
 	@Log
 	public User getUserByEmail(String email) {
-		String sql = "SELECT * FROM User WHERE email = :email;";
+		String sql = SELECT_USER_WITH_ROLES + "WHERE email = :email";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("email", email);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();

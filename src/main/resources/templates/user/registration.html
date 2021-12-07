@@ -20,7 +20,7 @@
 	<br />
 	<div class="row sidePadding">
 		<div class="col-3"></div>
-		<div class="col-6 d3Card-secondary " style="padding: 30px 20px;">
+		<div class="col-6 d3Card-fullscreen d3-dark-secondary" style="padding: 30px 20px;">
 			<div class="d-grid gap-2">
 				<h1><span sec:authorize="hasAuthority('ADMIN')">New User</span><span sec:authorize="isAnonymous()">Register</span></h1>
 				<label th:text=${msg}></label>
@@ -74,6 +74,13 @@
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="checkbox" id="role3" name="role3" value="4" th:field="*{roles}"/>
 							<label class="form-check-label" for="role3">admin</label>
+						</div>
+					</fieldset>
+					<fieldset sec:authorize="isAnonymous" style="visibility: hidden">
+						<legend>user role</legend>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="rol1" name="role1" value="2" th:field="*{roles}" checked/>
+							<label class="form-check-label" for="role1">reader</label>
 						</div>
 					</fieldset>
 					<br />
