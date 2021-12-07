@@ -125,8 +125,10 @@ public class UserServiceTests {
 		
 		when(passwordEncoder.encode(Mockito.anyString())).thenReturn(user.getPassword());
 		User expected = userService.registerNewUserAccount(user);
-		User actual = userService.editUser(expected);
+		expected.setUserId(1);
 		
+		when(userRepository.getUserByUsername(Mockito.anyString())).thenReturn(expected);
+		User actual = userService.editUser(expected);
 		Assert.assertEquals(expected, actual);
 	}
 	
