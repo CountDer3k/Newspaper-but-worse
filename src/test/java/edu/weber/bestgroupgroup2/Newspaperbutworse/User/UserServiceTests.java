@@ -35,7 +35,33 @@ public class UserServiceTests {
 	@Test
 	@Log
 	public void testIsValidUserFalse_Username() {
-		
+		UserDto user = getGwenStacy();
+		user.setUsername("");
+		Assert.assertFalse(userService.isValidUser(user));
+	}
+	
+	@Test
+	@Log
+	public void testIsValidUserFalse_Email() {
+		UserDto user = getGwenStacy();
+		user.setEmail("");
+		Assert.assertFalse(userService.isValidUser(user));
+	}
+	
+	@Test
+	@Log
+	public void testIsValidUserFalse_Password() {
+		UserDto user = getGwenStacy();
+		user.setPassword("");
+		Assert.assertFalse(userService.isValidUser(user));
+	}
+	
+	@Test
+	@Log
+	public void testIsValidUserFalse_MatchingPassword() {
+		UserDto user = getGwenStacy();
+		user.setMatchingPassword("987654321");
+		Assert.assertFalse(userService.isValidUser(user));
 	}
 	
 	/* Helper Methods */
