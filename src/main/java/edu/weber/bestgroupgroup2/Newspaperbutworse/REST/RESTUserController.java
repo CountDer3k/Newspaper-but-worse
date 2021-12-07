@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,11 +77,26 @@ public class RESTUserController {
 	@PostMapping()
 	@Log
 	public ResponseEntity<Object> loginUser(
-			@RequestParam(name = "username", required = false) String username,
-			@RequestParam(name = "password", required = false) String password){
+			@RequestParam(name = "username", required = true) String username,
+			@RequestParam(name = "password", required = true) String password,
+			@RequestParam(name = "firstname", required = true) String fName,
+			@RequestParam(name = "lastname", required = true) String lName){
 		
+		UserDto dto = new UserDto();
 		
-		return null;
+		dto.setFirstName(fName);
+		dto.setLastName(lName);
+		dto.setUsername(username);
+		dto.setPassword(password);
+		User newUser = userService.registerNewUserAccount(dto);
+		
+		logger.info(String.valueOf(newUser.getUserId()));
+		if (newUser.getUserId() != 0) {
+			return ResponseEntity.ok(newUser);
+		}
+		else {
+			return ResponseEntity.ok("Failed to add new user");
+		}
 	}
 	
 	

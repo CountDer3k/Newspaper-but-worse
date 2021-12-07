@@ -45,7 +45,8 @@ public class UserRepository {
 			"        JOIN\n" + 
 			"    Role_Permission AS rp ON r.role_id = rp.role_id\n" + 
 			"        JOIN\n" + 
-			"    Permission AS p ON rp.perm_id = p.perm_id";
+			"    Permission AS p ON rp.perm_id = p.perm_id ";
+	private final String USER_WITH_ROLES = "SELECT * FROM User AS u JOIN User_Role AS ur ON u.user_id = ur.user_id JOIN Role AS r ON ur.role_id = r.role_id JOIN \"    Role_Permission AS rp ON r.role_id = rp.role_id JOIN Permission AS p ON rp.perm_id = p.perm_id WHERE username = :username; ";
 	private final String UPDATE_USER = "UPDATE User SET first_name = :firstName, last_name = :lastName, email = :email WHERE user_id = :userId";
 	
 	@Autowired
@@ -63,7 +64,7 @@ public class UserRepository {
 	
 	@Log
 	public User getUserByUsername(String username) {
-		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username;";
+		String sql = SELECT_USER_WITH_ROLES + "WHERE username = :username;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("username", username);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
@@ -74,6 +75,7 @@ public class UserRepository {
 	@Log
 	public User getUserByEmail(String email) {
 		String sql = "SELECT * FROM User WHERE email = :email;";
+		sql = USER_WITH_ROLES;
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("email", email);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
