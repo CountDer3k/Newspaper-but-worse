@@ -1,9 +1,16 @@
-package edu.weber.bestgroupgroup2.Newspaperbutworse.Models;
+package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class PostModel {
+public class PostModel implements Serializable{
+
+	@Override
+	public String toString() {
+		return "PostModel [Id=" + Id + ", userId=" + userId + ", createDate=" + createDate + ", modifiedDate="
+				+ modifiedDate + ", article=" + article + ", url=" + url + "]";
+	}
 
 	private int Id;
 	private int userId;
@@ -11,6 +18,8 @@ public class PostModel {
 	private Date modifiedDate;
 	private ArticleModel article;
 	private String url;
+	
+	public PostModel() {}
 	
 	public PostModel(int Id){
 		url = "articles/"+Id;

@@ -27,11 +27,9 @@ CREATE TABLE `Comment` (
 
 CREATE TABLE Article (
 	post_id INT NOT NULL REFERENCES Post,
-	title TINYTEXT,
-    content MEDIUMTEXT,
+	title TINYTEXT NOT NULL,
+    content MEDIUMTEXT NOT NULL,
     access CHAR(3),
-    section_id INT NOT NULL,
-    FOREIGN KEY(section_id) REFERENCES Post(post_id),
     PRIMARY KEY(post_id)
 );
 

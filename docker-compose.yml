@@ -23,10 +23,10 @@ services:
       SPRING_DATASOURCE_USER: jjjjr
       SPRING_DATASOURCE_PASSWORD: spiderman
       SPRING_DATASOURCE_PORT: 3306
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bugle?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bugle?useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
 
   mysql:
-    image: mysql:8.0
+    image: "${DOCKER_MYSQL_IMAGE:-mysql:8.0}"
     ports:
      - 3306:3306
     environment:
