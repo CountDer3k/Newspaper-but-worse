@@ -2,6 +2,7 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 
 import static org.mockito.Mockito.when;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +11,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -58,21 +62,24 @@ public class UserRepositoryTest {
 		Assert.assertEquals(actual, expected);
 	}	
 	
-//	@Test
-//	@Log
-//	public void testGetUserByUsername() {
-//		int id = 1;
-//		mockKeyHolder(id);
-//		User user = getGwenStacy();
-//		userRepository.save(user);
-//		user.setUserId(id);
-//		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
-//		userRepository.getUserByUsername(user.getUsername());
-//		
-//		User expected = user;
-//		User actual = callbackHandler.getUser();
-//		Assert.assertEquals(expected, actual);
-//	}
+	@Test
+	@Log
+	public void testGetUserByUsername() throws Exception {
+		User user = getGwenStacy();
+		final ResultSet resultSet = Mockito.mock(ResultSet.class);
+		when(resultSet.getString("u.USERNAME")).thenReturn(user.getUsername());
+		
+		Mockito.doAnswer(invocation -> {
+			RowCallbackHandler callbackHandler = invocation.getArgument(2);
+			callbackHandler.processRow(resultSet);
+			return null;
+		}).when(namedParameterJdbcTemplate).query(
+					Mockito.anyString(),
+					Mockito.any(MapSqlParameterSource.class),
+					Mockito.any(RowCallbackHandler.class));
+		User actual = userRepository.getUserByUsername(user.getUsername());
+		Assert.assertEquals(user, actual);
+	}
 	
 	/* Helper Functions */
 	
