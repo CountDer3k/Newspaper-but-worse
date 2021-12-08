@@ -26,14 +26,14 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 public class PostRepository {
 
 	private Logger logger = LoggerFactory.getLogger(PostRepository.class);
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate; 
 
 	private final String INSERT_POST = "INSERT INTO Post(user_id, create_on) VALUES(:userID, :create) ";
 	private final String INSERT_ARTICLE	 = "INSERT INTO Article(post_id, title, content, access) VALUES(:postID, :title, :content, :access) ";
-	
+
 	private final String INSERT_COMMENT = "INSERT INTO Comment(post_id, content, parent_id)"
 			+ " VALUES(:postID, :content, :parentID) ";
-	
+
 	private final String GET_ARTICLE = "SELECT * FROM Post p INNER JOIN Article a ON p.post_id = a.post_id WHERE p.post_id = :postID";
 	private final String GET_ARTICLE_WITH_AUTHOR = "SELECT a.title, a.content, a.access, p.post_id, p.create_on, p.modified_on, u.user_id, CONCAT(u.first_name, ' ' ,u.last_name) AS NAME "
 			+ "FROM  Post p "
@@ -50,24 +50,24 @@ public class PostRepository {
 			+ "INNER JOIN `User` u  ON p.user_id = u.user_id "
 			+ "WHERE p.user_id = :authorId ";
 	private final String EDIT_ARTICLE = 
-			  "UPDATE Article "
-			+ "SET title = :title, content = :content, access = :access "
-			+ "WHERE post_id = :postID";
+			"UPDATE Article "
+					+ "SET title = :title, content = :content, access = :access "
+					+ "WHERE post_id = :postID";
 	private final String DELETE_ARTICLE = "DELETE FROM Article WHERE post_id = :postID ";
 	private final String DELETE_POST = "DELETE FROM Post WHERE post_id = :postID ";
-	 
+
 	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE post_id :pID ";
-	
+
 	private static PostRepository INSTANCE;
-	 
+
 	public PostRepository(){}
-	
+
 	@Autowired
 	public PostRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
- 
-	
+
+
 	//----------------
 	// Get methods
 	//----------------
@@ -77,135 +77,62 @@ public class PostRepository {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
 
-			return namedParameterJdbcTemplate.queryForObject(
+			return (PostModel)namedParameterJdbcTemplate.queryForObject(
 					GET_ARTICLE, 
-					parameters, 
-					(RowMapper<PostModel>) 
-					(rs, rowNum) -> {
-						PostModel post = new PostModel();
-						ArticleModel article = new ArticleModel();
-						article.setTitle(rs.getString("title"));
-						article.setContent(rs.getString("content"));
-						article.setAccess(rs.getString("access"));
-						post.setId(rs.getInt("post_id"));
-						
-						post.setArticle(article);
-						post.setId(rs.getInt("post_id"));
-						post.setUserId(rs.getInt("user_id"));
-						post.setCreateDate(rs.getDate("create_on"));
-						post.setModifiedDate(rs.getDate("modified_on"));
-						return post;
-					});
+					parameters, new PostRowMapper());
 		} catch(Exception e) {
 			logger.error("Error occured: " + e.toString());
 			return null;
 		}
 	}
-	 
+
 	@Log
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
 
-			return namedParameterJdbcTemplate.queryForObject(
+			return (PostArticleModel) namedParameterJdbcTemplate.queryForObject(
 					GET_ARTICLE_WITH_AUTHOR, 
-					parameters, 
-					(RowMapper<PostArticleModel>) 
-					(rs, rowNum) -> {
-						PostArticleModel pam = new PostArticleModel();
-						PostModel post = new PostModel();
-						ArticleModel article = new ArticleModel();
-						
-						article.setTitle(rs.getString("title"));
-						article.setContent(rs.getString("content"));
-						article.setAccess(rs.getString("access"));
-						article.setPostId(rs.getInt("post_id"));
-						
-						post.setArticle(article);
-						post.setId(rs.getInt("post_id"));
-						post.setCreateDate(rs.getDate("create_on"));
-						post.setModifiedDate(rs.getDate("modified_on"));
-						post.setUserId(rs.getInt("user_id"));
-						
-						
-						pam.setName(rs.getString("NAME"));
-						pam.setPost(post);
-						
-						return pam;
-					});
+					parameters, new PostRowMapperPAM());
 		}
 		catch(Exception e) {
 			logger.error("PostRepository - getArticleWithAuthorByID() " + e.toString());
 			return null;
 		}
 	}
-	
+
 	@Log
 	public List<PostArticleModel> getAllPosts() {
-		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
-		
-		posts = namedParameterJdbcTemplate.query(GET_ALL_POSTS_WITH_AUTHORS, new ResultSetExtractor<List<PostArticleModel>>(){
-		    @Override
-		    public List<PostArticleModel> extractData(ResultSet rs) throws SQLException,DataAccessException {
-		    	
-		    	List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
-		    	while(rs.next()) {
-		    		PostArticleModel pam = new PostArticleModel();
-		    		PostModel post = new PostModel();
-		    		ArticleModel article = new ArticleModel();
-		    		
-		    		article.setTitle(rs.getString("title"));
-					article.setContent(rs.getString("content"));
-					article.setAccess(rs.getString("access"));
-					article.setPostId(rs.getInt("post_id"));
-					
-					post.setArticle(article);
-					
-					Date date = new Date(0);
-					post.setCreateDate(date);
-					post.setModifiedDate(date);
-					post.setId(rs.getInt("post_id"));
-					post.setUserId(rs.getInt("user_id"));
-					
-					pam.setName(rs.getString("NAME"));
-					pam.setPost(post);
-		    		
-		    		posts.add(pam);
-		    	}
-		    	return posts;
-		    }
-		});
-		
-		return posts;
+		return (List<PostArticleModel>) namedParameterJdbcTemplate.query(GET_ALL_POSTS_WITH_AUTHORS, new PostRowMapperPAM());
 	}
-	
+
 	@Log
 	public List<Comment> getCommentsFromArticle(int articleId){
 		
 		List<Comment> comments = new ArrayList<Comment>();
-		
+
 		String getCommentsSQL = "SELECT * FROM Comment WHERE parent_id = " + articleId + ";";
 		String GET_COMMENTS_FROM_POST_WITH_USERS = "SELECT c.post_id, c.content, c.parent_id, u.user_id, u.username "
 				+ "FROM  Post p "
 				+ "INNER JOIN Comment c ON c.post_id = p.post_id "
 				+ "INNER JOIN `User` u  ON p.user_id = u.user_id "
 				+ "WHERE c.parent_id = " + articleId + ";";
-		
+
 		comments = namedParameterJdbcTemplate.query(GET_COMMENTS_FROM_POST_WITH_USERS, new ResultSetExtractor<List<Comment>>(){
 
 			@Override
 			public List<Comment> extractData(ResultSet rs) throws SQLException, DataAccessException {
-				
+
 				List<Comment> comments = new ArrayList<Comment>();
 				while(rs.next()) {
 					Comment comment = new Comment();
-					
+
 					comment.setPostId(rs.getInt("post_id"));
 					comment.setParentId(rs.getInt("parent_id"));
 					comment.setContent(rs.getString("content"));
 					comment.setUsername(rs.getString("username"));
-					
+
 					comments.add(comment);
 				}	
 				return comments;
@@ -216,43 +143,10 @@ public class PostRepository {
 
 	@Log
 	public List<PostArticleModel> getAllPostsForUserWithId(String authorId) {
-		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
-		
 		SqlParameterSource parameters = new MapSqlParameterSource()
 				.addValue("authorId", authorId);
 		
-		posts = namedParameterJdbcTemplate.query(GET_ALL_POSTS_WITH_AUTHORS_FOR_AUTHOR, parameters, new ResultSetExtractor<List<PostArticleModel>>(){
-		    @Override
-		    public List<PostArticleModel> extractData(ResultSet rs) throws SQLException,DataAccessException {
-		    	
-		    	List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
-		    	while(rs.next()) {
-		    		PostArticleModel pam = new PostArticleModel();
-		    		PostModel post = new PostModel();
-		    		ArticleModel article = new ArticleModel();
-		    		
-		    		article.setTitle(rs.getString("title"));
-					article.setContent(rs.getString("content"));
-					article.setAccess(rs.getString("access"));
-					article.setPostId(rs.getInt("p.post_id"));
-					
-					post.setArticle(article);
-					
-					Date date = new Date(0);
-					post.setCreateDate(date);
-					post.setModifiedDate(date);
-					post.setUserId(rs.getInt("user_id"));
-					post.setId(rs.getInt("post_id"));
-					pam.setName(rs.getString("NAME"));
-					pam.setPost(post);
-		    		
-		    		posts.add(pam);
-		    	}
-		    	return posts;
-		    }
-		});
-		
-		return posts;
+		return (List<PostArticleModel>) namedParameterJdbcTemplate.query(GET_ALL_POSTS_WITH_AUTHORS_FOR_AUTHOR, parameters, new PostRowMapperPAM());
 	}
 
 	//----------------
@@ -297,7 +191,7 @@ public class PostRepository {
 		}
 		return article;
 	}
-	
+
 	@Log
 	//Return void instead?
 	public Comment saveComment(Comment comment, int userID) {
@@ -311,24 +205,24 @@ public class PostRepository {
 					.addValue("create", date);
 
 			namedParameterJdbcTemplate.update(INSERT_POST, parameters, keyHolder);
-			
+
 			int PostID = keyHolder.getKey().intValue();
 			comment.setPostId(PostID);
-			
+
 			keyHolder = new GeneratedKeyHolder();
 			parameters = new MapSqlParameterSource()
 					.addValue("postID", comment.getPostId())
 					.addValue("content", comment.getContent())
 					.addValue("parentID", comment.getParentId());
-			
+
 			namedParameterJdbcTemplate.update(INSERT_COMMENT, parameters, keyHolder);
-			
+
 		}catch(Exception e) {
 			logger.error("PostRepository - saveComment() "+e.toString());
 		}
 		return comment;
 	}
-	
+
 	//----------------
 	// Edit methods
 	//----------------
@@ -348,11 +242,11 @@ public class PostRepository {
 		}
 		return article;
 	}
-	
+
 	//----------------
 	// Delete methods
 	//----------------
-	
+
 	// Returns true if the post was successfully deleted
 	@Log
 	public boolean deletePostArticle(String id) {
@@ -363,9 +257,9 @@ public class PostRepository {
 		} catch(Exception e) {
 			return false;
 		}
-		
+
 	}
-	
+
 	@Log
 	public boolean deleteArticle(String id) {
 		boolean success = false;
@@ -374,39 +268,39 @@ public class PostRepository {
 					.addValue("postID", id);
 
 			int result = namedParameterJdbcTemplate.update(DELETE_ARTICLE, parameters);
-			
+
 			success = result == 1 ? true : false;
-			
+
 		} catch(Exception e) { 
 			logger.error("Error occured: " + e.toString());
 		}
 		return success;
 	}
-	
+
 	@Log
 	public boolean deletePost(String id) {
 		boolean success = false;
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
-			
+
 			int result = namedParameterJdbcTemplate.update(DELETE_POST, parameters);
-			
+
 			success = result == 1 ? true : false;
 		} catch(Exception e) {
 			logger.error("Error occured: " + e.toString());
 		}
 		return success;
 	}
-	
-	
-	
-	
+
+
+
+
 	public static PostRepository getInstance() {
-			if(INSTANCE == null){
-				INSTANCE = new PostRepository();
-			}
-			return INSTANCE;
+		if(INSTANCE == null){
+			INSTANCE = new PostRepository();
 		}
+		return INSTANCE;
+	}
 
 }
