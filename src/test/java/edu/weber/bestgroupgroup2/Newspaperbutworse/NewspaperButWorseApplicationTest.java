@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.springframework.security.core.Authentication;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
 
@@ -65,13 +66,32 @@ public class NewspaperButWorseApplicationTest {
 	
 
 	@Test
-	public void testCreateTokenAndValidate() {
+	public void testCreateTokenNull() {
 		Duration ttl = Duration.ofMinutes(30);
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		
 		when(auth.isAuthenticated()).thenReturn(true);
-		String jwt = jwtTokenProvider.createToken(auth, expiration);
+		when(auth.getPrincipal() instanceof User).thenReturn(true);
+		
+		Assert.assertNull(jwtTokenProvider.createToken(auth, expiration));
+	}
+	
+	@Test
+	public void testCreateTokenWithUserWithValidation() {
+		User user = new User();
+		user.setUsername("Test");
+		user.setPassword("Pass");
+		Duration ttl = Duration.ofMinutes(30);
+		Date now = new Date();
+		Date expiration = new Date(now.getTime() + ttl.toMillis());
+		
+		String token = jwtTokenProvider.createToken(user, expiration);
+		
+		when(jwtTokenProvider.getJwtTokenFromRequest(request)).thenReturn(token);
+		
+		jwtTokenProvider.getAuthentication(request);
+		
 	}
 
 }
