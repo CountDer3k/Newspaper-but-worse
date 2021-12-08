@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Service
@@ -39,10 +38,7 @@ public class UserService implements UserDetailsService {
     
     @Log
     public User getUserByID(int id) {
-    	User user = new User();
-    	
-    	user = userRepository.getUserByID(id);
-    	
+    	User user = userRepository.getUserByID(id);
     	return user;
     }
     

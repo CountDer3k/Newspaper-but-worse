@@ -25,6 +25,10 @@ public class User implements UserDetails {
 	private ZonedDateTime modifiedOn;
 	private List<Role> roles;
 	
+	public User() {
+		
+	}
+	
 	public int getUserId() {
 		return userId;
 	}
