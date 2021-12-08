@@ -31,6 +31,7 @@ public class UserRowCallbackHandler implements RowCallbackHandler {
 					.get();
 		}
 		else {
+			
 			user = new User();
 			user.setUserId(userId);
 			user.setUsername(rs.getString("u.USERNAME"));
