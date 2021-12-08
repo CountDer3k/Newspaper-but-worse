@@ -3,6 +3,8 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.User;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,13 +12,15 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import edu.weber.bestgroupgroup2.Newspaperbutworse.REST.RESTPostController;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Repository
 public class UserRepository {
-	
+
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
+	private Logger logger = LoggerFactory.getLogger(UserRepository.class);
+
 	private final String INSERT_USER = "INSERT INTO User (username, password, email, first_name, last_name, created_on, modified_on) VALUES (:username, :password, :email, :firstName, :lastName, :createdOn, :modifiedOn)";
 	private final String INSERT_USER_ROLE = "INSERT INTO User_Role (user_id, role_id) VALUES (:userId, :roleId);";
 	private final String SELECT_USER_WITH_ROLES = "SELECT \n" + 
@@ -36,22 +40,18 @@ public class UserRepository {
 			"    p.perm_name,\n" + 
 			"    p.created_on,\n" + 
 			"    p.modified_on\n" + 
-			"FROM\n" + 
-			"    User AS u\n" + 
-			"        JOIN\n" + 
-			"    User_Role AS ur ON u.user_id = ur.user_id\n" + 
-			"        JOIN\n" + 
-			"    Role AS r ON ur.role_id = r.role_id\n" + 
-			"        JOIN\n" + 
-			"    Role_Permission AS rp ON r.role_id = rp.role_id\n" + 
-			"        JOIN\n" + 
-			"    Permission AS p ON rp.perm_id = p.perm_id";
-	
+			"FROM User AS u\n" + 
+			"    JOIN User_Role AS ur ON u.user_id = ur.user_id\n" + 
+			"    JOIN Role AS r ON ur.role_id = r.role_id\n" + 
+			"    JOIN Role_Permission AS rp ON r.role_id = rp.role_id\n" + 
+			"    JOIN Permission AS p ON rp.perm_id = p.perm_id";
+	private final String UPDATE_USER = "UPDATE User SET first_name = :firstName, last_name = :lastName, email = :email WHERE user_id = :userId";
+
 	@Autowired
 	public UserRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
-	
+
 	@Log
 	public List<User> getAllUsers() {
 		String sql = SELECT_USER_WITH_ROLES + ";";
@@ -59,10 +59,10 @@ public class UserRepository {
 		namedParameterJdbcTemplate.query(sql, callbackHandler);
 		return callbackHandler.getUserList();
 	}
-	
+
 	@Log
 	public User getUserByUsername(String username) {
-		String sql = SELECT_USER_WITH_ROLES + " WHERE username = :username;";
+		String sql = SELECT_USER_WITH_ROLES + "WHERE username = :username;";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("username", username);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
@@ -72,14 +72,14 @@ public class UserRepository {
 
 	@Log
 	public User getUserByEmail(String email) {
-		String sql = "SELECT * FROM User WHERE email = :email;";
+		String sql = SELECT_USER_WITH_ROLES + "WHERE email = :email";
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("email", email);
 		UserRowCallbackHandler callbackHandler = new UserRowCallbackHandler();
 		namedParameterJdbcTemplate.query(sql, parameters, callbackHandler);
 		return callbackHandler.getUser();
 	}
-	
+
 	@Log
 	public User getUserByID(int id) {
 		String sql = SELECT_USER_WITH_ROLES + " WHERE u.user_id = :userId;";
@@ -92,24 +92,49 @@ public class UserRepository {
 
 	@Log
 	public User save(User user) {
-		return save(user, 2);
+		try {
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			MapSqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("username", user.getUsername())
+					.addValue("password", user.getPassword())
+					.addValue("email", user.getEmail())
+					.addValue("firstName", user.getFirstName())
+					.addValue("lastName", user.getLastName())
+					.addValue("createdOn", new Timestamp(System.currentTimeMillis()))
+					.addValue("modifiedOn", new Timestamp(System.currentTimeMillis()));
+			namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
+
+
+			if (user.getRoles().isEmpty() || user.getRoles().toArray().length == 0 ||user.getRoles().equals(null)) {
+				namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", 2));
+			}
+			else {
+				for (Role role : user.getRoles()) {
+					namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", role.getRoleId()));
+				}
+			}
+			user.setUserId(keyHolder.getKey().intValue());
+		}catch(Exception e) {
+			logger.error(e.toString());
+		}
+		return user;
 	}
-	
+
 	@Log
-	public User save(User user, int roleId) {
-		KeyHolder keyHolder = new GeneratedKeyHolder();
+	public User updateUser(User user) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource()
-				.addValue("username", user.getUsername())
-				.addValue("password", user.getPassword())
-				.addValue("email", user.getEmail())
 				.addValue("firstName", user.getFirstName())
 				.addValue("lastName", user.getLastName())
-				.addValue("createdOn", new Timestamp(System.currentTimeMillis()))
-				.addValue("modifiedOn", new Timestamp(System.currentTimeMillis()));
-		
-		namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
-		namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", roleId));
-		user.setUserId(keyHolder.getKey().intValue());
+				.addValue("email", user.getEmail())
+				.addValue("userId", user.getUserId());
+		int status = namedParameterJdbcTemplate.update(UPDATE_USER, parameters);
+
+		if(status != 0){
+			System.out.println("User data updated for ID " + user.getUserId());
+		}
+		else {
+			System.out.println("No User found with ID " + user.getUserId());
+		}
 		return user;
 	}
 

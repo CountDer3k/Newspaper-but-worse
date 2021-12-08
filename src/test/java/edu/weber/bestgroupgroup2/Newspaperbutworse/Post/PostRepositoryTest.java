@@ -2,9 +2,11 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
 import org.junit.Test;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +50,9 @@ public class PostRepositoryTest {
 	PasswordEncoder encoder;
 	@Mock
 	ResultSetExtractor<List<PostArticleModel>> rse;
+	@Mock
+	ResultSet rs;
+	
 	
 	@Before
 	public void setup() {
@@ -144,6 +149,75 @@ public class PostRepositoryTest {
 	}	
 	
 	
+	@Test
+	public void testEditArticle() {
+		ArticleModel expected = new ArticleModel();
+		expected.setPostId(1);
+		expected.setTitle("Title");
+		expected.setContent("Something");
+		expected.setAccess("FR");
+		
+		//when(repo.editArticle(expected)).thenReturn(expected);
+		
+		ArticleModel actual = repo.editArticle(expected);
+		Assert.assertEquals(expected.getContent(), actual.getContent());
+	}
+	
+	@Test
+	public void testDeletePostArticle() {
+		Assert.assertTrue(repo.deletePostArticle("1"));
+	}
+	
+	@Test
+	public void testDeleteArticle() {
+		when(template.update(any(String.class), any(SqlParameterSource.class))).thenReturn(1);
+		
+		boolean actual = repo.deleteArticle("1");
+		Assert.assertEquals(true, actual);
+	}
+	
+	@Test
+	public void testDeletePost() {
+		when(template.update(any(String.class), any(SqlParameterSource.class))).thenReturn(1);
+		
+		boolean actual = repo.deletePost("1");
+		Assert.assertEquals(true, actual);
+	}
+	
+	
+	@Test
+	public void testSaveComment() {
+		Comment expected = new Comment();
+		expected.setContent("what an article!");
+		
+		//when(template.update(any(String.class), any(SqlParameterSource.class))).thenReturn(1);
+		
+		Comment actual = repo.saveComment(expected, 1);
+		Assert.assertEquals(expected.getContent(), actual.getContent());
+	}
+	
+	@Test
+	public void testGetCommentsFromArticle() {
+		List<Comment> comments = new ArrayList<Comment>();
+		
+		when(template.query(any(String.class), any(ResultSetExtractor.class))).thenReturn(comments);
+		
+		
+		List<Comment> actual = repo.getCommentsFromArticle(1);
+		Assert.assertEquals(comments.size(), actual.size());
+	}
+	
+	@Test
+	public void testGetPostsFromArticle() {
+		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
+		expected.add(makePAM());
+		
+		when(template.query(any(String.class), any(ResultSetExtractor.class))).thenReturn(expected);
+		
+		
+		List<PostArticleModel> actual = repo.getAllPostsForUserWithId("1");
+		Assert.assertEquals(expected.size(), actual.size());
+	}
 	
 	
 	//------------------------
@@ -209,5 +283,5 @@ public class PostRepositoryTest {
 		return article;
 	}
 	
-
+	
 }

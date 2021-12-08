@@ -272,11 +272,12 @@ public class PostRepository {
 			int PostID = keyHolder.getKey().intValue();
 			article.setPostId(PostID);
 			saveArticle(article);
+			return post;
 		} catch(Exception e) 
 		{
 			logger.error("PostRepository - savePost() " + e.getLocalizedMessage());
 		}
-		return post;
+		return null;
 	}
 
 	@Log
@@ -376,7 +377,7 @@ public class PostRepository {
 			
 			success = result == 1 ? true : false;
 			
-		} catch(Exception e) {
+		} catch(Exception e) { 
 			logger.error("Error occured: " + e.toString());
 		}
 		return success;

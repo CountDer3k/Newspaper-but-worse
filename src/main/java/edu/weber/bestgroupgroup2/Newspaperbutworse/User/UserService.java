@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Service
@@ -39,10 +38,7 @@ public class UserService implements UserDetailsService {
     
     @Log
     public User getUserByID(int id) {
-    	User user = new User();
-    	
-    	user = userRepository.getUserByID(id);
-    	
+    	User user = userRepository.getUserByID(id);
     	return user;
     }
     
@@ -55,6 +51,7 @@ public class UserService implements UserDetailsService {
     	user.setLastName(userDto.getLastName());
     	user.setEmail(userDto.getEmail());
     	user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+    	user.setRoles(userDto.getRoles());
     	
     	return userRepository.save(user);
     }
@@ -97,6 +94,13 @@ public class UserService implements UserDetailsService {
 		return userList.subList(start, end);
 	}
 	
+
+	public User editUser(User user) {
+		User oldUser = (User) loadUserByUsername(user.getUsername());
+		user.setUserId(oldUser.getUserId());
+		return userRepository.updateUser(user);
+		
+	}
 
 }
 

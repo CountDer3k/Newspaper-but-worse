@@ -16,36 +16,55 @@
 	crossorigin="anonymous">
 </head>
 
-<body>
-
+<body class="d3-dark-secondary" style="padding-top: 20px">
 	<nav class="navbar navbar-expand-lg navbar-dark d3-dark-nav"
 		id="navigationFragment">
-		<div class="container-fluid row">
+		<div class="container-fluid row d3-dark-secondary">
 			<div class="col-3">
-				<a href="/" class="h3" style="background-color:none; color:white"><i class="far fa-newspaper h2"></i> Bugle</a>
+				<a href="/" class="h3" style="background-color: none; color: white"><i
+					class="far fa-newspaper h2"></i> Bugle</a>
 			</div>
 			<div class="col-6">
 				<form class="d-flex">
-					<input class="form-control me-2" type="search" placeholder="Search"
+					<!-- <input class="form-control me-2" type="search" placeholder="Search"
 						aria-label="Search">
 					<button class="btn btn-outline-success btn-outline-dark-d3"
-						type="submit">Search!</button>
+						type="submit">Search!</button> -->
 				</form>
 			</div>
 			<div class="col-3 d-flex flex-row-reverse">
-				<button sec:authorize="isAuthenticated()" class="btn btn-outline-light dropdown-toggle" id="navbarDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false" style="height:40px;">&nbsp;Menu</button>
-				<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenu">
-					<li><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/user/list}" class="dropdown-item">User List</a></li>
+				<button sec:authorize="isAuthenticated()"
+					class="btn btn-outline-light dropdown-toggle"
+					id="navbarDropdownMenu" data-bs-toggle="dropdown"
+					aria-expanded="false" style="height: 40px;">&nbsp;Menu</button>
+				<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end"
+					aria-labelledby="navbarDropdownMenu">
+					<li><a sec:authorize="hasAuthority('ADMIN')"
+						th:href="@{~/user/list}" class="dropdown-item">User List</a></li>
+					<li><a sec:authorize="hasAuthority('ADMIN')"
+						th:href="@{~/user/registration}" class="dropdown-item">New
+							User</a></li>
+					<li><a sec:authorize="hasAuthority('AUTHOR')"
+						th:href="@{~/authors/articleList}" class="dropdown-item">Article
+							List</a></li>
+					<li><a sec:authorize="hasAuthority('AUTHOR')"
+						th:href="@{~/articles/articleForm}" class="dropdown-item">New
+							Article</a></li>
+					<li><a sec:authorize="hasAuthority('READER')" th:href="@{~/}"
+						class="dropdown-item">Favorite Articles</a></li>
 					<li><a th:href="@{~/user/logout}" class="dropdown-item">Logout</a></li>
 				</ul>
-				<a sec:authorize="isAnonymous()" th:href="@{/user/login}" class="btn btn-outline-light" style="height:40px;">&nbsp;Login</a>
-				<a sec:authorize="isAnonymous()" th:href="@{/user/registration}" class="btn btn-outline-light" style="height:40px;">&nbsp;Register</a>
+				<a sec:authorize="isAnonymous()" th:href="@{~/user/login}"
+					class="btn btn-outline-light" style="height: 40px;">&nbsp;Login</a>
+				<a sec:authorize="isAnonymous()" th:href="@{~/user/registration}"
+					class="btn btn-outline-light" style="height: 40px;">&nbsp;Register</a>
 			</div>
 		</div>
 	</nav>
 	<br />
 	<br />
-	
+
+
 </body>
 
 </html>

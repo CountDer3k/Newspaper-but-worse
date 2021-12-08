@@ -1,14 +1,10 @@
-
-
-
-
 .d3-dark-primary{
 	background-color:#261C2C;
 	color: white;
 	
 }
 .d3-dark-secondary{
-	background-color:#5C527F;
+	background-color:#5C527F !important;
 	/* 
 	#3E2C41
 	#5C527F
@@ -62,11 +58,20 @@
 	padding-left: 25px;
 }
 
+a.h2:link,
+a.h2:visited {
+	text-decoration: none;
+	color: white;
+}
+
+a.h2:hover,
+a.h2:active {
+	text-decoration: none;
+	color: #5C527F;
+}
 
 .inputRounded{
 	border-radius: 5px;
 	border:0;
     box-shadow:4px 4px 3px 
 }
-
-

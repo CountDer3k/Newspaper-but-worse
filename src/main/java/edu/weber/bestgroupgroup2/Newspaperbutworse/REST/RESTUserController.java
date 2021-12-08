@@ -12,12 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.Post.PostArticleModel;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.Role;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
+import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,29 +70,73 @@ public class RESTUserController {
 			return ResponseEntity.ok(u);
 		else {
 			Map<String,String> m = new HashMap<String, String>();
-			m.put("Error", "No User Found");
+			m.put("Error", "No User Found"); 
 			return ResponseEntity.ok(m);
 		}
 	}
 	
-	@Operation(summary = "Add a user")
+	@Operation(summary = "Add a user \nTakes in arguments in the body in the following order: \nusername, password, firstname, lastname")
 	@PostMapping()
 	@Log
 	public ResponseEntity<Object> loginUser(
-			@RequestParam(name = "username", required = false) String username,
-			@RequestParam(name = "password", required = false) String password){
+			@RequestBody String body){
 		
+		String[] bodyInfo = body.split("&");
+		if(bodyInfo.length < 5) {
+			return ResponseEntity.ok("Not enough parameters passed in");
+		}
 		
-		return null;
+		String username ="", password="", firstName="", lastName="", email="";
+
+
+		for(String item : bodyInfo) {
+			String[] itemParameters = item.split("=");
+			
+			switch(itemParameters[0]){
+				case "username":
+					username = itemParameters[1];
+					break;
+				case "password":
+					password = itemParameters[1];
+					break;
+				case "email":
+					email = itemParameters[1];
+					break;
+				case "firstname":
+					firstName = itemParameters[1];
+					break;
+				case "lastname":
+					lastName = itemParameters[1];
+					break;
+			}
+		}
+		
+		if((username != "") && (password != "") && (email !="") && (firstName !="") && (lastName !="")) {
+			UserDto dto = new UserDto();
+			
+			dto.setFirstName(firstName);
+			dto.setLastName(lastName);
+			dto.setUsername(username);
+			dto.setPassword(password);
+			dto.setEmail(email);
+			dto.setRoles(new ArrayList<Role>());
+			
+			// ?? Make sure that this also adds a role and permissions as well
+			
+			User newUser = userService.registerNewUserAccount(dto);
+			
+			
+			if (newUser.getUserId() != 0) {
+				return ResponseEntity.ok(newUser);
+			}
+			else {
+				return ResponseEntity.ok("Failed to add new user");
+			}
+		}
+		else {
+			return ResponseEntity.ok("One or more parameters where missing in the body");
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

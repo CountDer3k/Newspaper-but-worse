@@ -118,13 +118,14 @@ public class PostController {
 			@Validated PostDto postDto,
 			BindingResult bindResult,
 			HttpServletRequest request,
-			Errors errors) {
+			Errors errors,
+			Authentication authentication) {
 
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
-		//?? Get this from logged in user
-		int userID = 1;
+		User user = (User)authentication.getPrincipal();
+		int userID = user.getUserId();
 
 		if(postService.isValidPost(postDto)) {
 			ModelAndView modelAndView = new ModelAndView("redirect:/");
@@ -132,30 +133,19 @@ public class PostController {
 			modelAndView.getModelMap().addAttribute("post", postDto);
 			return modelAndView;
 		}
-		//?? WTF is this doing here??
-		return new ModelAndView("user/registration", "msg", "Registration Failed!");
+		return new ModelAndView("/error");
 	}
 
 
 	@GetMapping("authors/articleList")
 	@Log
-	public ModelAndView showAuthorArticles(Principal prin) {
+	public ModelAndView showAuthorArticles(Authentication authentication) {
 
 		try {
-//			User author = (User)prin;
-//			String authorId = "";
-//			if(author == null) {
-//				logger.info("Author is still null....");
-//				authorId = "1";
-//			}
-//			else {
-//				int aId = author.getUserId();
-//				authorId =  String.valueOf(aId);
-//				logger.info("Author ID: " + authorId);
-//			}
+			User user = (User)authentication.getPrincipal();
+			int userID = user.getUserId();
 
-
-			String authorId = "1";
+			String authorId = String.valueOf(userID);
 			
 			List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 			posts = postService.getAllPostsForUserWithId(authorId);
@@ -199,13 +189,14 @@ public class PostController {
 			BindingResult bindResult,
 			HttpServletRequest request,
 			Errors errors, 
+			Authentication authentication,
 			@PathVariable String articleId) {
 
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
-		//?? Get this from logged in user
-		int authorId = 1;
+		User user = (User)authentication.getPrincipal();
+		int authorId = user.getUserId();
 
 		if(postService.isValidPost(postDto)) {
 			// Update articles
