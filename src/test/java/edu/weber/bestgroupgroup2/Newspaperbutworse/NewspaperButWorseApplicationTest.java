@@ -2,7 +2,9 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse;
 
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +56,22 @@ public class NewspaperButWorseApplicationTest {
 		when(request.getCookies()).thenReturn(arr);
 		
 		Assert.assertNotNull(jwtTokenProvider.getJwtTokenFromRequest(request));
+	}
+	
+	@Test
+	public void testGetNullCookieFromRequest() {
+		Assert.assertNull(jwtTokenProvider.getJwtTokenFromRequest(request));
+	}
+	
+
+	@Test
+	public void testCreateTokenAndValidate() {
+		Duration ttl = Duration.ofMinutes(30);
+		Date now = new Date();
+		Date expiration = new Date(now.getTime() + ttl.toMillis());
+		
+		when(auth.isAuthenticated()).thenReturn(true);
+		String jwt = jwtTokenProvider.createToken(auth, expiration);
 	}
 
 }
