@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,16 +28,16 @@ import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping("API/users")
 public class RESTUserController {
-	
+
 	private Logger logger = LoggerFactory.getLogger(RESTUserController.class);
-	
+
 	private UserService userService;
-	
+
 	@Autowired
 	public RESTUserController(UserService userService) {
 		this.userService = userService;
 	}
-	
+
 	@Operation(summary = "Get all users")
 	@GetMapping()
 	@Log
@@ -44,14 +45,14 @@ public class RESTUserController {
 			@RequestParam(name = "entries", required = false) String entriesAmount,
 			@RequestParam(name = "page", required = false) String pageNum){
 		List<User> users;
-		
+
 		try {
 			int entries = Integer.parseInt(entriesAmount);
 			int page = 1;
 			if (pageNum != null){
 				page = Integer.parseInt(pageNum);
 			}
-			
+
 			users = userService.getAllUsers(entries > 0 ? entries : 1, page > 0 ? page : 1);
 		} catch(Exception e) {
 			logger.error("RESTPostController - getAllPostForAuthor() " + e.toString());
@@ -59,7 +60,7 @@ public class RESTUserController {
 		}
 		return users != null ? ResponseEntity.ok(users) : ResponseEntity.ok(new ArrayList<User>());
 	}
-	
+
 	@Operation(summary = "Get a articles by its id")
 	@GetMapping("{userId}")
 	@Log
@@ -74,75 +75,22 @@ public class RESTUserController {
 			return ResponseEntity.ok(m);
 		}
 	}
-	
+
 	@Operation(summary = "Add a user \nTakes in arguments in the body in the following order: \nusername, password, firstname, lastname")
 	@PostMapping()
 	@Log
 	public ResponseEntity<Object> loginUser(
-			@RequestBody String body){
-		
-		String[] bodyInfo = body.split("&");
-		if(bodyInfo.length < 5) {
-			return ResponseEntity.ok("Not enough parameters passed in");
-		}
-		
-		String username ="", password="", firstName="", lastName="", email="";
+			@Validated
+			@RequestBody UserDto user){
+
+		User newUser = userService.registerNewUserAccount(user);
 
 
-		for(String item : bodyInfo) {
-			String[] itemParameters = item.split("=");
-			
-			switch(itemParameters[0]){
-				case "username":
-					username = itemParameters[1];
-					break;
-				case "password":
-					password = itemParameters[1];
-					break;
-				case "email":
-					email = itemParameters[1];
-					break;
-				case "firstname":
-					firstName = itemParameters[1];
-					break;
-				case "lastname":
-					lastName = itemParameters[1];
-					break;
-			}
-		}
-		
-		if((username != "") && (password != "") && (email !="") && (firstName !="") && (lastName !="")) {
-			UserDto dto = new UserDto();
-			
-			dto.setFirstName(firstName);
-			dto.setLastName(lastName);
-			dto.setUsername(username);
-			dto.setPassword(password);
-			dto.setEmail(email);
-			dto.setRoles(new ArrayList<Role>());
-			
-			// ?? Make sure that this also adds a role and permissions as well
-			
-			User newUser = userService.registerNewUserAccount(dto);
-			
-			
-			if (newUser.getUserId() != 0) {
-				return ResponseEntity.ok(newUser);
-			}
-			else {
-				return ResponseEntity.ok("Failed to add new user");
-			}
+		if (newUser != null && newUser.getUserId() != 0) {
+			return ResponseEntity.ok(newUser);
 		}
 		else {
-			return ResponseEntity.ok("One or more parameters where missing in the body");
+			return ResponseEntity.badRequest().body("Failed to add new user");
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }

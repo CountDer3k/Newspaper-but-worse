@@ -25,7 +25,7 @@ public class RESTAuthenticationController {
 
 	private Logger logger = LoggerFactory.getLogger(RESTAuthenticationController.class);
 	private JwtTokenProvider jot;
-	
+	 
 	@Autowired
 	public RESTAuthenticationController(JwtTokenProvider jot) {
 		this.jot = jot;

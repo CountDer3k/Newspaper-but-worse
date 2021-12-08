@@ -53,13 +53,14 @@ public class UserController {
 			return new ModelAndView("error");
 		}
 		
-	    if(userService.isValidUser(userDto)) {
-	    	ModelAndView modelAndView = new ModelAndView("redirect:/");
-	    	userService.registerNewUserAccount(userDto);
+		ModelAndView modelAndView = new ModelAndView("redirect:/");
+    	User user = userService.registerNewUserAccount(userDto);
+    	if (user != null) {
 	    	modelAndView.getModelMap().addAttribute("msg", "Registration Confirmed!");
 	    	modelAndView.getModelMap().addAttribute("user", userDto);
 	    	return modelAndView;
-	    }
+    	}
+
 	    
 	    return new ModelAndView("user/registration", "msg", "Registration Failed!");
 	}
