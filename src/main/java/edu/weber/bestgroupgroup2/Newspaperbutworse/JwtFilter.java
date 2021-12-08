@@ -19,10 +19,10 @@ public class JwtFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
+		String s = request.getHeader("Authorization");
+		System.out.println(s);
 		SecurityContextHolder.getContext().setAuthentication(jwtTokenProvider.getAuthentication(request));
 		filterChain.doFilter(request, response);
 		
 	}
-
 }

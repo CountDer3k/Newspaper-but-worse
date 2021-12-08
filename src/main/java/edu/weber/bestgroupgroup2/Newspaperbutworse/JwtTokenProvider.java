@@ -30,10 +30,10 @@ public class JwtTokenProvider {
 	//Might want to look at/rework the secretKey?
 	private final byte[] secretKey = "alterego".getBytes();
 	private UserService userService;
-	
+
 	@Autowired
 	public JwtTokenProvider(UserService userService) { this.userService = userService; }
-	
+
 	public Cookie createCookieTokenString(Authentication auth) {
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
@@ -43,9 +43,9 @@ public class JwtTokenProvider {
 		userCookie.setPath("/");
 		return userCookie;
 	}
-	
+
 	public String createToken(Authentication auth, Date expiration) {
-		
+
 		if(auth != null
 				&& auth.isAuthenticated()
 				&& auth.getPrincipal() instanceof User) {
@@ -54,24 +54,24 @@ public class JwtTokenProvider {
 		}
 		return null;
 	}
-	
+
 	public String createToken(User user, Date expiration) {
-		
+
 		if(user != null) {
 			Claims claims = Jwts.claims().setSubject(String.valueOf(user.getUserId()));
 			claims.put("authorities", user.getAuthorities());
 			claims.put("username", user.getUsername());
 			claims.put("firstName", user.getFirstName());
 			claims.put("lastname", user.getLastName());
-			
+
 			Date now = new Date();
-			
+
 			Date validity = expiration;
-			
+
 			if(validity == null) {
 				validity = new Date(now.getTime() + ttl.toMillis());
 			}
-			
+
 			return Jwts.builder()
 					.setClaims(claims)
 					.setIssuedAt(now)
@@ -79,12 +79,12 @@ public class JwtTokenProvider {
 					.signWith(SignatureAlgorithm.HS256, secretKey)
 					.compact();
 		}
-		
+
 		return null;
 	}
 
 	public Authentication getAuthentication(HttpServletRequest request) {
-		
+
 		String token = getJwtTokenFromRequest(request);
 		if (token != null && validateToken(token)) {
 			return getAuthentication(token);
@@ -93,7 +93,7 @@ public class JwtTokenProvider {
 	}
 
 	private Authentication getAuthentication(String token) {
-		
+
 		String username = getUsername(token);
 		if(username != null) {
 			UserDetails userDetails = userService.loadUserByUsername(username);
@@ -105,13 +105,13 @@ public class JwtTokenProvider {
 	}
 
 	public String getUsername(String token) {
-		
+
 		Jwt<DefaultJwsHeader, DefaultClaims> jwt = Jwts.parser().setSigningKey(secretKey).parse(token);
 		return jwt.getBody().get("username", String.class);
 	}
 
 	private boolean validateToken(String token) {
-		
+
 		try {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			return true;
@@ -123,16 +123,49 @@ public class JwtTokenProvider {
 	}
 
 	public String getJwtTokenFromRequest(HttpServletRequest request) {
-		
+		String token = getTokenFromCookie(request);
+		if (token == null) {
+			token = getTokenFromHeader(request);
+		}
+		return token;
+	}
+
+	private String getTokenFromCookie(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-		
+
 		if (cookies != null) {
-	        for (Cookie cookie : cookies) {
-	            if (cookie.getName().equals(AppConstants.JWT_COOKIE_NAME)) {
-	                return cookie.getValue();
-	            }
-	        }
-	    }
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals(AppConstants.JWT_COOKIE_NAME)) {
+					return cookie.getValue();
+				}
+			}
+		}
 		return null;
 	}
+	
+	private String getTokenFromHeader(HttpServletRequest request) {
+	
+		String token = request.getHeader("Authorization");
+		if(token != null) {
+			String[] s = token.split(" ");
+			if(s.length > 0)
+				return s[1];
+		}
+		return null;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

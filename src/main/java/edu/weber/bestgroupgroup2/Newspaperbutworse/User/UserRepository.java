@@ -44,7 +44,7 @@ public class UserRepository {
 			"    JOIN User_Role AS ur ON u.user_id = ur.user_id\n" + 
 			"    JOIN Role AS r ON ur.role_id = r.role_id\n" + 
 			"    JOIN Role_Permission AS rp ON r.role_id = rp.role_id\n" + 
-			"    JOIN Permission AS p ON rp.perm_id = p.perm_id";
+			"    JOIN Permission AS p ON rp.perm_id = p.perm_id ";
 	private final String UPDATE_USER = "UPDATE User SET first_name = :firstName, last_name = :lastName, email = :email WHERE user_id = :userId";
 
 	@Autowired
@@ -105,7 +105,7 @@ public class UserRepository {
 			namedParameterJdbcTemplate.update(INSERT_USER, parameters, keyHolder);
 
 
-			if (user.getRoles().isEmpty() || user.getRoles().toArray().length == 0 ||user.getRoles().equals(null)) {
+			if (user.getRoles() == null || user.getRoles().isEmpty() || user.getRoles().size() == 0) {
 				namedParameterJdbcTemplate.update(INSERT_USER_ROLE, new MapSqlParameterSource().addValue("userId", keyHolder.getKey()).addValue("roleId", 2));
 			}
 			else {
@@ -115,7 +115,7 @@ public class UserRepository {
 			}
 			user.setUserId(keyHolder.getKey().intValue());
 		}catch(Exception e) {
-			logger.error(e.toString());
+			logger.error(e.getMessage(), e);
 		}
 		return user;
 	}
