@@ -48,7 +48,6 @@ public class NewspaperButWorseApplicationTest {
 	@Test
 	public void testGetCookieFromRequest() {
 		
-		
 		Cookie cookie = new Cookie(AppConstants.JWT_COOKIE_NAME, "test");
 		Cookie[] arr = new Cookie[1];
 		arr[0] = cookie;
