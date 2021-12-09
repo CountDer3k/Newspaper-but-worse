@@ -42,6 +42,7 @@ public class PostRepositoryTest {
 	PostRepository repo;
 	PostRowMapper mapper;
 	PostRowMapperPAM mapperPAM;
+	CommentRowMapper mapperComment;
 	@Mock
 	NamedParameterJdbcTemplate template;
 	@Mock
@@ -65,6 +66,7 @@ public class PostRepositoryTest {
 		keyHolder = new GeneratedKeyHolder();
 		mapper = new PostRowMapper();
 		mapperPAM = new PostRowMapperPAM();
+		mapperComment = new CommentRowMapper();
 	}
  
 	
@@ -256,6 +258,17 @@ public class PostRepositoryTest {
 		PostArticleModel actual = mapperPAM.mapRow(rs, 1);
 		
 		Assert.assertEquals(expected.getPost().getArticle().getTitle(), actual.getPost().getArticle().getTitle());
+	}
+	
+	@Test
+	public void testCommentRowMapper() throws SQLException{
+		Comment comment = new Comment();
+		comment.setContent("Something");
+		
+		when(rs.getString("content")).thenReturn(comment.getContent());
+		
+		Comment actual = mapperComment.mapRow(rs, 0);
+		Assert.assertEquals(comment.getContent(), actual.getContent());
 	}
 	
 	//------------------------
