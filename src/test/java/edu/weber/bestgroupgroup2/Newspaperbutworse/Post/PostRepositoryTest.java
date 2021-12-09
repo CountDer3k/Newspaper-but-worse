@@ -40,7 +40,8 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 public class PostRepositoryTest {
 
 	PostRepository repo;
-
+	PostRowMapper mapper;
+	PostRowMapperPAM mapperPAM;
 	@Mock
 	NamedParameterJdbcTemplate template;
 	@Mock
@@ -53,19 +54,24 @@ public class PostRepositoryTest {
 	ResultSetExtractor<List<PostArticleModel>> rse;
 	@Mock
 	ResultSet rs;
+	@Mock
+	Number num;
+
 	
 	
 	@Before
 	public void setup() {
 		repo = new PostRepository(template);
 		keyHolder = new GeneratedKeyHolder();
+		mapper = new PostRowMapper();
+		mapperPAM = new PostRowMapperPAM();
 	}
  
 	
 	@Test
 	public void testGetArticleByID() throws SQLException {
 		String id = "1";
-		mockKeyHolder();
+		mockKeyHolder(); 
 
 		PostModel post = makePost();
 		repo.savePost(post);
@@ -196,7 +202,8 @@ public class PostRepositoryTest {
 		Comment expected = new Comment();
 		expected.setContent("what an article!");
 		
-		//when(template.update(any(String.class), any(SqlParameterSource.class))).thenReturn(1);
+		//when(template.update(any(String.class), any(SqlParameterSource.class), keyHolder)).thenReturn(expected);
+		when(keyHolder.getKey()).thenReturn((Number) 2);
 		
 		Comment actual = repo.saveComment(expected, 1);
 		Assert.assertEquals(expected.getContent(), actual.getContent());
@@ -225,6 +232,31 @@ public class PostRepositoryTest {
 		Assert.assertEquals(expected.size(), actual.size());
 	}
 	
+	
+	//----------
+	// RowMapper
+	//----------
+	@Test
+	public void testRowMapper() throws SQLException {
+		PostModel expected = makePost();
+		
+		when(rs.getString("title")).thenReturn(expected.getArticle().getTitle());
+		
+		PostModel actual = mapper.mapRow(rs, 1);
+		
+		Assert.assertEquals(expected.getArticle().getTitle(), actual.getArticle().getTitle());
+	}
+	
+	@Test
+	public void testRowMapperPAM() throws SQLException {
+		PostArticleModel expected = makePAM();
+	
+		when(rs.getString("title")).thenReturn(expected.getPost().getArticle().getTitle());
+		
+		PostArticleModel actual = mapperPAM.mapRow(rs, 1);
+		
+		Assert.assertEquals(expected.getPost().getArticle().getTitle(), actual.getPost().getArticle().getTitle());
+	}
 	
 	//------------------------
 	// Helper creation methods

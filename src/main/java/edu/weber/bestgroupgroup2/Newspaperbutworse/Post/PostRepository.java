@@ -193,7 +193,6 @@ public class PostRepository {
 	}
 
 	@Log
-	//Return void instead?
 	public Comment saveComment(Comment comment, int userID) {
 		//This seems to only get the date not the time in the db
 		long millis = System.currentTimeMillis();  
@@ -206,7 +205,8 @@ public class PostRepository {
 
 			namedParameterJdbcTemplate.update(INSERT_POST, parameters, keyHolder);
 
-			int PostID = keyHolder.getKey().intValue();
+			Number key = keyHolder.getKey();
+			int PostID = key.intValue();
 			comment.setPostId(PostID);
 
 			keyHolder = new GeneratedKeyHolder();
