@@ -86,8 +86,11 @@ public class RESTUserController {
 		User newUser = userService.registerNewUserAccount(user);
 
 
-		if (newUser != null && newUser.getUserId() != 0) {
-			return ResponseEntity.ok(newUser);
+		if (newUser != null) {
+			if( newUser.getUserId() != 0) {
+				return ResponseEntity.ok(newUser);
+			}
+			return ResponseEntity.badRequest().body("Failed to add new user");
 		}
 		else {
 			return ResponseEntity.badRequest().body("Failed to add new user");

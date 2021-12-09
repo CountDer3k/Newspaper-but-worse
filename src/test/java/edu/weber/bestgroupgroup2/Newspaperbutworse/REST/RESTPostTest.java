@@ -38,7 +38,7 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class RESTTest {
+public class RESTPostTest {
 
 	RESTPostController controller;
 	@Mock
