@@ -100,10 +100,9 @@ public class RESTUserTest {
 	
 	@Test
 	public void testGetUser_null() {
-		User u = new User();
-		ResponseEntity<Object> expected = ResponseEntity.ok(u);
-
-		when(service.getUserByID(1)).thenReturn(null);
+		Map<String,String> m = new HashMap<String, String>();
+		m.put("Error", "No User Found"); 
+		ResponseEntity<Object> expected = ResponseEntity.ok(m);
 
 		ResponseEntity<Object> actual = controller.getUser("1");
 
@@ -135,12 +134,12 @@ public class RESTUserTest {
 		UserDto dto = new UserDto();
 		ResponseEntity<Object> expected = ResponseEntity.badRequest().body("Failed to add new user");
 
-		when(service.registerNewUserAccount(dto)).thenReturn(u);
 
 		ResponseEntity<Object> actual = controller.loginUser(any(UserDto.class));
 
 		Assert.assertEquals(expected, actual);
 	}
+	
 	
 	
 	

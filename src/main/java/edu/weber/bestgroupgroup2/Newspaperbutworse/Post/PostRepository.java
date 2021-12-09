@@ -79,15 +79,16 @@ public class PostRepository {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Log
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
 
-			return (PostArticleModel) namedParameterJdbcTemplate.queryForObject(
-					GET_ARTICLE_WITH_AUTHOR, 
-					parameters, new PostRowMapperPAM());
+			PostArticleModel pam = (PostArticleModel) namedParameterJdbcTemplate.queryForObject(
+					GET_ARTICLE_WITH_AUTHOR, parameters, new PostRowMapperPAM());
+			return pam;
 		}
 		catch(Exception e) {
 			logger.error("PostRepository - getArticleWithAuthorByID() " + e.toString());

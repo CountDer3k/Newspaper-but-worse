@@ -184,7 +184,9 @@ public class RESTPostTest {
 	@Test
 	public void testGetPost_null() {
 		PostModel p = new PostModel();
-		ResponseEntity<PostModel> expected = ResponseEntity.ok(p);
+		Map<String,String> m = new HashMap<String, String>();
+		m.put("Error", "No Article Found");
+		ResponseEntity<Object> expected = ResponseEntity.ok(m);
 
 		when(service.getPostByID(any(String.class))).thenReturn(p);
 

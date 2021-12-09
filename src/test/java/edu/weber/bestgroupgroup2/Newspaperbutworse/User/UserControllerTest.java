@@ -46,7 +46,7 @@ public class UserControllerTest {
 	public void testRegisterUserAccount() throws Exception {
 		UserDto userDto = getGwenStacyDto();
 		User user = getGwenStacy();
-		when(userService.isValidUser(Mockito.any())).thenReturn(true);
+		//when(userService.isValidUser(Mockito.any())).thenReturn(true);
 		when(userService.registerNewUserAccount(Mockito.any())).thenReturn(user);
 		mockMvc.perform(MockMvcRequestBuilders.post("/user/registration", userDto))
 			.andExpect(MockMvcResultMatchers.redirectedUrl("/?msg=Registration+Confirmed%21"))
