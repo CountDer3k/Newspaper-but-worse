@@ -40,7 +40,9 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 public class PostRepositoryTest {
 
 	PostRepository repo;
-
+	PostRowMapper mapper;
+	PostRowMapperPAM mapperPAM;
+	CommentRowMapper mapperComment;
 	@Mock
 	NamedParameterJdbcTemplate template;
 	@Mock
@@ -53,32 +55,28 @@ public class PostRepositoryTest {
 	ResultSetExtractor<List<PostArticleModel>> rse;
 	@Mock
 	ResultSet rs;
+	@Mock
+	PostRowMapperPAM rowPAM;
+
 	
 	
 	@Before
 	public void setup() {
 		repo = new PostRepository(template);
 		keyHolder = new GeneratedKeyHolder();
+		mapper = new PostRowMapper();
+		mapperPAM = new PostRowMapperPAM();
+		mapperComment = new CommentRowMapper();
 	}
  
 	
 	@Test
 	public void testGetArticleByID() throws SQLException {
 		String id = "1";
-		mockKeyHolder();
+		mockKeyHolder(); 
 
 		PostModel post = makePost();
 		repo.savePost(post);
-		
-		final ResultSet resultSet = Mockito.mock(ResultSet.class);
-		when(resultSet.getString("title")).thenReturn(post.getArticle().getTitle());
-		when(resultSet.getString("content")).thenReturn(post.getArticle().getContent());
-		when(resultSet.getString("access")).thenReturn(post.getArticle().getAccess());
-		when(resultSet.getInt("post_id")).thenReturn(post.getId());
-		
-		when(resultSet.getInt("user_id")).thenReturn(post.getUserId());
-		when(resultSet.getDate("create_on")).thenReturn(null);
-		when(resultSet.getDate("modified_on")).thenReturn(null);
 		
 		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class)))
 		.thenReturn(post);
@@ -88,27 +86,15 @@ public class PostRepositoryTest {
 
 		Assert.assertEquals(expected, actual);
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetArticleWithAuthorByID() {
-		String id = "1";
-		mockKeyHolder();
-
-		PostModel post = makePost(); 
-		repo.savePost(post);
+		PostArticleModel expected = makePAM();
 		
-		PostArticleModel expected = new PostArticleModel();
-		expected.setName("Dobby Elf");
-		expected.setPost(post);
+		when(template.queryForObject(any(String.class), any(SqlParameterSource.class), any(PostRowMapperPAM.class))).thenReturn(expected);
 		
-		createNewUser();
-		
-		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (RowMapper<PostArticleModel>) ArgumentMatchers.any(RowMapper.class)))
-		.thenReturn(expected);
-		
-		
-		
-		PostArticleModel actual = repo.getArticleWithAuthorByID(id);
+		PostArticleModel actual = repo.getArticleWithAuthorByID("1");
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -119,11 +105,9 @@ public class PostRepositoryTest {
 		
 		mockKeyHolder();
 		PostModel post = makePost();
-		PostArticleModel pam = makePAM(post);
-		expected.add(pam);
 		repo.savePost(post);
 		
-		when(template.query(ArgumentMatchers.any(String.class), ArgumentMatchers.any(ResultSetExtractor.class))).thenReturn(expected);
+		//when(template.query(ArgumentMatchers.any(String.class), ArgumentMatchers.any(ResultSetExtractor.class))).thenReturn(expected);
 				
 		List<PostArticleModel> actual = repo.getAllPosts();
 
@@ -196,8 +180,9 @@ public class PostRepositoryTest {
 		Comment expected = new Comment();
 		expected.setContent("what an article!");
 		
-		//when(template.update(any(String.class), any(SqlParameterSource.class))).thenReturn(1);
-		
+		//when(template.update(any(String.class), any(SqlParameterSource.class), keyHolder)).thenReturn(expected);
+		when(keyHolder.getKey()).thenReturn((Number) 2);
+
 		Comment actual = repo.saveComment(expected, 1);
 		Assert.assertEquals(expected.getContent(), actual.getContent());
 	}
@@ -206,25 +191,56 @@ public class PostRepositoryTest {
 	public void testGetCommentsFromArticle() {
 		List<Comment> comments = new ArrayList<Comment>();
 		
-		when(template.query(any(String.class), any(ResultSetExtractor.class))).thenReturn(comments);
-		
 		
 		List<Comment> actual = repo.getCommentsFromArticle(1);
 		Assert.assertEquals(comments.size(), actual.size());
 	}
 	
 	@Test
-	public void testGetPostsFromArticle() {
+	public void testGetAllPostsForUserWithId() {
 		List<PostArticleModel> expected = new ArrayList<PostArticleModel>();
-		expected.add(makePAM());
-		
-		when(template.query(any(String.class), any(ResultSetExtractor.class))).thenReturn(expected);
 		
 		
 		List<PostArticleModel> actual = repo.getAllPostsForUserWithId("1");
 		Assert.assertEquals(expected.size(), actual.size());
 	}
 	
+	
+	//----------
+	// RowMapper
+	//----------
+	@Test
+	public void testRowMapper() throws SQLException {
+		PostModel expected = makePost();
+		
+		when(rs.getString("title")).thenReturn(expected.getArticle().getTitle());
+		
+		PostModel actual = mapper.mapRow(rs, 1);
+		
+		Assert.assertEquals(expected.getArticle().getTitle(), actual.getArticle().getTitle());
+	}
+	
+	@Test
+	public void testRowMapperPAM() throws SQLException {
+		PostArticleModel expected = makePAM();
+	
+		when(rs.getString("title")).thenReturn(expected.getPost().getArticle().getTitle());
+		
+		PostArticleModel actual = mapperPAM.mapRow(rs, 1);
+		
+		Assert.assertEquals(expected.getPost().getArticle().getTitle(), actual.getPost().getArticle().getTitle());
+	}
+	
+	@Test
+	public void testCommentRowMapper() throws SQLException{
+		Comment comment = new Comment();
+		comment.setContent("Something");
+		
+		when(rs.getString("content")).thenReturn(comment.getContent());
+		
+		Comment actual = mapperComment.mapRow(rs, 0);
+		Assert.assertEquals(comment.getContent(), actual.getContent());
+	}
 	
 	//------------------------
 	// Helper creation methods

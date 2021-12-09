@@ -39,33 +39,33 @@ public class PostController {
 	@GetMapping("articles/articleNum/{articleId}")
 	@Log
 	public ModelAndView showArticleView(@PathVariable String articleId) {
-		
+
 		ModelAndView modelAndView = new ModelAndView("article/article");
 		try {
-		// Get article from db		
-		PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
-    modelAndView.getModelMap().addAttribute("post", pam.getPost());
-		modelAndView.getModelMap().addAttribute("author", pam.getName());
-		modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
-		modelAndView.getModelMap().addAttribute("articleId", articleId);
-		
-		// Get comments from db
-		List<Comment> comments = new ArrayList<Comment>();
-		comments = postService.getCommentsFromArticle(Integer.parseInt(articleId));
-		
-		CommentDto commentDto = new CommentDto();
-		commentDto.setParentId(Integer.parseInt(articleId));
-		modelAndView.getModelMap().addAttribute("comment", commentDto);
-		modelAndView.getModelMap().addAttribute("comment.parentId", articleId);
-		modelAndView.getModelMap().addAttribute("comments", comments);
-		
-		return modelAndView;
+			// Get article from db		
+			PostArticleModel pam = postService.getPostWithAuthorByID(articleId);
+			modelAndView.getModelMap().addAttribute("post", pam.getPost());
+			modelAndView.getModelMap().addAttribute("author", pam.getName());
+			modelAndView.getModelMap().addAttribute("article", pam.getPost().getArticle());
+			modelAndView.getModelMap().addAttribute("articleId", articleId);
+
+			// Get comments from db
+			List<Comment> comments = new ArrayList<Comment>();
+			comments = postService.getCommentsFromArticle(Integer.parseInt(articleId));
+
+			CommentDto commentDto = new CommentDto();
+			commentDto.setParentId(Integer.parseInt(articleId));
+			modelAndView.getModelMap().addAttribute("comment", commentDto);
+			modelAndView.getModelMap().addAttribute("comment.parentId", articleId);
+			modelAndView.getModelMap().addAttribute("comments", comments);
+
+			return modelAndView;
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return new ModelAndView("/error");
 		}
 	}
-	
+
 	@PostMapping("/articles/addComment")
 	@Log
 	public ModelAndView addComment(
@@ -74,26 +74,21 @@ public class PostController {
 			HttpServletRequest request,
 			Errors errors,
 			Authentication authentication) {
-		
+
 		User user = (User)authentication.getPrincipal();
-		
+
 		if(bindResult.hasErrors()) {
 			return new ModelAndView("error");
 		}
 		ModelAndView modelAndView;
-		
-		//TODO: Validity of comments
-	    if(true) {
-	    	//Currently redirects to root instead of same article page, not passing articleId and idk yet how
-	    	modelAndView = new ModelAndView("redirect:/articles/articleNum/"+commentDto.getParentId());
-	    	Comment addedComment = postService.addNewComment(commentDto, user.getUserId());
-        	//modelAndView.getModelMap().addAttribute("comment", commentDto);
-	    	//return modelAndView;
-	    }
 
-	    return modelAndView;
+		//Currently redirects to root instead of same article page, not passing articleId and idk yet how
+		modelAndView = new ModelAndView("redirect:/articles/articleNum/"+commentDto.getParentId());
+		Comment addedComment = postService.addNewComment(commentDto, user.getUserId());
+
+		return modelAndView;
 	}
-	
+
 	@GetMapping("/articles/articleForm")
 	@Log
 	public ModelAndView showRegistrationForm(WebRequest request) {
@@ -146,7 +141,7 @@ public class PostController {
 			int userID = user.getUserId();
 
 			String authorId = String.valueOf(userID);
-			
+
 			List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
 			posts = postService.getAllPostsForUserWithId(authorId);
 			ModelAndView modelAndView = new ModelAndView("author/articleList");
