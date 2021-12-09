@@ -13,7 +13,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -35,9 +39,21 @@ public class NewspaperButWorseApplicationTest {
 	@Mock
 	HttpServletRequest request;
 	
+	@Mock
+	JwtTokenProvider mockJTP;
+	
+//	@Mock
+//	HttpSecurity httpSec;
+	
+	@Mock
+	ApplicationContext appContext;
+	
+	SecurityConfig secConfig;
+	
 	@Before
 	public void setup() {
 		jwtTokenProvider = new JwtTokenProvider(userService);
+		secConfig = new SecurityConfig(appContext, jwtTokenProvider);
 	}
 	
 	@Test
@@ -82,16 +98,47 @@ public class NewspaperButWorseApplicationTest {
 		User user = new User();
 		user.setUsername("Test");
 		user.setPassword("Pass");
-		Duration ttl = Duration.ofMinutes(30);
-		Date now = new Date();
-		Date expiration = new Date(now.getTime() + ttl.toMillis());
+//		Duration ttl = Duration.ofMinutes(30);
+//		Date now = new Date();
+//		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		
-		String token = jwtTokenProvider.createToken(user, expiration);
+		String token = jwtTokenProvider.createToken(user, null);
 		
 		when(jwtTokenProvider.getJwtTokenFromRequest(request)).thenReturn(token);
 		
-		jwtTokenProvider.getAuthentication(request);
+		Assert.assertNull(jwtTokenProvider.getAuthentication(request));
 		
 	}
+	
+	@Test
+	public void testCreateTokenBypassAuth() {
+		User user = new User();
+		user.setUsername("Test");
+		user.setPassword("Pass");
+//		Duration ttl = Duration.ofMinutes(30);
+//		Date now = new Date();
+//		Date expiration = new Date(now.getTime() + ttl.toMillis());
+		
+		String token = jwtTokenProvider.createToken(user, null);
+		
+		jwtTokenProvider.validateToken(token);
+		jwtTokenProvider.validateToken("haha I am a token lol");
+		
+		Assert.assertNull(jwtTokenProvider.getAuthentication(token));
+		
+	}
+	
+	
+	
+//	@Test
+//	public void testSecurityConfigMethod() {
+//		
+//		HttpSecurity httpSec = null;
+//		try {
+//			secConfig.configure(httpSec);
+//		} catch (Exception e) {
+//			System.out.println();
+//		}
+//	}
 
 }
