@@ -99,11 +99,42 @@ public class RESTTest {
 		
 		when(service.getAllPosts(anyInt(), anyInt())).thenReturn(posts);
 		
-		//ResponseEntity<List<PostArticleModel>> actual = controller.getAllPost("2", nu);
-		//Assert.assertEquals(expected, actual);
+		ResponseEntity<List<PostArticleModel>> actual = controller.getAllPost("abc", null);
+		Assert.assertEquals(expected, actual);
 	}
 	
+	@Test
+	public void testGetAllPostForAuthor() {
+		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+		ResponseEntity<List<PostArticleModel>> expected = ResponseEntity.ok(posts);
+		
+		when(service.getAllPostsForUserWithId("2")).thenReturn(posts);
+		
+		ResponseEntity<List<PostArticleModel>> actual = controller.getAllPostForAuthor("2", "2" , "2");
+		Assert.assertEquals(expected, actual);
+	}
 	
+	@Test
+	public void testGetAllPostForAuthor_Null() {
+		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+		ResponseEntity<List<PostArticleModel>> expected = ResponseEntity.ok(posts);
+		
+		when(service.getAllPostsForUserWithId("2")).thenReturn(posts);
+		
+		ResponseEntity<List<PostArticleModel>> actual = controller.getAllPostForAuthor("2", "2" , null);
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testGetAllPostForAuthor_Exception() {
+		List<PostArticleModel> posts = new ArrayList<PostArticleModel>();
+		ResponseEntity<List<PostArticleModel>> expected = ResponseEntity.ok(posts);
+		
+		when(service.getAllPostsForUserWithId("2")).thenReturn(posts);
+		
+		ResponseEntity<List<PostArticleModel>> actual = controller.getAllPostForAuthor("2", "abc" , null);
+		Assert.assertEquals(expected, actual);
+	}
 	
 	
 	//------------------------
