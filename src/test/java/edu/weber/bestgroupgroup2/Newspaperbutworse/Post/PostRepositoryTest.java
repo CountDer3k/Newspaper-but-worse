@@ -55,8 +55,6 @@ public class PostRepositoryTest {
 	ResultSetExtractor<List<PostArticleModel>> rse;
 	@Mock
 	ResultSet rs;
-	@Mock
-	Number num;
 
 	
 	
@@ -206,7 +204,7 @@ public class PostRepositoryTest {
 		
 		//when(template.update(any(String.class), any(SqlParameterSource.class), keyHolder)).thenReturn(expected);
 		when(keyHolder.getKey()).thenReturn((Number) 2);
-		
+
 		Comment actual = repo.saveComment(expected, 1);
 		Assert.assertEquals(expected.getContent(), actual.getContent());
 	}
