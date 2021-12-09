@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,12 +63,22 @@ public class PostRepositoryTest {
  
 	
 	@Test
-	public void testGetArticleByID() {
+	public void testGetArticleByID() throws SQLException {
 		String id = "1";
 		mockKeyHolder();
 
 		PostModel post = makePost();
 		repo.savePost(post);
+		
+		final ResultSet resultSet = Mockito.mock(ResultSet.class);
+		when(resultSet.getString("title")).thenReturn(post.getArticle().getTitle());
+		when(resultSet.getString("content")).thenReturn(post.getArticle().getContent());
+		when(resultSet.getString("access")).thenReturn(post.getArticle().getAccess());
+		when(resultSet.getInt("post_id")).thenReturn(post.getId());
+		
+		when(resultSet.getInt("user_id")).thenReturn(post.getUserId());
+		when(resultSet.getDate("create_on")).thenReturn(null);
+		when(resultSet.getDate("modified_on")).thenReturn(null);
 		
 		when(template.queryForObject(ArgumentMatchers.any(String.class), ArgumentMatchers.any(SqlParameterSource.class), (RowMapper<PostModel>) ArgumentMatchers.any(RowMapper.class)))
 		.thenReturn(post);
