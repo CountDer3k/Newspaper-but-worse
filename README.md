@@ -33,7 +33,7 @@ Navigate to the directory and run:
 mvn clean install; docker-compose up --build
 '''
 
-### Method 3: Debug Mode
+### Method 2: Debug Mode
 //Debug command:
 mvnDebug spring-boot:run -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
 
