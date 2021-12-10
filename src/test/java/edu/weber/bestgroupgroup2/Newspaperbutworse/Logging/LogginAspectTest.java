@@ -2,7 +2,6 @@ package edu.weber.bestgroupgroup2.Newspaperbutworse.Logging;
 
 import org.junit.Test;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import org.aspectj.lang.Signature;
