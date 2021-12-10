@@ -174,6 +174,13 @@ public class PostRepositoryTest {
 		Assert.assertEquals(true, actual);
 	}
 	
+	@Test
+	public void testDeleteComments() {
+		when(template.update(any(String.class), any(SqlParameterSource.class))).thenReturn(1);
+		
+		boolean actual = repo.deletePost("1");
+		Assert.assertEquals(true, actual);
+	}
 	
 	@Test
 	public void testSaveComment() {

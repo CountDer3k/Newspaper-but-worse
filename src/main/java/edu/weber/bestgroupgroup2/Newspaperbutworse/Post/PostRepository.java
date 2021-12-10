@@ -48,6 +48,7 @@ public class PostRepository {
 					+ "WHERE post_id = :postID";
 	private final String DELETE_ARTICLE = "DELETE FROM Article WHERE post_id = :postID ";
 	private final String DELETE_POST = "DELETE FROM Post WHERE post_id = :postID ";
+	private final String DELETE_COMMENTS = "DELETE FROM Comment WHERE parent_id = :postID";
 
 	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE post_id :pID ";
 
@@ -228,8 +229,10 @@ public class PostRepository {
 	@Log
 	public boolean deletePostArticle(String id) {
 		try {
+			deleteComments(id);
 			deleteArticle(id);
 			deletePost(id);
+			
 			return true;
 		} catch(Exception e) {
 			return false;
@@ -267,6 +270,23 @@ public class PostRepository {
 		} catch(Exception e) {
 			logger.error("Error occured: " + e.toString());
 		}
+		return success;
+	}
+	
+	@Log
+	public boolean deleteComments(String id) {
+		boolean success = false;
+		
+		try {
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", id);
+			
+			int result = namedParameterJdbcTemplate.update(DELETE_COMMENTS, parameters);
+			
+		}catch(Exception e) {
+			logger.error("Error occured: " + e.toString());
+		}
+		
 		return success;
 	}
 
