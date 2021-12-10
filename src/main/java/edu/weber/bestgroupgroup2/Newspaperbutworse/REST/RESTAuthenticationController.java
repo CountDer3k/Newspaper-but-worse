@@ -47,7 +47,7 @@ public class RESTAuthenticationController {
 		
 		
 		final Duration ttl = Duration.ofMinutes(30);
-		Date now = new Date();
+		Date now = new Date(); 
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		
 		String token = jot.createToken(user, expiration);
