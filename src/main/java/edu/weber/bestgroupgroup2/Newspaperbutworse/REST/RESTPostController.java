@@ -148,7 +148,7 @@ public class RESTPostController {
 	})
 	@GetMapping("articles/{articleId}")
 	@Log
-	public ResponseEntity<?> getPost(@PathVariable String articleId){
+	public ResponseEntity<Object> getPost(@PathVariable String articleId){
 		PostModel p = postService.getPostByID(articleId);
 
 		if(p != null)

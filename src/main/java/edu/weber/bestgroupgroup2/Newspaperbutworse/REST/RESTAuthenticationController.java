@@ -35,7 +35,6 @@ public class RESTAuthenticationController {
 	@GetMapping("tokens")
 	@Log
 	public ResponseEntity<String> createNewToken(@RequestHeader("Authorization") String authHeader ) throws UnsupportedEncodingException{
-
 		String authentication = authHeader.split(" ")[1];
 		String decodedString = new String(Base64.getDecoder().decode(authentication.getBytes("UTF-8")));
 		String[] userPassword = decodedString.split(":");
@@ -48,7 +47,7 @@ public class RESTAuthenticationController {
 		
 		
 		final Duration ttl = Duration.ofMinutes(30);
-		Date now = new Date();
+		Date now = new Date(); 
 		Date expiration = new Date(now.getTime() + ttl.toMillis());
 		
 		String token = jot.createToken(user, expiration);

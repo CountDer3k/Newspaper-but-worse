@@ -1,17 +1,11 @@
 package edu.weber.bestgroupgroup2.Newspaperbutworse.Post;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -19,7 +13,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import edu.weber.bestgroupgroup2.Newspaperbutworse.User.User;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.aop.logging.Log;
 
 @Repository
@@ -55,6 +48,7 @@ public class PostRepository {
 					+ "WHERE post_id = :postID";
 	private final String DELETE_ARTICLE = "DELETE FROM Article WHERE post_id = :postID ";
 	private final String DELETE_POST = "DELETE FROM Post WHERE post_id = :postID ";
+	private final String DELETE_COMMENTS = "DELETE FROM Comment WHERE parent_id = :postID";
 
 	private final String DE_PA = "DELETE FROM Article WHERE post_id = :aID; DELETE FROM Post WHERE post_id :pID ";
 
@@ -86,15 +80,16 @@ public class PostRepository {
 		}
 	}
 
+	//@SuppressWarnings("unchecked")
 	@Log
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
 			SqlParameterSource parameters = new MapSqlParameterSource()
 					.addValue("postID", id);
 
-			return (PostArticleModel) namedParameterJdbcTemplate.queryForObject(
-					GET_ARTICLE_WITH_AUTHOR, 
-					parameters, new PostRowMapperPAM());
+			PostArticleModel pam = (PostArticleModel) namedParameterJdbcTemplate.queryForObject(
+					GET_ARTICLE_WITH_AUTHOR, parameters, new PostRowMapperPAM());
+			return pam;
 		}
 		catch(Exception e) {
 			logger.error("PostRepository - getArticleWithAuthorByID() " + e.toString());
@@ -119,25 +114,8 @@ public class PostRepository {
 				+ "INNER JOIN `User` u  ON p.user_id = u.user_id "
 				+ "WHERE c.parent_id = " + articleId + ";";
 
-		comments = namedParameterJdbcTemplate.query(GET_COMMENTS_FROM_POST_WITH_USERS, new ResultSetExtractor<List<Comment>>(){
+		comments = namedParameterJdbcTemplate.query(GET_COMMENTS_FROM_POST_WITH_USERS, new CommentRowMapper());
 
-			@Override
-			public List<Comment> extractData(ResultSet rs) throws SQLException, DataAccessException {
-
-				List<Comment> comments = new ArrayList<Comment>();
-				while(rs.next()) {
-					Comment comment = new Comment();
-
-					comment.setPostId(rs.getInt("post_id"));
-					comment.setParentId(rs.getInt("parent_id"));
-					comment.setContent(rs.getString("content"));
-					comment.setUsername(rs.getString("username"));
-
-					comments.add(comment);
-				}	
-				return comments;
-			}
-		});
 		return comments;
 	}
 
@@ -193,7 +171,6 @@ public class PostRepository {
 	}
 
 	@Log
-	//Return void instead?
 	public Comment saveComment(Comment comment, int userID) {
 		//This seems to only get the date not the time in the db
 		long millis = System.currentTimeMillis();  
@@ -206,7 +183,8 @@ public class PostRepository {
 
 			namedParameterJdbcTemplate.update(INSERT_POST, parameters, keyHolder);
 
-			int PostID = keyHolder.getKey().intValue();
+			Number key = keyHolder.getKey();
+			int PostID = key.intValue();
 			comment.setPostId(PostID);
 
 			keyHolder = new GeneratedKeyHolder();
@@ -251,8 +229,10 @@ public class PostRepository {
 	@Log
 	public boolean deletePostArticle(String id) {
 		try {
+			deleteComments(id);
 			deleteArticle(id);
 			deletePost(id);
+			
 			return true;
 		} catch(Exception e) {
 			return false;
@@ -290,6 +270,23 @@ public class PostRepository {
 		} catch(Exception e) {
 			logger.error("Error occured: " + e.toString());
 		}
+		return success;
+	}
+	
+	@Log
+	public boolean deleteComments(String id) {
+		boolean success = false;
+		
+		try {
+			SqlParameterSource parameters = new MapSqlParameterSource()
+					.addValue("postID", id);
+			
+			int result = namedParameterJdbcTemplate.update(DELETE_COMMENTS, parameters);
+			
+		}catch(Exception e) {
+			logger.error("Error occured: " + e.toString());
+		}
+		
 		return success;
 	}
 

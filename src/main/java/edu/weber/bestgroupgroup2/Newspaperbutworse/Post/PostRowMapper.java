@@ -24,5 +24,4 @@ public class PostRowMapper implements RowMapper{
 		post.setModifiedDate(rs.getDate("modified_on"));
 		return post;
 	}
-
 }
