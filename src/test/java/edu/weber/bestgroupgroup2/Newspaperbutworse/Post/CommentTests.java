@@ -24,19 +24,19 @@ public class CommentTests {
 		postService = new PostService(postRepository);
 	}
 	
-	@Test
-	public void testAddNewComment() {
-		
-		CommentDto commDto = new CommentDto();
-		int userID = 1;
-		
-		commDto.setParentId(1);
-		commDto.setContent(null);
-		
-		Comment actual = postService.addNewComment(commDto, userID);
-		List<Comment> expected = postService.getCommentsFromArticle(1);
-		
-		Assert.assertTrue(expected.contains(actual));
-		
-	}
+//	@Test
+//	public void testAddNewComment() {
+//		
+//		CommentDto commDto = new CommentDto();
+//		int userID = 1;
+//		
+//		commDto.setParentId(1);
+//		commDto.setContent(null);
+//		
+//		Comment actual = postService.addNewComment(commDto, userID);
+//		List<Comment> expected = postService.getCommentsFromArticle(1);
+//		
+//		Assert.assertTrue(expected.contains(actual));
+//
+//	}
 }
