@@ -36,7 +36,8 @@ import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserDto;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserRepository;
 import edu.weber.bestgroupgroup2.Newspaperbutworse.User.UserService;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class PostRepositoryTest {
 
 	PostRepository repo;
@@ -87,7 +88,6 @@ public class PostRepositoryTest {
 		Assert.assertEquals(expected, actual);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetArticleWithAuthorByID() {
 		PostArticleModel expected = makePAM();

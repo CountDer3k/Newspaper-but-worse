@@ -80,7 +80,7 @@ public class PostRepository {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	@Log
 	public PostArticleModel getArticleWithAuthorByID(String id) {
 		try {
