@@ -1,4 +1,9 @@
 # Newspaper-but-worse
+---
+Built by the best group (and only group), Group 2, this newspaper site has only
+some of the functionality you would typically expect from a Newspaper (and all 
+of the Spiderman references), but none of the style.
+
 Fall 2021 - 4230 Capstone Project
 
 By: Der3k, Jack, & Jazzley.
