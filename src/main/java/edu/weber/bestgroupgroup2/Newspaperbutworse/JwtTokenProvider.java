@@ -92,7 +92,7 @@ public class JwtTokenProvider {
 		return null;
 	}
 
-	private Authentication getAuthentication(String token) {
+	public Authentication getAuthentication(String token) {
 
 		String username = getUsername(token);
 		if(username != null) {
@@ -110,7 +110,7 @@ public class JwtTokenProvider {
 		return jwt.getBody().get("username", String.class);
 	}
 
-	private boolean validateToken(String token) {
+	public boolean validateToken(String token) {
 
 		try {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
@@ -148,7 +148,7 @@ public class JwtTokenProvider {
 		String token = request.getHeader("Authorization");
 		if(token != null) {
 			String[] s = token.split(" ");
-			if(s.length > 0)
+			if(s.length > 1)
 				return s[1];
 		}
 		return null;
